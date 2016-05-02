@@ -1,3 +1,12 @@
-<!-- <section class="contact-list" ng-show="tabCtrl.isSet(4)">
 
-</section> -->
+<form class="contact-list" data-ng-submit="mapCtrl.search()">
+  From:
+  <input data-ng-model="mapCtrl.startingPoint.street" type="text" placeholder="street address">
+  <input data-ng-model="mapCtrl.startingPoint.city" type="text" placeholder="city">
+  <input data-ng-model="mapCtrl.startingPoint.state" type="text" placeholder="state"><br>
+  To:
+  <input data-ng-model="mapCtrl.destination.street" type="text" placeholder="street address">
+  <input data-ng-model="mapCtrl.destination.city" type="text" placeholder="city">
+  <input data-ng-model="mapCtrl.destination.state" type="text" placeholder="state">
+  <input type="submit" name="name" value="Search!">
+</form>
