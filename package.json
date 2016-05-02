@@ -4,6 +4,7 @@
   "description": "front-end for our 401 final project - RideShare. We will be integrating with the Python back-end",
   "main": "client-server.js",
   "dependencies": {
+    "angular": "^1.5.5",
     "angular-base64": "^2.0.5",
     "angular-route": "^1.5.5",
     "body-parser": "^1.15.0",

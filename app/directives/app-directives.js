@@ -1,27 +1,27 @@
 'use strict';
 module.exports = function (app) {
 
-app.directive('userProfile', function(){
-    return {
-      restrict: 'E',
-      templateUrl: './templates/user-profile.html',
-      controller:function($http){
-        this.userInfo = contact;
-      },
-      controllerAs: 'contactCtrl'
-    };
-  });
+// app.directive('userProfile', function(){
+//     return {
+//       restrict: 'E',
+//       templateUrl: './templates/user-profile.html',
+//       controller:function($http){
+//         this.userInfo = contact;
+//       },
+//       controllerAs: 'contactCtrl'
+//     };
+//   });
 
-  app.directive('newProfile', function(){
-    return {
-      restrict: 'E',
-      templateUrl: './templates/portfolio-contact.html',
-      controller:function($http){
-        this.userInfo = contact;
-      },
-      controllerAs: 'contactCtrl'
-    };
-  });
+  // app.directive('newProfile', function(){
+  //   return {
+  //     restrict: 'E',
+  //     templateUrl: './templates/portfolio-contact.html',
+  //     controller:function($http){
+  //       this.userInfo = contact;
+  //     },
+  //     controllerAs: 'contactCtrl'
+  //   };
+  // });
   app.directive('customNav', function(){
     return {
       restrict: 'E',
@@ -38,10 +38,10 @@ app.directive('userProfile', function(){
       controllerAs: 'tabCtrl'
     };
   });
-  app.directive('signIn', function(){
+  app.directive('userInfo', function(){
     return {
       restrict: 'E',
-      templateUrl: './templates/portfolio-projects.html',
+      templateUrl: './templates/user-profile.html',
       controller:function($http){
         $http.get(gitRoute + '/' + 'repos')
         .then((result)=>{
