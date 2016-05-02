@@ -45,16 +45,22 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+<<<<<<< HEAD
 	__webpack_require__(5);
 	__webpack_require__(4);
 	__webpack_require__(6);
 	module.exports = __webpack_require__(7);
+=======
+	__webpack_require__(4);
+	module.exports = __webpack_require__(5);
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 	const angular = __webpack_require__(2);
 	const app = angular.module('myApp', []);
 	__webpack_require__(4)(app);
@@ -85,6 +91,65 @@
 	}]);
 
 
+=======
+	'use strict';
+	const angular = __webpack_require__(2);
+
+
+
+	var app = angular.module("rideshareApp", []);
+
+
+
+	app.controller('UserController', ['$http', function($http) {
+	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	this.users = ['user'];
+	this.newUser = {};
+	console.log('hit');
+
+	this.getUser = function(){
+	  $http.get(userRoute)
+	    .then((result)=>{
+	      // console.log('GET USER' + angular.toJson(result.data));
+	      this.users = result.data;
+	    }, function(error){
+	      console.log(error);
+	    });
+	  // };
+	};
+	// this.createUser = function(user){
+	//   $http.post(userRoute)
+	//     .then((result)=>{
+	//       this.newUser.push(user);
+	//     });
+	//   };
+	//
+	// this.updateUser = function(user){
+	//   $http.put(userRoute + user._id)
+	//
+	// }
+
+	}]);
+
+
+	// app.directive('customUser', function($http){
+	//   return {
+	//     restrict: 'E',
+	//     templateUrl: './templates/user-profile.html',
+	//     controller: function($http){
+	//       $http.get(userRoute)
+	//       .then((result)=>{
+	//         self.user = result.data;
+	//       })
+	//
+	//     }
+	//   }
+	//
+	// }]);
+	// };
+
+
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
@@ -30970,6 +31035,7 @@
 /* 4 */
 /***/ function(module, exports) {
 
+<<<<<<< HEAD
 	module.exports = function(app){
 	  app.directive('mapRider',function(){
 	    return {
@@ -31007,6 +31073,36 @@
 	    return {
 	      restrict: 'E',
 	      templateUrl: './templates/portfolio-tabs.html',
+=======
+	'use strict';
+	module.exports = function (app) {
+
+	// app.directive('userProfile', function(){
+	//     return {
+	//       restrict: 'E',
+	//       templateUrl: './templates/user-profile.html',
+	//       controller:function($http){
+	//         this.userInfo = contact;
+	//       },
+	//       controllerAs: 'contactCtrl'
+	//     };
+	//   });
+
+	  // app.directive('newProfile', function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     templateUrl: './templates/portfolio-contact.html',
+	  //     controller:function($http){
+	  //       this.userInfo = contact;
+	  //     },
+	  //     controllerAs: 'contactCtrl'
+	  //   };
+	  // });
+	  app.directive('customNav', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/tabs.html',
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 	      controller: function(){
 	        this.tab = 1;
 	        this.isSet = function(check){
@@ -31019,10 +31115,17 @@
 	      controllerAs: 'tabCtrl'
 	    };
 	  });
+<<<<<<< HEAD
 	  app.directive('customProject', function(){
 	    return {
 	      restrict: 'E',
 	      templateUrl: './templates/portfolio-projects.html',
+=======
+	  app.directive('userInfo', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/user-profile.html',
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 	      controller:function($http){
 	        $http.get(gitRoute + '/' + 'repos')
 	        .then((result)=>{
@@ -31078,6 +31181,7 @@
 	       }
 	     };
 	   });
+<<<<<<< HEAD
 	})();
 
 
@@ -31125,6 +31229,13 @@
 
 /***/ },
 /* 7 */
+=======
+	};
+
+
+/***/ },
+/* 5 */
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 /***/ function(module, exports) {
 
 	
