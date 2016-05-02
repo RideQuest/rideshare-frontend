@@ -45,14 +45,53 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+<<<<<<< HEAD
+	__webpack_require__(5);
+	__webpack_require__(4);
+	__webpack_require__(6);
+	module.exports = __webpack_require__(7);
+=======
 	__webpack_require__(4);
 	module.exports = __webpack_require__(5);
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
+	const angular = __webpack_require__(2);
+	const app = angular.module('myApp', []);
+	__webpack_require__(4)(app);
+
+	app.controller('mapController', ['$window', function($window){
+	  var pikePlace = {lat: 47.608953, lng: -122.341099};
+	  var bellevueMall = {lat: 47.616591, lng: -122.198797};
+	  this.user = {};
+	  this.startingPoint = {
+	    street: '',
+	    city: '',
+	    state: ''
+	  };
+	  this.destination  = {
+	    street: '',
+	    city: '',
+	    state: ''
+	  };;
+
+	  this.initialize = function(){
+	    $window.Gmap.initMap(pikePlace, bellevueMall);
+	  }
+
+	  this.search = function(){
+	    console.log(angular.toJson(this.startingPoint));
+	    console.log(angular.toJson(this.destination));
+	  }
+	}]);
+
+
+=======
 	'use strict';
 	const angular = __webpack_require__(2);
 
@@ -110,6 +149,7 @@
 	// };
 
 
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
@@ -30995,6 +31035,45 @@
 /* 4 */
 /***/ function(module, exports) {
 
+<<<<<<< HEAD
+	module.exports = function(app){
+	  app.directive('mapRider',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      templateUrl: '/templates/form-rider.html'
+	    }
+	  });
+
+	}
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	(function(){
+	  var gitRoute = 'https://api.github.com/users/lwenke01';
+
+	  var app = angular.module("rideshareApp", []);
+
+	  app.directive('userProfile', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/portfolio-contact.html',
+	      controller:function($http){
+	        this.userInfo = contact;
+	      },
+	      controllerAs: 'contactCtrl'
+	    };
+	  });
+	  app.directive('customNav', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/portfolio-tabs.html',
+=======
 	'use strict';
 	module.exports = function (app) {
 
@@ -31023,6 +31102,7 @@
 	    return {
 	      restrict: 'E',
 	      templateUrl: './templates/tabs.html',
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 	      controller: function(){
 	        this.tab = 1;
 	        this.isSet = function(check){
@@ -31035,10 +31115,17 @@
 	      controllerAs: 'tabCtrl'
 	    };
 	  });
+<<<<<<< HEAD
+	  app.directive('customProject', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/portfolio-projects.html',
+=======
 	  app.directive('userInfo', function(){
 	    return {
 	      restrict: 'E',
 	      templateUrl: './templates/user-profile.html',
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 	      controller:function($http){
 	        $http.get(gitRoute + '/' + 'repos')
 	        .then((result)=>{
@@ -31094,11 +31181,61 @@
 	       }
 	     };
 	   });
+<<<<<<< HEAD
+	})();
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	(function(module){
+	  var Gmap = {};
+	  var map;
+
+	  Gmap.initMap = function (startPoint, destination){
+	    console.log('Here is two points ' + JSON.stringify(startPoint) + ' '+ JSON.stringify(destination))
+	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    map = new google.maps.Map(document.getElementById('map'),{
+	      center: pikePlace,
+	      scrollwheel: false,
+	      zoom: 11
+	  });
+
+
+
+	    var directionsDisplay = new google.maps.DirectionsRenderer({
+	      map: map
+	    });
+
+	    var request = {
+	      destination: destination,
+	      origin: startPoint,
+	      travelMode: google.maps.TravelMode.DRIVING
+	    };
+
+	    var directionsService = new google.maps.DirectionsService();
+	    directionsService.route(request, function(res, status){
+	      if(status == google.maps.DirectionsStatus.OK){
+	        directionsDisplay.setDirections(res);
+	      }
+	    });
+	  }
+
+	  module.Gmap = Gmap;
+
+	})(window);
+
+
+/***/ },
+/* 7 */
+=======
 	};
 
 
 /***/ },
 /* 5 */
+>>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 /***/ function(module, exports) {
 
 	
