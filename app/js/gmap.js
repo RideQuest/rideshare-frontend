@@ -8,29 +8,31 @@
     var map = new google.maps.Map(document.getElementById('map'),{
       center: pikePlace,
       scrollwheel: false,
-      zoom: 7
+      zoom: 11
   });
-
-    var directionsDisplay = new google.map.DirectionsRenderer({
-      map: map
-    });
-
-    var request = {
-      destination: bellevueMall,
-      origin: pikePlace,
-      travelMode: google.maps.TravelMode.DRIVING
-    };
-
-    var directionsService = new google.maps.DirectionsService();
-    directionsService.route(request, function(res, status){
-      if(status == google.maps.DirectionsStatus.OK){
-        directionsDisplay.setDirections(res);
-      }
-    });
-    return map;
-    }
+  }
 
 
-    module.exports = Gmap;
+    // Gmap.directionsDisplay = new google.map.DirectionsRenderer({
+    //   map: map
+    // });
+    //
+    // Gmap.request = {
+    //   destination: bellevueMall,
+    //   origin: pikePlace,
+    //   travelMode: google.maps.TravelMode.DRIVING
+    // };
+    //
+    // Gmap.directionsService = new google.maps.DirectionsService();
+    // directionsService.route(request, function(res, status){
+    //   if(status == google.maps.DirectionsStatus.OK){
+    //     directionsDisplay.setDirections(res);
+    //   }
+    // });
+
+
+
+
+    module.Gmap = Gmap;
 
 })(window);
