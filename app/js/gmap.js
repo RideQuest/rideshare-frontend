@@ -29,10 +29,8 @@
         directionsDisplay.setDirections(res);
       }
     });
-
   }
 
-
-    window.Gmap = Gmap;
+  module.Gmap = Gmap;
 
 })(window);

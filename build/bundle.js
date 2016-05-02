@@ -63,11 +63,11 @@
 	  var pikePlace = {lat: 47.608953, lng: -122.341099};
 	  var bellevueMall = {lat: 47.616591, lng: -122.198797};
 	  this.user = {};
-	  this.from = 'pike place';
+	  this.from = {lat: 47.665085, lng: -122.380389};
 	  this.to = '';
 	  console.log('hitting')
 	  this.initialize = function(){
-	    $window.Gmap.initMap(pikePlace, bellevueMall);
+	    $window.Gmap.initMap(this.from, bellevueMall);
 	  }
 	}]);
 
@@ -30957,6 +30957,56 @@
 /* 4 */
 /***/ function(module, exports) {
 
+	(function(module){
+	  var Gmap = {};
+	  var map;
+
+	  Gmap.initMap = function (startPoint, destination){
+	    console.log('Here is two points ' + JSON.stringify(startPoint) + ' '+ JSON.stringify(destination))
+	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    map = new google.maps.Map(document.getElementById('map'),{
+	      center: pikePlace,
+	      scrollwheel: false,
+	      zoom: 11
+	  });
+
+
+
+	    var directionsDisplay = new google.maps.DirectionsRenderer({
+	      map: map
+	    });
+
+	    var request = {
+	      destination: destination,
+	      origin: startPoint,
+	      travelMode: google.maps.TravelMode.DRIVING
+	    };
+
+	    var directionsService = new google.maps.DirectionsService();
+	    directionsService.route(request, function(res, status){
+	      if(status == google.maps.DirectionsStatus.OK){
+	        directionsDisplay.setDirections(res);
+	      }
+	    });
+
+	  }
+
+
+	  module.Gmap = Gmap;
+
+	})(window);
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
 	'use strict';
 
 	(function(){
@@ -31053,61 +31103,11 @@
 
 
 /***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	(function(module){
-	  var Gmap = {};
-	  var map;
-
-	  Gmap.initMap = function (startPoint, destination){
-	    console.log('Here is two points ' + JSON.stringify(startPoint) + ' '+ JSON.stringify(destination))
-	    var pikePlace = {lat: 47.608953, lng: -122.341099};
-	    map = new google.maps.Map(document.getElementById('map'),{
-	      center: pikePlace,
-	      scrollwheel: false,
-	      zoom: 11
-	  });
-
-
-
-	    var directionsDisplay = new google.maps.DirectionsRenderer({
-	      map: map
-	    });
-
-	    var request = {
-	      destination: destination,
-	      origin: startPoint,
-	      travelMode: google.maps.TravelMode.DRIVING
-	    };
-
-	    var directionsService = new google.maps.DirectionsService();
-	    directionsService.route(request, function(res, status){
-	      if(status == google.maps.DirectionsStatus.OK){
-	        directionsDisplay.setDirections(res);
-	      }
-	    });
-
-	  }
-
-
-	    window.Gmap = Gmap;
-
-	})(window);
-
-
-/***/ },
 /* 7 */
 /***/ function(module, exports) {
 
 	
+
 
 /***/ }
 /******/ ]);
