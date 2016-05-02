@@ -22,6 +22,7 @@ app.controller('mapController', ['$window', function($window){
   }
 
   this.search = function(){
+    $window.Gmap.convertAddress()
     console.log(angular.toJson(this.startingPoint));
     console.log(angular.toJson(this.destination));
   }

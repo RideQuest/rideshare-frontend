@@ -11,8 +11,6 @@
       zoom: 11
   });
 
-
-
     var directionsDisplay = new google.maps.DirectionsRenderer({
       map: map
     });
@@ -29,6 +27,10 @@
         directionsDisplay.setDirections(res);
       }
     });
+  }
+
+  Gmap.convertAddress = function(fromAddress){
+    geocoder.geocode({address: fromAddress})
   }
 
   module.Gmap = Gmap;
