@@ -1,0 +1,19 @@
+<!-- <section class="user-profile">
+<form class="newUser" action="index.html" method="post">
+
+</form>
+</section> -->
+<section ng-controller="UserController as userctrl" ng-init="userctrl.getUser()">
+ <!-- {{userctrl.users[0].password}} -->
+   <!-- {{username}} -->
+ <div ng-repeat="user in userctrl.users">
+   <ul>
+ <li>Username: {{user.username}}</li>
+ <li>Password: {{user.password}}</li>
+ <li>email: {{user.email}}</li>
+</ul>
+</div>
+
+
+
+</section>
