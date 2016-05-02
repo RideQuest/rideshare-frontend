@@ -7,9 +7,11 @@
     <title>RideShare App</title>
 
   </head>
-  <body data-ng-controller="mapController as mapCtrl">
-    <map-rider></map-rider>
-    <div ng-init="mapCtrl.initialize()" id="map" style="width: 100%; height: 60em;"></div>
+  <body>
+    <section data-ng-controller="mapController as mapCtrl">
+      <map-rider></map-rider>
+      <div ng-init="mapCtrl.initialize()" id="map" style="width: 100%; height: 60em;"></div>
+    </section>
 
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvgiNNUfAJl3Kl_NlrfPS1nXyiMn23baE" async defer></script>
