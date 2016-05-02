@@ -1,10 +1,10 @@
 <section="tabs">
 <nav class="navbar">
   <a href ng-class="{ active:tabCtrl.isSet(1) }" ng-click="tabCtrl.setTab(1)">Home</a>
-  <a href ng-class="{ active:tabCtrl.isSet(2) }" ng-click="tabCtrl.setTab(2)">Arcades</a>
+  <a href ng-class="{ active:tabCtrl.isSet(2) }" ng-click="tabCtrl.setTab(2)">Profile</a>
   <a href ng-class="{ active:tabCtrl.isSet(3) }" ng-click="tabCtrl.setTab(3)">Games</a>
   <a href ng-class="{ active:tabCtrl.isSet(4) }" ng-click="tabCtrl.setTab(4)">Contact</a>
-  <a href ng-class="{ active:tabCtrl.isSet(5) }" ng-click="tabCtrl.setTab(5)">Resources</a>
+  <a href ng-class="{ active:tabCtrl.isSet(5) }" ng-click="tabCtrl.setTab(5)">About Us</a>
   <span>{{tabCtrl.active}}</span>
 </nav>
 <custom-home ng-show="tabCtrl.isSet(1)"></custom-home>

@@ -4,7 +4,6 @@ const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 
 const sources = {
-  sass: __dirname + '/app/'
   html: __dirname + '/app/**/*.html',
   js: __dirname + '/app/index.js',
   test: __dirname + '/test/*_spec.js'
