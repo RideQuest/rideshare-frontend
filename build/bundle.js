@@ -57,6 +57,7 @@
 	const angular = __webpack_require__(2);
 
 
+
 	var app = angular.module("rideshareApp", []);
 
 
@@ -69,20 +70,24 @@
 
 	this.getUser = function(){
 	  $http.get(userRoute)
-	    .then(function (result){
-	      console.log(result.data);
-	      this.users = result;
+	    .then((result)=>{
+	      // console.log('GET USER' + angular.toJson(result.data));
+	      this.users = result.data;
 	    }, function(error){
 	      console.log(error);
 	    });
 	  // };
 	};
-	// self.createUser = function(user){
-	//   $http.post(userRoute){
+	// this.createUser = function(user){
+	//   $http.post(userRoute)
 	//     .then((result)=>{
+	//       this.newUser.push(user);
+	//     });
+	//   };
 	//
-	//     })
-	//   }
+	// this.updateUser = function(user){
+	//   $http.put(userRoute + user._id)
+	//
 	// }
 
 	}]);

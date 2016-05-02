@@ -2,6 +2,7 @@
 const angular = require('angular');
 
 
+
 var app = angular.module("rideshareApp", []);
 
 
@@ -14,22 +15,25 @@ console.log('hit');
 
 this.getUser = function(){
   $http.get(userRoute)
-    .then(function (result){
-      console.log('GET USER' + result.data);
-      this.users = result;
+    .then((result)=>{
+      // console.log('GET USER' + angular.toJson(result.data));
+      this.users = result.data;
     }, function(error){
       console.log(error);
     });
   // };
 };
-this.createUser = function(user){
-  $http.post(userRoute)
-    .then((result)=>{
-      this.newUser.push(user);
-    });
-
-};
-
+// this.createUser = function(user){
+//   $http.post(userRoute)
+//     .then((result)=>{
+//       this.newUser.push(user);
+//     });
+//   };
+//
+// this.updateUser = function(user){
+//   $http.put(userRoute + user._id)
+//
+// }
 
 }]);
 

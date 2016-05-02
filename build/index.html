@@ -6,14 +6,13 @@
     <title>RideShare App</title>
   </head>
   <body ng-controller="UserController as userctrl" ng-init="userctrl.getUser()">
-    {{userctrl.users[0].password}}
-      {{userctrl.users}}
-    <!-- <div ng-repeat="user in userctrl.users">
+    <!-- {{userctrl.users[0].password}} -->
       {{username}}
+    <div ng-repeat="user in userctrl.users">
+      {{user.username}}
       {{user.password}}
       {{user.email}}
-
-    </div> -->
+    </div>
 
     <script type="text/javascript" src="bundle.js"></script>
   </body>
