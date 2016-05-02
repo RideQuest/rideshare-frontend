@@ -2,10 +2,9 @@
   var Gmap = {};
   var map;
 
-  Gmap.initMap = function (){
+  Gmap.initMap = function (startPoint, destination){
+    console.log('Here is two points ' + JSON.stringify(startPoint) + ' '+ JSON.stringify(destination))
     var pikePlace = {lat: 47.608953, lng: -122.341099};
-    var bellevueMall = {lat: 47.616591, lng: -122.198797};
-
     map = new google.maps.Map(document.getElementById('map'),{
       center: pikePlace,
       scrollwheel: false,
@@ -19,8 +18,8 @@
     });
 
     var request = {
-      destination: bellevueMall,
-      origin: pikePlace,
+      destination: destination,
+      origin: startPoint,
       travelMode: google.maps.TravelMode.DRIVING
     };
 
@@ -34,6 +33,6 @@
   }
 
 
-    module.Gmap = Gmap;
+    window.Gmap = Gmap;
 
 })(window);

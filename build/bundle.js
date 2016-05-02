@@ -44,20 +44,44 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const angular = __webpack_require__(1);
-	const app = angular.module('myApp', []);
+	__webpack_require__(1);
+	__webpack_require__(4);
+	__webpack_require__(5);
+	__webpack_require__(6);
+	module.exports = __webpack_require__(7);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(2);
-	module.exports = angular;
+	const angular = __webpack_require__(2);
+	const app = angular.module('myApp', []);
+
+
+	app.controller('mapController', ['$window', function($window){
+	  var pikePlace = {lat: 47.608953, lng: -122.341099};
+	  var bellevueMall = {lat: 47.616591, lng: -122.198797};
+	  this.user = {};
+	  this.from = 'pike place';
+	  this.to = '';
+	  console.log('hitting')
+	  this.initialize = function(){
+	    $window.Gmap.initMap(pikePlace, bellevueMall);
+	  }
+	}]);
 
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(3);
+	module.exports = angular;
+
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 	/**
@@ -30928,6 +30952,162 @@
 	})(window);
 
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	(function(){
+	  var gitRoute = 'https://api.github.com/users/lwenke01';
+
+	  var app = angular.module("rideshareApp", []);
+
+	  app.directive('userProfile', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/portfolio-contact.html',
+	      controller:function($http){
+	        this.userInfo = contact;
+	      },
+	      controllerAs: 'contactCtrl'
+	    };
+	  });
+	  app.directive('customNav', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/portfolio-tabs.html',
+	      controller: function(){
+	        this.tab = 1;
+	        this.isSet = function(check){
+	          return this.tab === check;
+	        };
+	        this.setTab = function(active){
+	          this.tab = active;
+	        };
+	      },
+	      controllerAs: 'tabCtrl'
+	    };
+	  });
+	  app.directive('customProject', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/portfolio-projects.html',
+	      controller:function($http){
+	        $http.get(gitRoute + '/' + 'repos')
+	        .then((result)=>{
+	          this.repos = result.data;
+	        });
+	      },
+	      controllerAs: 'projectCtrl'
+	    };
+	  });
+	  app.directive('customHome', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/portfolio-home.html',
+	      controller:function($http){
+	        $http.get(gitRoute)
+	        .then((result)=>{
+	          this.user = result.data;
+	        });
+	      },
+	      controllerAs:'homeCtrl'
+	    };
+	  });
+	  app.directive('customResume', function(){
+	    return {
+	      retrict: 'E',
+	      templateUrl: './templates/portfolio-resume.html',
+	      controller:function($http){
+	        $http.get('./app/data-json/educationData.json')
+	        .then((result)=>{
+	          this.schools = result.data;
+	        });
+	      },
+	      controllerAs: 'resumeCtrl'
+	    };
+	  });
+	  app.directive('customResources', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/portfolio-resources.html'
+	    };
+	  });
+	  app.directive('directiveLink', function(){
+	    return {
+	      restrict: 'A',
+	      replace: true,
+	      link: function($scope, element) {
+	        element.css('border-radius', '25px');
+	        element.css('text-align', 'center');
+	        element.css('color', 'blue');
+	        element.css('font-size', '3em');
+	        element.css('transform', 'translateX(10px) rotate(10deg) translateY(5px)');
+
+	       }
+	     };
+	   });
+	})();
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	(function(module){
+	  var Gmap = {};
+	  var map;
+
+	  Gmap.initMap = function (startPoint, destination){
+	    console.log('Here is two points ' + JSON.stringify(startPoint) + ' '+ JSON.stringify(destination))
+	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    map = new google.maps.Map(document.getElementById('map'),{
+	      center: pikePlace,
+	      scrollwheel: false,
+	      zoom: 11
+	  });
+
+
+
+	    var directionsDisplay = new google.maps.DirectionsRenderer({
+	      map: map
+	    });
+
+	    var request = {
+	      destination: destination,
+	      origin: startPoint,
+	      travelMode: google.maps.TravelMode.DRIVING
+	    };
+
+	    var directionsService = new google.maps.DirectionsService();
+	    directionsService.route(request, function(res, status){
+	      if(status == google.maps.DirectionsStatus.OK){
+	        directionsDisplay.setDirections(res);
+	      }
+	    });
+
+	  }
+
+
+	    window.Gmap = Gmap;
+
+	})(window);
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	
 
 /***/ }
 /******/ ]);
