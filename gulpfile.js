@@ -5,7 +5,7 @@ const sourcemaps = require('gulp-sourcemaps');
 
 const sources = {
   html: __dirname + '/app/**/*.html',
-  js: __dirname + '/app/index.js',
+  js: __dirname + '/app/**/*.js',
   test: __dirname + '/test/*_spec.js'
 };
 

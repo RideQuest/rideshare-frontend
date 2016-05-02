@@ -1,11 +1,18 @@
 'use strict';
+module.exports = function (app) {
 
-(function(){
-  var gitRoute = 'https://api.github.com/users/lwenke01';
+app.directive('userProfile', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/user-profile.html',
+      controller:function($http){
+        this.userInfo = contact;
+      },
+      controllerAs: 'contactCtrl'
+    };
+  });
 
-  var app = angular.module("rideshareApp", []);
-
-  app.directive('userProfile', function(){
+  app.directive('newProfile', function(){
     return {
       restrict: 'E',
       templateUrl: './templates/portfolio-contact.html',
@@ -18,7 +25,7 @@
   app.directive('customNav', function(){
     return {
       restrict: 'E',
-      templateUrl: './templates/portfolio-tabs.html',
+      templateUrl: './templates/tabs.html',
       controller: function(){
         this.tab = 1;
         this.isSet = function(check){
@@ -31,7 +38,7 @@
       controllerAs: 'tabCtrl'
     };
   });
-  app.directive('customProject', function(){
+  app.directive('signIn', function(){
     return {
       restrict: 'E',
       templateUrl: './templates/portfolio-projects.html',
@@ -90,4 +97,4 @@
        }
      };
    });
-})();
+};
