@@ -1,19 +1,1 @@
-<!DOCTYPE html>
-<html ng-app="rideshareApp">
-  <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" type="text/css" href="index.css"/>
-    <title>RideShare App</title>
-  </head>
-  <body ng-controller="UserController as userctrl" ng-init="userctrl.getUser()">
-    <!-- {{userctrl.users[0].password}} -->
-      {{username}}
-    <div ng-repeat="user in userctrl.users">
-      {{user.username}}
-      {{user.password}}
-      {{user.email}}
-    </div>
 
-    <script type="text/javascript" src="bundle.js"></script>
-  </body>
-</html>

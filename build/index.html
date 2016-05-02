@@ -7,13 +7,15 @@
   </head>
   <body ng-controller="UserController as userctrl" ng-init="userctrl.getUser()">
     <!-- {{userctrl.users[0].password}} -->
-      {{username}}
+      <!-- {{username}} -->
     <div ng-repeat="user in userctrl.users">
-      {{user.username}}
-      {{user.password}}
-      {{user.email}}
-    </div>
-
+      <ul>
+    <li>Username: {{user.username}}</li>
+    <li>Password: {{user.password}}</li>
+    <li>email: {{user.email}}</li>
+  </ul>
+  </div>
+----------------------------------
     <script type="text/javascript" src="bundle.js"></script>
   </body>
 </html>
