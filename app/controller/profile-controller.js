@@ -1,18 +1,18 @@
 'use strict';
 
 module.exports = function(app){
-app.controller('ProfileController', ['$http', function($http) {
+app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
 const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
-const self= this;
-self.profiles = ['profile'];
-self.newProfile = {};
+// const self= this;
+$scope.profiles = ['profile'];
+$scope.newProfile = {};
 console.log('hit profile');
 
-self.getProfile = function(){
+$scope.getProfile = function(){
   $http.get(profileRoute)
     .then((result)=>{
       console.log();
-      self.profiles = result.data;
+      $scope.profiles = result.data;
     }, function(error){
       console.log(error);
     });
@@ -26,10 +26,10 @@ self.getProfile = function(){
 //     });
 //   };
 
-self.updateProfile = function(profile){
+$scope.updateProfile = function(profile){
   $http.put(profileRoute + profile.id)
   .then((result)=>{
-    self.profiles = self.profiles.map((p)=>{
+    $scope.profiles = $scope.profiles.map((p)=>{
       if(p.id === profile.id){
         return profile;
       }else {
@@ -37,6 +37,14 @@ self.updateProfile = function(profile){
       };
     });
   });
+};
+
+$scope.submit = function(profile){
+  if($scope.profiles){
+    $scope.profiles.push(this.profiles);
+    $scope.profiles = '';
+  }
+
 };
 // this.onFileSelect = function($files) {
 //   for(var i=0; < $files.length; i++){

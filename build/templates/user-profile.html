@@ -1,18 +1,17 @@
-<main ng-controller="ProfileController as profilectrl" ng-init="profilectrl.getProfile()" >
+<!-- <main ng-controller="ProfileController as profilectrl" ng-init="profilectrl.getProfile()" > -->
   <!-- <div ng-init="profilectrl.getProfile()" ng-repeat="profile in profilectrl.profiles"> -->
-<section class="who-profile">
+<section ng-controller="ProfileController as profilectrl" ng-init="profilectrl.getProfile()" class="who-profile">
 
   <h2>My Profile</h2>
     <div>
     <p>First Name: {{profilectrl.profiles.first_name}}</p><br>
     <p>  Last Name: {{profilectrl.profiles.last_name}}</p><br>
     <p>   Email: {{profilectrl.profiles.email}}</p><br>
-    <p>   Photo: {{profilectrl.profiles.image}}</p><br>
+    <p>   Photo: <img src="{{profilectrl.profiles.image}}" alt="Profile Pic"></p><br>
     <p>   Car Make: {{profilectrl.profiles.car_brand}}</p><br>
     <p>   Car Seats: {{profilectrl.profiles.car_seat}}</p><br>
   </div>
 
-  </section>
 <div class="">
 
   <form class="update-profile" ng-submit="userctrl.updateProfile(profile)" >
@@ -30,4 +29,6 @@
 
   </form>
 </div>
-</main>
+</section>
+
+<!-- </main> -->

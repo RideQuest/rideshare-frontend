@@ -5,7 +5,13 @@ app.controller('UserController', ['$http', function($http) {
 const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
 const self = this;
 self.users = ['user'];
+self.submit = function(){
+  if(self.users){
+    self.users.push(this.users);
+    self.users = '';
+  }
 
+};
 // self.newUser = {};
 console.log('hit');
 
