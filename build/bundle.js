@@ -45,12 +45,24 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+<<<<<<< HEAD
 	__webpack_require__(4);
 	__webpack_require__(6);
 	__webpack_require__(7);
 	__webpack_require__(5);
 	__webpack_require__(8);
 	module.exports = __webpack_require__(9);
+=======
+	__webpack_require__(8);
+	__webpack_require__(7);
+	__webpack_require__(6);
+	__webpack_require__(5);
+	__webpack_require__(9);
+	__webpack_require__(10);
+	__webpack_require__(11);
+	__webpack_require__(12);
+	module.exports = __webpack_require__(4);
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 
 
 /***/ },
@@ -60,12 +72,23 @@
 	'use strict';
 	const angular = __webpack_require__(2);
 	var app = angular.module("rideshareApp", []);
-
+	// var app = angular.module("rideshareApp", ['ngFileUpload']);
 
 
 	__webpack_require__(4)(app);
+	// require(__dirname + '/directives/gmap-directive.js')(app);
+	__webpack_require__(5)(app);
+
+<<<<<<< HEAD
+	__webpack_require__(4)(app);
 	__webpack_require__(5)(app);
 	__webpack_require__(6)(app);
+=======
+	// require(__dirname + '/controller/file-controller.js')(app);
+	// require(__dirname + '/controller/gmap-controller.js')(app);
+	__webpack_require__(6)(app);
+	__webpack_require__(7)(app);
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 
 
 /***/ },
@@ -30953,6 +30976,7 @@
 /* 4 */
 /***/ function(module, exports) {
 
+<<<<<<< HEAD
 	module.exports = function(app){
 	  app.controller('mapController', ['$window','$http', function($window, $http){
 	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/'
@@ -31020,6 +31044,28 @@
 	  });
 
 	}
+=======
+	'use strict';
+	module.exports = function (app) {
+
+
+
+	app.service('fileUpload', ['$http', function ($http) {
+	    this.uploadFileToUrl = function(file, uploadUrl){
+	        var fd = new FormData();
+	        fd.append('file', file);
+	        $http.post(uploadUrl, fd, {
+	            transformRequest: angular.identity,
+	            headers: {'Content-Type': undefined}
+	        })
+	        .success(function(){
+	        })
+	        .error(function(){
+	        });
+	    }
+	}]);
+	};
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 
 
 /***/ },
@@ -31027,7 +31073,9 @@
 /***/ function(module, exports) {
 
 	'use strict';
+	module.exports = function (app) {
 
+<<<<<<< HEAD
 	module.exports = function(app) {
 	app.controller('UserController', ['$http', function($http) {
 	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
@@ -31083,28 +31131,39 @@
 
 	'use strict';
 	module.exports = function (app) {
+=======
+	app.directive('userProfile', function(){
+	    return {
+	      restrict: 'E',
+	      // replace: true,
+	      templateUrl: './templates/user-profile.html'
 
-	// app.directive('userProfile', function(){
-	//     return {
-	//       restrict: 'E',
-	//       templateUrl: './templates/user-profile.html',
-	//       controller:function($http){
-	//         this.userInfo = contact;
-	//       },
-	//       controllerAs: 'contactCtrl'
-	//     };
-	//   });
+	    };
+	  });
 
-	  // app.directive('newProfile', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/portfolio-contact.html',
-	  //     controller:function($http){
-	  //       this.userInfo = contact;
-	  //     },
-	  //     controllerAs: 'contactCtrl'
-	  //   };
-	  // });
+	  app.directive('userSignin', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/signin.html'
+	    };
+	  });
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
+
+	  app.directive('fileModel', ['$parse', function ($parse) {
+	    return {
+	        restrict: 'A',
+	        link: function(scope, element, attrs) {
+	            var model = $parse(attrs.fileModel);
+	            var modelSetter = model.assign;
+
+	            element.bind('change', function(){
+	                scope.$apply(function(){
+	                    modelSetter(scope, element[0].files[0]);
+	                });
+	            });
+	        }
+	    };
+	}]);
 	  app.directive('customNav', function(){
 	    return {
 	      restrict: 'E',
@@ -31121,6 +31180,7 @@
 	      controllerAs: 'tabCtrl'
 	    };
 	  });
+<<<<<<< HEAD
 	  app.directive('userInfo', function(){
 	    return {
 	      restrict: 'E',
@@ -31132,51 +31192,293 @@
 	        });
 	      },
 	      controllerAs: 'projectCtrl'
-	    };
-	  });
-	  app.directive('customHome', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-home.html',
-	      controller:function($http){
-	        $http.get(gitRoute)
-	        .then((result)=>{
-	          this.user = result.data;
-	        });
-	      },
-	      controllerAs:'homeCtrl'
-	    };
-	  });
-	  app.directive('customResume', function(){
-	    return {
-	      retrict: 'E',
-	      templateUrl: './templates/portfolio-resume.html',
-	      controller:function($http){
-	        $http.get('./app/data-json/educationData.json')
-	        .then((result)=>{
-	          this.schools = result.data;
-	        });
-	      },
-	      controllerAs: 'resumeCtrl'
-	    };
-	  });
-	  app.directive('customResources', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-resources.html'
-	    };
-	  });
-	  app.directive('directiveLink', function(){
-	    return {
-	      restrict: 'A',
-	      replace: true,
-	      link: function($scope, element) {
-	        element.css('border-radius', '25px');
-	        element.css('text-align', 'center');
-	        element.css('color', 'blue');
-	        element.css('font-size', '3em');
-	        element.css('transform', 'translateX(10px) rotate(10deg) translateY(5px)');
+=======
+	  // app.directive('userInfo', function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     templateUrl: './templates/user-profile.html',
+	  //     controller:function($http){
+	  //       $http.get(gitRoute + '/' + 'repos')
+	  //       .then((result)=>{
+	  //         this.repos = result.data;
+	  //       });
+	  //     },
+	  //     controllerAs: 'projectCtrl'
+	  //   };
+	  // });
+	  // app.directive('customHome', function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     templateUrl: './templates/portfolio-home.html',
+	  //     controller:function($http){
+	  //       $http.get(gitRoute)
+	  //       .then((result)=>{
+	  //         this.user = result.data;
+	  //       });
+	  //     },
+	  //     controllerAs:'homeCtrl'
+	  //   };
+	  // });
+	  // app.directive('customResume', function(){
+	  //   return {
+	  //     retrict: 'E',
+	  //     templateUrl: './templates/portfolio-resume.html',
+	  //     controller:function($http){
+	  //       $http.get('./app/data-json/educationData.json')
+	  //       .then((result)=>{
+	  //         this.schools = result.data;
+	  //       });
+	  //     },
+	  //     controllerAs: 'resumeCtrl'
+	  //   };
+	  // });
+	  // app.directive('customResources', function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     templateUrl: './templates/portfolio-resources.html'
+	  //   };
+	  // });
+	  // app.directive('directiveLink', function(){
+	  //   return {
+	  //     restrict: 'A',
+	  //     replace: true,
+	  //     link: function($scope, element) {
+	  //       element.css('border-radius', '25px');
+	  //       element.css('text-align', 'center');
+	  //       element.css('color', 'blue');
+	  //       element.css('font-size', '3em');
+	  //       element.css('transform', 'translateX(10px) rotate(10deg) translateY(5px)');
+	  //
+	  //      }
+	  //    };
+	  //  });
+	};
 
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app){
+	app.controller('UserController', ['$http', function($http) {
+	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	const self = this;
+	self.users = ['user'];
+	self.submit = function(){
+	  if(self.users){
+	    self.users.push(this.users);
+	    self.users = '';
+	  }
+
+	};
+	// self.newUser = {};
+	console.log('hit');
+	self.ctrl = function($scope) {
+	    $scope.btns = [{
+	        label: "One",
+	        state: false
+	    }, {
+	        label: "Two",
+	        state: true
+	    }, {
+	        label: "Three",
+	        state: false
+	    }];
+
+	    $scope.toggle = function () {
+	        self.b.state = !self.b.state;
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
+	    };
+	}
+
+	self.getUser = function(){
+	  $http.get(userRoute)
+	    .then((result)=>{
+	      self.users = result.data;
+	    }, function(error){
+	      return error;
+	    });
+	};
+	self.createUser = function(user){
+	  $http.post(userRoute, user)
+	    .then(function(result){
+	      // console.log('post is hit');
+	      self.users.push(res.data);
+	      self.newUser = null;
+	    });
+	  };
+	  self.signIn = function(user){
+	    $http.put(userRoute + user.id)
+	    .then((result)=>{
+	      self.users = self.users.map((u)=>{
+	        if(u.id === user.id){
+	          return user;
+	        }else {
+	          return u;
+	        };
+	      });
+	    });
+	  };
+
+	self.updateUser = function(user){
+	  $http.put(userRoute + user.id)
+	  .then((result)=>{
+	    self.users = self.users.map((u)=>{
+	      if(u.id === user.id){
+	        return user;
+	      }else {
+	        return u;
+	      };
+	    });
+	  });
+	};
+
+	self.removeUser = function(user){
+	  $http.delete(userRoute + user.id)
+	  .then((result)=>{
+	    self.users = self.users.filter((u)=> u.id !=u.id);
+	  });
+	};
+
+	}]);
+
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app){
+	app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
+	const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
+	// const self= this;
+	$scope.profiles = ['profile'];
+	$scope.newProfile = {};
+	console.log('hit profile');
+
+	$scope.getProfile = function(){
+	  $http.get(profileRoute)
+	    .then((result)=>{
+	      console.log();
+	      $scope.profiles = result.data;
+	    }, function(error){
+	      console.log(error);
+	    });
+
+	};
+	// this.createUser = function(profile){
+	//   $http.post(profileRoute, user)
+	//     .then((result)=>{
+	//       console.log('post is hit');
+	//       this.profiles.push(result.data);
+	//     });
+	//   };
+
+	$scope.updateProfile = function(profile){
+	  $http.put(profileRoute + profile.id)
+	  .then((result)=>{
+	    $scope.profiles = $scope.profiles.map((p)=>{
+	      if(p.id === profile.id){
+	        return profile;
+	      }else {
+	        return p;
+	      };
+	    });
+	  });
+	};
+
+	$scope.submit = function(profile){
+	  if($scope.profiles){
+	    $scope.profiles.push(this.profiles);
+	    $scope.profiles = '';
+	  }
+
+	};
+	// this.onFileSelect = function($files) {
+	//   for(var i=0; < $files.length; i++){
+	//     var $file = $files[i];
+	//     Upload.upload({
+	//       url:
+	//     })
+	//   }
+	// }
+
+	// this.removeUser = function(user){
+	//   $http.delete(userRoute + user.id)
+	//   .then((result)=>{
+	//     this.users = this.users.filter((u)=> u.id !=u.id);
+	//   });
+	// };
+
+
+	}]);
+	app.controller('FileController', ['$scope', 'fileUpload', function($scope, fileUpload){
+
+	    $scope.uploadFile = function(){
+	        var file = $scope.myFile;
+	        console.log('file is ' );
+	        console.dir(file);
+	        var uploadUrl = "/fileUpload";
+	        fileUpload.uploadFileToUrl(file, uploadUrl);
+	    };
+
+	}]);
+	};
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.controller('mapController', ['$window', function($window){
+	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
+	    this.user = {};
+	    this.startingPoint = {
+	      street: '',
+	      city: '',
+	      state: ''
+	    };
+	    this.destination  = {
+	      street: '',
+	      city: '',
+	      state: ''
+	    };;
+
+	    this.initialize = function(){
+	      $window.Gmap.initMap(pikePlace, bellevueMall);
+	    }
+
+	    this.search = function(){
+	      var start = this.startingPoint.street + ', ' + this.startingPoint.city + this.startingPoint.
+	      $window.Gmap.convertAddress()
+	      console.log(angular.toJson(this.startingPoint));
+	      console.log(angular.toJson(this.destination));
+	    }
+	  }]);
+	}
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.directive('mapRider',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      templateUrl: '/templates/form-rider.html'
+	    }
+	  });
+
+<<<<<<< HEAD
 	       }
 	     };
 	   });
@@ -31185,6 +31487,29 @@
 
 /***/ },
 /* 8 */
+=======
+	}
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	// module.exports = function(app){
+	//   app.directive('mapRider',function(){
+	//     return {
+	//       restrict: 'E',
+	//       replace: true,
+	//       templateUrl: '/templates/form-rider.html'
+	//     }
+	//   });
+	//
+	// }
+
+
+/***/ },
+/* 11 */
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 /***/ function(module, exports) {
 
 	(function(module){
@@ -31203,6 +31528,7 @@
 	    });
 	  }
 
+<<<<<<< HEAD
 	  Gmap.getDirections = function(startPoint){
 	    Gmap.convertAddress(startPoint, function(){
 	      console.log('Is it start point ? ' + startPoint)
@@ -31222,6 +31548,10 @@
 	          }
 	      });
 
+=======
+	    var directionsDisplay = new google.maps.DirectionsRenderer({
+	      map: map
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 	    });
 	  }
 
@@ -31261,6 +31591,7 @@
 	    });
 	  };
 
+<<<<<<< HEAD
 	  Gmap.markersOnOrigins = function(markerPoints){
 	    var marker;
 	    markerPoints.forEach((startingPoint)=>{
@@ -31272,16 +31603,37 @@
 	    });
 
 	  }
+=======
+	  Gmap.convertAddress = function(fromAddress){
+	    geocoder.geocode({address: fromAddress})
+	  }
+
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 	  module.Gmap = Gmap;
 
 	})(window);
 
 
 /***/ },
+<<<<<<< HEAD
 /* 9 */
+=======
+/* 12 */
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 /***/ function(module, exports) {
 
-	
+	'use strict';
+	module.exports = function(app) {
+	  app.factory('ErrorService', function() {
+	    var error;
+	    return function(newError) {
+	      if (newError === null) return error = null;
+	      if (!newError) return error;
+	      return error = newError;
+	    };
+	  });
+	};
+
 
 /***/ }
 /******/ ]);
