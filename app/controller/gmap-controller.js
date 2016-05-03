@@ -1,5 +1,5 @@
 module.exports = function(app){
-  app.controller('mapController', ['$window','$http', function($window, $http){
+  app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
     var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
     var pikePlace = {lat: 47.608953, lng: -122.341099};
     var bellevueMall = {lat: 47.616591, lng: -122.198797};

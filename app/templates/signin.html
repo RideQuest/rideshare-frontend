@@ -1,20 +1,20 @@
 
-<section class="sign"ng-controller="UserController as userctrl" >
+<section class="sign" ng-controller="UserController as userctrl" >
   <!-- <div class="login"> -->
   <!-- <h2 class="login-header">Log in</h2> -->
-  <div><button id="login-button" ng-hide="userlogin" ng-click="userlogin = userlogin == true ? false : true;">Login</button></div>
+  <!-- <div><button id="login-button" ng-hide="userlogin" ng-click="userlogin = userlogin == true ? false : true;">Login</button></div>
       <div class="login">
     <div><div ng-show="userlogin" class="hideByDefault">
         <div class="login-triangle"></div>
-      <h2 class="login-header">Log in</h2>
-      <form class="signin-form" ng-submit="userctrl.getUser()"></p>
-        <p><input type="email" placeholder="email" ng-model="userctrl.users.email"></p>
-        <p><input type="text" placeholder="username" ng-model="userctrl.users.username"></p>
-        <p><input type="password" placeholder="password" ng-model="userctrl.users.password"></p>
-        <p><input type="submit" value="Log in"></p>
-      </div></div>
+      <h2 class="login-header">Log in</h2> -->
+      <form class="signin-form" ng-submit="userctrl.logIn(user)">
+        <!-- <p><input type="email" placeholder="email" ng-model="userctrl.users.email"> -->
+        <input type="text" placeholder="type in your username" ng-model="user.username">
+        <input type="password" placeholder="type in your password" ng-model="user.password">
+        <input type="submit" value="Log in"></p>
+      <!-- </div></div> -->
     </form>
-  </div>
+  <!-- </div> -->
 
   <!-- <div class="login">
   <div class="login-triangle"></div>
@@ -31,7 +31,7 @@
   <div class="signup-wrapper">
     <div><button id="signup-button" ng-hide="newuser" ng-click="newuser = newuser == true ? false : true;">Sign Up</button></div>
     <div><div ng-show="newuser" class="hideByDefault">
-      <form class="signup-form" ng-submit="userctrl.createUser(newUser)" >
+      <form class="signup-form" ng-submit="userctrl.signUp(newUser)" >
         <input ng-model="newUser.username" type="text" placeholder="username">
         <input ng-model="newUser.email" type="email" placeholder="email">
         <input ng-model="newUser.password" type="password" placeholder="password">

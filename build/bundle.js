@@ -46,14 +46,15 @@
 
 	__webpack_require__(1);
 	__webpack_require__(7);
-	__webpack_require__(9);
-	__webpack_require__(8);
 	__webpack_require__(6);
-	__webpack_require__(5);
-	__webpack_require__(10);
 	__webpack_require__(11);
+	__webpack_require__(8);
+	__webpack_require__(10);
+	__webpack_require__(9);
 	__webpack_require__(12);
-	module.exports = __webpack_require__(4);
+	__webpack_require__(4);
+	__webpack_require__(13);
+	module.exports = __webpack_require__(5);
 
 
 /***/ },
@@ -65,14 +66,14 @@
 	var app = angular.module("rideshareApp", []);
 
 
-
 	__webpack_require__(4)(app);
 	__webpack_require__(5)(app);
 	__webpack_require__(6)(app);
-
 	__webpack_require__(7)(app);
+
 	__webpack_require__(8)(app);
 	__webpack_require__(9)(app);
+	__webpack_require__(10)(app);
 
 
 /***/ },
@@ -30960,30 +30961,76 @@
 /* 4 */
 /***/ function(module, exports) {
 
-	'use strict';
-	module.exports = function (app) {
+	module.exports = function(app){
+	  app.factory('AuthService', ['$http', '$window', function($http, $window){
+	    var token;
+	    var url = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com';
+	    var auth = {
+	      createUser(user, cb){
+	        console.log('grabbing user data : ' + user);
+	        cb || function(){};
+	        $http.post(url + 'auth-token/', user)
+	          .then((res)=>{
+	            token = $window.localStorage.token = res.data.token;
+	            console.log('ThisIsToken: ' + token);
+	          },(err)=>{
+	            console.log(err);
+	          });
+	      },
+	      getToken(){
+	        return token || $window.localStorage.token;
+	      },
+	      signOut(){
+	        token = null;
+	        $window.localStorage.token = null;
+	      },
 
-
-
-	app.service('fileUpload', ['$http', function ($http) {
-	    this.uploadFileToUrl = function(file, uploadUrl){
-	        var fd = new FormData();
-	        fd.append('file', file);
-	        $http.post(uploadUrl, fd, {
-	            transformRequest: angular.identity,
-	            headers: {'Content-Type': undefined}
-	        })
-	        .success(function(){
-	        })
-	        .error(function(){
+	      signIn(user, cb){
+	        cb || function(){};
+	        $http.get(url + '/auth-token',{
+	          headers: {
+	            authorization: 'Basic' + btoa(user.username + ':' + user.password)
+	          }
+	        }).then((res)=>{
+	          token = $window.localStorage.token = res.data.token;
+	          cb(null, res);
+	        }, (err)=>{
+	          console.log(err);
+	          cb(err);
 	        });
-	    }
-	}]);
+	      }
+	    };
+	    return auth;
+	  }]);
 	};
 
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+	module.exports = function (app) {
+
+	  app.service('fileUpload', ['$http', function ($http) {
+	    this.uploadFileToUrl = function(file, uploadUrl){
+	      var fd = new FormData();
+	      fd.append('file', file);
+	      $http.post(uploadUrl, fd, {
+	        transformRequest: angular.identity,
+	        headers: {'Content-Type': undefined}
+	      })
+	        .success(function(){
+	        })
+	        .error(function(){
+	        });
+	    };
+	  }]);
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -31017,7 +31064,7 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31133,11 +31180,11 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
-	  app.controller('mapController', ['$window','$http', function($window, $http){
+	  app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
 	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
 	    var pikePlace = {lat: 47.608953, lng: -122.341099};
 	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
@@ -31162,7 +31209,7 @@
 
 	    this.postRoutes = function(coordinates){
 	      console.log('I am inside of postRoute : ' + coordinates);
-	      $http.post(mainRoute + 'users/1', coordinates)
+	      $http.post(mainRoute + 'users', coordinates)
 	        .then((err, res)=>{
 	          if(err) return console.log('Errorrrr : ' + err);
 	          console.log('Response back : ' + res);
@@ -31180,41 +31227,58 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
 
 	module.exports = function(app){
-	app.controller('UserController', ['$http', function($http) {
-	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	const self = this;
-	self.users = ['user'];
-	self.submit = function(){
-	  if(self.users){
-	    self.users.push(this.users);
-	    self.users = '';
-	  }
+	app.controller('UserController', ['$http','AuthService', function($http, AuthService) {
+	  const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	  const self = this;
+	  self.users = ['user'];
+	  self.submit = function(){
+	    if(self.users){
+	      self.users.push(this.users);
+	      self.users = '';
+	    }
 
-	};
-
-	self.getUser = function(){
-	  $http.get(userRoute)
-	    .then((result)=>{
-	      self.users = result.data;
-	    }, function(error){
-	      return error;
-	    });
-	};
-	self.createUser = function(user){
-	  $http.post(userRoute, user)
-	    .then(function(result){
-	      // console.log('post is hit');
-	      self.users.push(res.data);
-	      self.newUser = null;
-	    });
 	  };
-	  self.signIn = function(user){
+
+	  self.getUser = function(){
+	    $http.get(userRoute)
+	      .then((result)=>{
+	        self.users = result.data;
+	      }, function(error){
+	        return error;
+	      });
+	  };
+
+	  self.createUser = function(user){
+	    $http.post(userRoute, user, {
+	      headers: AuthService.getToken()
+	    })
+	      .then(function(res){
+	        console.log('post is hit');
+	        self.users.push(res.data);
+	        self.newUser = null;
+	      });
+	  };
+
+	  // self.signIn = function(user){
+	  //   $http.put(userRoute + user.id)
+	  //   .then((res)=>{
+	  //     self.users = self.users.map((u)=>{
+	  //       if(u.id === user.id){
+	  //         return user;
+	  //       }else {
+	  //         return u;
+	  //       }
+	  //     });
+	  //   });
+	  // };
+
+	  self.updateUser = function(user){
 	    $http.put(userRoute + user.id)
 	    .then((result)=>{
 	      self.users = self.users.map((u)=>{
@@ -31222,122 +31286,123 @@
 	          return user;
 	        }else {
 	          return u;
-	        };
+	        }
 	      });
 	    });
 	  };
 
-	self.updateUser = function(user){
-	  $http.put(userRoute + user.id)
-	  .then((result)=>{
-	    self.users = self.users.map((u)=>{
-	      if(u.id === user.id){
-	        return user;
-	      }else {
-	        return u;
-	      };
-	    });
-	  });
-	};
-
-	self.removeUser = function(user){
-	  $http.delete(userRoute + user.id)
-	  .then((result)=>{
-	    self.users = self.users.filter((u)=> u.id !=u.id);
-	  });
-	};
-
-	}]);
-
-	};
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(app){
-	app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
-	const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
-	// const self= this;
-	$scope.profiles = ['profile'];
-	$scope.newProfile = {};
-	console.log('hit profile');
-
-	$scope.getProfile = function(){
-	  $http.get(profileRoute)
+	  self.removeUser = function(user){
+	    $http.delete(userRoute + user.id)
 	    .then((result)=>{
-	      console.log();
-	      $scope.profiles = result.data;
-	    }, function(error){
-	      console.log(error);
+	      self.users = self.users.filter((u)=> u.id !=u.id);
 	    });
+	  };
 
-	};
-	// this.createUser = function(profile){
-	//   $http.post(profileRoute, user)
-	//     .then((result)=>{
-	//       console.log('post is hit');
-	//       this.profiles.push(result.data);
-	//     });
-	//   };
-
-	$scope.updateProfile = function(profile){
-	  $http.put(profileRoute + profile.id)
-	  .then((result)=>{
-	    $scope.profiles = $scope.profiles.map((p)=>{
-	      if(p.id === profile.id){
-	        return profile;
-	      }else {
-	        return p;
-	      };
+	  self.signUp = function(user){
+	    AuthService.createUser(user, (err, res)=>{
+	      if(err) return console.log(err);
+	      console.log('hitting' + res);
 	    });
-	  });
-	};
-
-	$scope.submit = function(profile){
-	  if($scope.profiles){
-	    $scope.profiles.push(this.profiles);
-	    $scope.profiles = '';
 	  }
 
-	};
-	// this.onFileSelect = function($files) {
-	//   for(var i=0; < $files.length; i++){
-	//     var $file = $files[i];
-	//     Upload.upload({
-	//       url:
-	//     })
-	//   }
-	// }
-
-	// this.removeUser = function(user){
-	//   $http.delete(userRoute + user.id)
-	//   .then((result)=>{
-	//     this.users = this.users.filter((u)=> u.id !=u.id);
-	//   });
-	// };
-
-
+	  self.logIn = function(user){
+	    console.log(user);
+	    AuthService.signIn(user, (err, res)=>{
+	      console.log('Log in response : ' + res);
+	    });
+	  };
 	}]);
-	app.controller('FileController', ['$scope', 'fileUpload', function($scope, fileUpload){
 
-	    $scope.uploadFile = function(){
-	        var file = $scope.myFile;
-	        console.log('file is ' );
-	        console.dir(file);
-	        var uploadUrl = "/fileUpload";
-	        fileUpload.uploadFileToUrl(file, uploadUrl);
-	    };
-
-	}]);
 	};
 
 
 /***/ },
 /* 10 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app){
+	  app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
+	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
+	    // const self= this;
+	    $scope.profiles = ['profile'];
+	    $scope.newProfile = {};
+	    console.log('hit profile');
+
+	    $scope.getProfile = function(){
+	      $http.get(profileRoute)
+	        .then((result)=>{
+	          console.log();
+	          $scope.profiles = result.data;
+	        }, function(error){
+	          console.log(error);
+	        });
+
+	    };
+	    // this.createUser = function(profile){
+	    //   $http.post(profileRoute, user)
+	    //     .then((result)=>{
+	    //       console.log('post is hit');
+	    //       this.profiles.push(result.data);
+	    //     });
+	    //   };
+
+	    $scope.updateProfile = function(profile){
+	      $http.put(profileRoute + profile.id)
+	        .then((result)=>{
+	          $scope.profiles = $scope.profiles.map((p)=>{
+	            if(p.id === profile.id){
+	              return profile;
+	            } else {
+	              return p;
+	            }
+	          });
+	        });
+	    };
+
+	    $scope.submit = function(profile){
+	      if($scope.profiles){
+	        $scope.profiles.push(this.profiles);
+	        $scope.profiles = '';
+	      }
+
+	    };
+	    // this.onFileSelect = function($files) {
+	    //   for(var i=0; < $files.length; i++){
+	    //     var $file = $files[i];
+	    //     Upload.upload({
+	    //       url:
+	    //     })
+	    //   }
+	    // }
+
+	    // this.removeUser = function(user){
+	    //   $http.delete(userRoute + user.id)
+	    //   .then((result)=>{
+	    //     this.users = this.users.filter((u)=> u.id !=u.id);
+	    //   });
+	    // };
+
+
+	  }]);
+
+	  app.controller('FileController', ['$scope', 'fileUpload', function($scope, fileUpload){
+
+	    $scope.uploadFile = function(){
+	      var file = $scope.myFile;
+	      console.log('file is ' );
+	      console.dir(file);
+	      var uploadUrl = '/fileUpload';
+	      fileUpload.uploadFileToUrl(file, uploadUrl);
+	    };
+
+	  }]);
+	};
+
+
+/***/ },
+/* 11 */
 /***/ function(module, exports) {
 
 	// module.exports = function(app){
@@ -31353,7 +31418,7 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	(function(module){
@@ -31451,7 +31516,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
