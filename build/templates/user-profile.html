@@ -2,6 +2,24 @@
   <!-- <div ng-init="profilectrl.getProfile()" ng-repeat="profile in profilectrl.profiles"> -->
 <section ng-controller="ProfileController as profilectrl" ng-init="profilectrl.getProfile()" class="who-profile">
 
+<<<<<<< HEAD
+</form>
+</section> -->
+<section ng-controller="UserController as userctrl" ng-init="userctrl.getUser()">
+ <!-- {{userctrl.users[0].password}} -->
+   <!-- {{username}} -->
+ <div ng-repeat="user in userctrl.users">
+   <ul>
+ <li>Username: {{user.username}}</li>
+ <li>Password: {{user.password}}</li>
+ <li>email: {{user.email}}</li>
+</ul>
+</div>
+
+
+
+</section>
+=======
   <h2>My Profile</h2>
     <div>
     <p>First Name: {{profilectrl.profiles.first_name}}</p><br>
@@ -32,3 +50,4 @@
 </section>
 
 <!-- </main> -->
+>>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
