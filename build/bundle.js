@@ -45,111 +45,29 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-<<<<<<< HEAD
-	__webpack_require__(5);
 	__webpack_require__(4);
 	__webpack_require__(6);
-	module.exports = __webpack_require__(7);
-=======
-	__webpack_require__(4);
-	module.exports = __webpack_require__(5);
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
+	__webpack_require__(7);
+	__webpack_require__(5);
+	__webpack_require__(8);
+	module.exports = __webpack_require__(9);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
-	const angular = __webpack_require__(2);
-	const app = angular.module('myApp', []);
-	__webpack_require__(4)(app);
-
-	app.controller('mapController', ['$window', function($window){
-	  var pikePlace = {lat: 47.608953, lng: -122.341099};
-	  var bellevueMall = {lat: 47.616591, lng: -122.198797};
-	  this.user = {};
-	  this.startingPoint = {
-	    street: '',
-	    city: '',
-	    state: ''
-	  };
-	  this.destination  = {
-	    street: '',
-	    city: '',
-	    state: ''
-	  };;
-
-	  this.initialize = function(){
-	    $window.Gmap.initMap(pikePlace, bellevueMall);
-	  }
-
-	  this.search = function(){
-	    console.log(angular.toJson(this.startingPoint));
-	    console.log(angular.toJson(this.destination));
-	  }
-	}]);
-
-
-=======
 	'use strict';
 	const angular = __webpack_require__(2);
-
-
-
 	var app = angular.module("rideshareApp", []);
 
 
 
-	app.controller('UserController', ['$http', function($http) {
-	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	this.users = ['user'];
-	this.newUser = {};
-	console.log('hit');
-
-	this.getUser = function(){
-	  $http.get(userRoute)
-	    .then((result)=>{
-	      // console.log('GET USER' + angular.toJson(result.data));
-	      this.users = result.data;
-	    }, function(error){
-	      console.log(error);
-	    });
-	  // };
-	};
-	// this.createUser = function(user){
-	//   $http.post(userRoute)
-	//     .then((result)=>{
-	//       this.newUser.push(user);
-	//     });
-	//   };
-	//
-	// this.updateUser = function(user){
-	//   $http.put(userRoute + user._id)
-	//
-	// }
-
-	}]);
+	__webpack_require__(4)(app);
+	__webpack_require__(5)(app);
+	__webpack_require__(6)(app);
 
 
-	// app.directive('customUser', function($http){
-	//   return {
-	//     restrict: 'E',
-	//     templateUrl: './templates/user-profile.html',
-	//     controller: function($http){
-	//       $http.get(userRoute)
-	//       .then((result)=>{
-	//         self.user = result.data;
-	//       })
-	//
-	//     }
-	//   }
-	//
-	// }]);
-	// };
-
-
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
@@ -31035,7 +30953,33 @@
 /* 4 */
 /***/ function(module, exports) {
 
-<<<<<<< HEAD
+	module.exports = function(app){
+	  app.controller('mapController', ['$window','$http', function($window, $http){
+	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/'
+	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
+	    this.user = {};
+	    this.origin = '';
+	    this.destination  = '';
+
+	    this.initialize = function(){
+	      $window.Gmap.initMap();
+	    }
+
+	    this.search = function(){
+	      console.log('hitting here in search!')
+	      $window.Gmap.getDirections(this.origin)
+	    }
+
+	    
+	  }]);
+	}
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
 	module.exports = function(app){
 	  app.directive('mapRider',function(){
 	    return {
@@ -31049,31 +30993,64 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
 
-	(function(){
-	  var gitRoute = 'https://api.github.com/users/lwenke01';
+	module.exports = function(app) {
+	app.controller('UserController', ['$http', function($http) {
+	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	this.users = ['user'];
+	this.newUser = {};
+	console.log('hit');
 
-	  var app = angular.module("rideshareApp", []);
+	this.getUser = function(){
+	  $http.get(userRoute)
+	    .then((result)=>{
+	      this.users = result.data;
+	    }, function(error){
+	      console.log(error);
+	    });
+	  // };
+	};
+	this.createUser = function(user){
+	  $http.post(userRoute)
+	    .then((result)=>{
+	      this.newUser.push(user);
+	    });
+	  };
 
-	  app.directive('userProfile', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-contact.html',
-	      controller:function($http){
-	        this.userInfo = contact;
-	      },
-	      controllerAs: 'contactCtrl'
-	    };
-	  });
-	  app.directive('customNav', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-tabs.html',
-=======
+	this.updateUser = function(user){
+	  $http.put(userRoute + user._id)
+
+
+	}
+
+	}]);
+
+
+	// app.directive('customUser', function($http){
+	//   return {
+	//     restrict: 'E',
+	//     templateUrl: './templates/user-profile.html',
+	//     controller: function($http){
+	//       $http.get(userRoute)
+	//       .then((result)=>{
+	//         self.user = result.data;
+	//       })
+	//
+	//     }
+	//   }
+	//
+	// }]);
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
 	'use strict';
 	module.exports = function (app) {
 
@@ -31102,7 +31079,6 @@
 	    return {
 	      restrict: 'E',
 	      templateUrl: './templates/tabs.html',
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 	      controller: function(){
 	        this.tab = 1;
 	        this.isSet = function(check){
@@ -31115,17 +31091,10 @@
 	      controllerAs: 'tabCtrl'
 	    };
 	  });
-<<<<<<< HEAD
-	  app.directive('customProject', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-projects.html',
-=======
 	  app.directive('userInfo', function(){
 	    return {
 	      restrict: 'E',
 	      templateUrl: './templates/user-profile.html',
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 	      controller:function($http){
 	        $http.get(gitRoute + '/' + 'repos')
 	        .then((result)=>{
@@ -31181,46 +31150,67 @@
 	       }
 	     };
 	   });
-<<<<<<< HEAD
-	})();
+	};
 
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports) {
 
 	(function(module){
 	  var Gmap = {};
 	  var map;
+	  var geocoder;
+	  var request;
 
-	  Gmap.initMap = function (startPoint, destination){
-	    console.log('Here is two points ' + JSON.stringify(startPoint) + ' '+ JSON.stringify(destination))
+	  Gmap.initMap = function (){
 	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    geocoder = new google.maps.Geocoder();
 	    map = new google.maps.Map(document.getElementById('map'),{
 	      center: pikePlace,
 	      scrollwheel: false,
-	      zoom: 11
-	  });
-
-
-
-	    var directionsDisplay = new google.maps.DirectionsRenderer({
-	      map: map
-	    });
-
-	    var request = {
-	      destination: destination,
-	      origin: startPoint,
-	      travelMode: google.maps.TravelMode.DRIVING
-	    };
-
-	    var directionsService = new google.maps.DirectionsService();
-	    directionsService.route(request, function(res, status){
-	      if(status == google.maps.DirectionsStatus.OK){
-	        directionsDisplay.setDirections(res);
-	      }
+	      zoom: 12
 	    });
 	  }
+
+	  Gmap.getDirections = function(startPoint){
+	    Gmap.convertAddress(startPoint, function(){
+	      console.log('Is it start point ? ' + startPoint)
+	      request = {
+	        destination: {lat: 47.618427, lng: -122.351843},
+	        origin: startPoint,
+	        travelMode: google.maps.TravelMode.DRIVING
+	      }
+	      var directionsDisplay = new google.maps.DirectionsRenderer({
+	          map: map
+	        });
+
+	      var directionsService = new google.maps.DirectionsService();
+	        directionsService.route(request, function(res, status){
+	          if(status == google.maps.DirectionsStatus.OK){
+	            directionsDisplay.setDirections(res);
+	          }
+	      });
+
+	    });
+	  }
+
+	  Gmap.convertAddress = function(address, cb){
+	    geocoder.geocode({'address': address}, function(results, status){
+	      if(status == google.maps.GeocoderStatus.OK){
+	        map.setCenter(results[0].geometry.location);
+	        console.log('inside convert fn : ' + JSON.stringify(results[0].geometry.location));
+	        var marker = new google.maps.Marker({
+	          map: map,
+	          position: results[0].geometry.location
+	        });
+	        startPoint = results[0].geometry.location
+	        cb(startPoint)
+	      } else {
+	        alert('Geocode was not successful : ' + status);
+	      };
+	    });
+	  };
 
 	  module.Gmap = Gmap;
 
@@ -31228,14 +31218,7 @@
 
 
 /***/ },
-/* 7 */
-=======
-	};
-
-
-/***/ },
-/* 5 */
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
+/* 9 */
 /***/ function(module, exports) {
 
 	

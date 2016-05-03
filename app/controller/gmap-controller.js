@@ -1,28 +1,21 @@
 module.exports = function(app){
-  app.controller('mapController', ['$window', function($window){
+  app.controller('mapController', ['$window','$http', function($window, $http){
+    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/'
     var pikePlace = {lat: 47.608953, lng: -122.341099};
     var bellevueMall = {lat: 47.616591, lng: -122.198797};
     this.user = {};
-    this.startingPoint = {
-      street: '',
-      city: '',
-      state: ''
-    };
-    this.destination  = {
-      street: '',
-      city: '',
-      state: ''
-    };;
+    this.origin = '';
+    this.destination  = '';
 
     this.initialize = function(){
-      $window.Gmap.initMap(pikePlace, bellevueMall);
+      $window.Gmap.initMap();
     }
 
     this.search = function(){
-      var start = this.startingPoint.street + ', ' + this.startingPoint.city + this.startingPoint.
-      $window.Gmap.convertAddress()
-      console.log(angular.toJson(this.startingPoint));
-      console.log(angular.toJson(this.destination));
+      console.log('hitting here in search!')
+      $window.Gmap.getDirections(this.origin)
     }
+
+    
   }]);
 }

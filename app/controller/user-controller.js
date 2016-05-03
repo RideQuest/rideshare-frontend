@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app)=>{
+module.exports = function(app) {
 app.controller('UserController', ['$http', function($http) {
 const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
 this.users = ['user'];
@@ -25,7 +25,7 @@ this.createUser = function(user){
 
 this.updateUser = function(user){
   $http.put(userRoute + user._id)
-  
+
 
 }
 
