@@ -31119,6 +31119,22 @@
 	};
 	// self.newUser = {};
 	console.log('hit');
+	self.ctrl = function($scope) {
+	    $scope.btns = [{
+	        label: "One",
+	        state: false
+	    }, {
+	        label: "Two",
+	        state: true
+	    }, {
+	        label: "Three",
+	        state: false
+	    }];
+
+	    $scope.toggle = function () {
+	        self.b.state = !self.b.state;
+	    };
+	}
 
 	self.getUser = function(){
 	  $http.get(userRoute)

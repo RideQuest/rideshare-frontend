@@ -1,65 +1,44 @@
 
-
-
 <section class="sign"ng-controller="UserController as userctrl" >
- <!-- <div ng-init="userctrl.getUser()" ng-repeat="user in userctrl.users">
-   <ul>
- <li>Username: {{user.username}}</li>
- <li>Password: {{user.password}}</li>
- <li>email: {{user.email}}</li>
-</ul>
-</div> -->
-<div class="login-wrapper">
+  <!-- <div class="login"> -->
+  <!-- <h2 class="login-header">Log in</h2> -->
+  <div><button id="login-button" ng-hide="userlogin" ng-click="userlogin = userlogin == true ? false : true;">Login</button></div>
+      <div class="login">
+    <div><div ng-show="userlogin" class="hideByDefault">
+        <div class="login-triangle"></div>
+      <h2 class="login-header">Log in</h2>
+      <form class="signin-form" ng-submit="userctrl.getUser()"></p>
+        <p><input type="email" placeholder="email" ng-model="userctrl.users.email"></p>
+        <p><input type="text" placeholder="username" ng-model="userctrl.users.username"></p>
+        <p><input type="password" placeholder="password" ng-model="userctrl.users.password"></p>
+        <p><input type="submit" value="Log in"></p>
+      </div></div>
+    </form>
+  </div>
 
-  <div><button id="login-button" ng-click="userlogin = userlogin == true ? false : true;">Login</button></div>
-  <!-- <div>Value: {{myvalue}}</div> -->
-  <div><div ng-show="userlogin" class="hideByDefault">
-<!-- <a href="#" ng-model="expandme" ng-click="expandme=true">Click here to <strong>LOGIN</strong></a> -->
-<!-- <label>Login <input type="checkbox" ng-model="checked" ng-init="checked=true" /></label><br/>
+  <!-- <div class="login">
+  <div class="login-triangle"></div>
 
-<span ng-if="checked" class="animate-if"> -->
-<!--
-<div ng-show="expandme">
-</div> <hr /> -->
+  <h2 class="login-header">Log in</h2>
 
-<form class="signin-form" ng-submit="userctrl.getUser()">
-   <input type="email" placeholder="email" ng-model="userctrl.users.email">
-   <input type="text" placeholder="username" ng-model="userctrl.users.username">
-   <input type="password" placeholder="password" ng-model="userctrl.users.password">
-   <button type="submit">Sign In</button>
-   <!-- <label>Click me: <input type="checkbox" ng-model="checked" ng-init="checked=true" /></label><br/>
-Show when checked:
-<span ng-if="checked" class="animate-if">
-  This is removed when the checkbox is unchecked.
-</span>
-</div> -->
-
-  </div></div>
- </form>
-</div>
-<!-- <a href="#" ng-model="expandme" ng-click="expandme=true">Click here to <strong>SHOW</strong> description</a>
-
- <div ng-show="expandme">I am description for the above title, which was collapsed by default</div>
- <hr /> -->
-<div class="signup-wrapper">
-  <div><button id="signup-button" ng-click="newuser = newuser == true ? false : true;">Sign Up</button></div>
-  <!-- <div>Value: {{myvalue}}</div> -->
-  <div><div ng-show="newuser" class="hideByDefault">
-  <!-- <label>Sign Up <input type="checkbox" data-ng-model="checked-up" data-ng-init="checked=true" /></label><br/>
-
-  <span data-ng-if="checked" class="animate-up"> -->
-
-  <form class="signup-form" ng-submit="userctrl.createUser(newUser)" >
-
-    <input ng-model="newUser.username" type="text" placeholder="username">
-    <input ng-model="newUser.email" type="email" placeholder="email">
-    <input ng-model="newUser.password" type="password" placeholder="password">
-    <button type="submit">Sign Up</button>
-
+  <form class="login-container">
+    <p><input type="email" placeholder="Email"></p>
+    <p><input type="password" placeholder="Password"></p>
+    <p><input type="submit" value="Log in"></p>
   </form>
+</div> -->
 
-  </div></div>
-<!-- </span> -->
-</div>
+  <div class="signup-wrapper">
+    <div><button id="signup-button" ng-hide="newuser" ng-click="newuser = newuser == true ? false : true;">Sign Up</button></div>
+    <div><div ng-show="newuser" class="hideByDefault">
+      <form class="signup-form" ng-submit="userctrl.createUser(newUser)" >
+        <input ng-model="newUser.username" type="text" placeholder="username">
+        <input ng-model="newUser.email" type="email" placeholder="email">
+        <input ng-model="newUser.password" type="password" placeholder="password">
+        <button type="submit">Sign Up</button>
+      </div></div>
+    </form>
 
-  </section>
+  </div>
+
+</section>
