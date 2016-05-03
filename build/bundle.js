@@ -45,24 +45,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-<<<<<<< HEAD
-	__webpack_require__(4);
-	__webpack_require__(6);
 	__webpack_require__(7);
-	__webpack_require__(5);
-	__webpack_require__(8);
-	module.exports = __webpack_require__(9);
-=======
-	__webpack_require__(8);
-	__webpack_require__(7);
-	__webpack_require__(6);
-	__webpack_require__(5);
 	__webpack_require__(9);
+	__webpack_require__(8);
+	__webpack_require__(6);
+	__webpack_require__(5);
 	__webpack_require__(10);
 	__webpack_require__(11);
 	__webpack_require__(12);
 	module.exports = __webpack_require__(4);
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 
 
 /***/ },
@@ -72,23 +63,16 @@
 	'use strict';
 	const angular = __webpack_require__(2);
 	var app = angular.module("rideshareApp", []);
-	// var app = angular.module("rideshareApp", ['ngFileUpload']);
+
 
 
 	__webpack_require__(4)(app);
-	// require(__dirname + '/directives/gmap-directive.js')(app);
 	__webpack_require__(5)(app);
+	__webpack_require__(6)(app);
 
-<<<<<<< HEAD
-	__webpack_require__(4)(app);
-	__webpack_require__(5)(app);
-	__webpack_require__(6)(app);
-=======
-	// require(__dirname + '/controller/file-controller.js')(app);
-	// require(__dirname + '/controller/gmap-controller.js')(app);
-	__webpack_require__(6)(app);
 	__webpack_require__(7)(app);
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
+	__webpack_require__(8)(app);
+	__webpack_require__(9)(app);
 
 
 /***/ },
@@ -30976,48 +30960,26 @@
 /* 4 */
 /***/ function(module, exports) {
 
-<<<<<<< HEAD
-	module.exports = function(app){
-	  app.controller('mapController', ['$window','$http', function($window, $http){
-	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/'
-	    var pikePlace = {lat: 47.608953, lng: -122.341099};
-	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
-	    this.user = {};
-	    this.origin = '';
-	    this.startCoordinates = {}
-	    this.markerPoints = [{lat: 47.615635, lng: -122.203703},{lat: 47.565444, lng: -122.329953}];
-	    this.initialize = function(){
-	      $window.Gmap.initMap();
-	    }
+	'use strict';
+	module.exports = function (app) {
 
-	    this.search = function(cb){
-	      cb = this.postRoutes;
-	      console.log('hitting here in search!')
-	      $window.Gmap.getDirections(this.origin)
-	      $window.Gmap.convertAddressForData(this.origin, function(coordinates){
-	        this.startCoordinates = coordinates;
-	        console.log('startCoordinates : ' + angular.toJson(this.startCoordinates))
-	        cb(angular.toJson(this.startCoordinates));
-	      });
-	    }
 
-	    this.postRoutes = function(coordinates){
-	      console.log('I am inside of postRoute : ' + coordinates);
-	      $http.post(mainRoute + 'routes', coordinates)
-	        .then((err, res)=>{
-	          if(err) return console.log('Errorrrr : ' + err)
-	          console.log('Response back : ' + res);
+
+	app.service('fileUpload', ['$http', function ($http) {
+	    this.uploadFileToUrl = function(file, uploadUrl){
+	        var fd = new FormData();
+	        fd.append('file', file);
+	        $http.post(uploadUrl, fd, {
+	            transformRequest: angular.identity,
+	            headers: {'Content-Type': undefined}
+	        })
+	        .success(function(){
+	        })
+	        .error(function(){
 	        });
 	    }
-
-	    this.getAllDriverOrigins = function(){
-	      $window.Gmap.markersOnOrigins(this.markerPoints);
-	    }
-
-
-
-	  }]);
-	}
+	}]);
+	};
 
 
 /***/ },
@@ -31043,29 +31005,15 @@
 	    }
 	  });
 
-	}
-=======
-	'use strict';
-	module.exports = function (app) {
-
-
-
-	app.service('fileUpload', ['$http', function ($http) {
-	    this.uploadFileToUrl = function(file, uploadUrl){
-	        var fd = new FormData();
-	        fd.append('file', file);
-	        $http.post(uploadUrl, fd, {
-	            transformRequest: angular.identity,
-	            headers: {'Content-Type': undefined}
-	        })
-	        .success(function(){
-	        })
-	        .error(function(){
-	        });
+	  app.directive('mapView',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      controller: 'mapController',
+	      templateUrl: '/templates/gmap-view.html'
 	    }
-	}]);
-	};
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
+	  });
+	}
 
 
 /***/ },
@@ -31075,63 +31023,6 @@
 	'use strict';
 	module.exports = function (app) {
 
-<<<<<<< HEAD
-	module.exports = function(app) {
-	app.controller('UserController', ['$http', function($http) {
-	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	this.users = ['user'];
-	this.newUser = {};
-	console.log('hit');
-
-	this.getUser = function(){
-	  $http.get(userRoute)
-	    .then((result)=>{
-	      this.users = result.data;
-	    }, function(error){
-	      console.log(error);
-	    });
-	  // };
-	};
-	this.createUser = function(user){
-	  $http.post(userRoute)
-	    .then((result)=>{
-	      this.newUser.push(user);
-	    });
-	  };
-
-	this.updateUser = function(user){
-	  $http.put(userRoute + user._id)
-
-
-	}
-
-	}]);
-
-
-	// app.directive('customUser', function($http){
-	//   return {
-	//     restrict: 'E',
-	//     templateUrl: './templates/user-profile.html',
-	//     controller: function($http){
-	//       $http.get(userRoute)
-	//       .then((result)=>{
-	//         self.user = result.data;
-	//       })
-	//
-	//     }
-	//   }
-	//
-	// }]);
-	};
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	'use strict';
-	module.exports = function (app) {
-=======
 	app.directive('userProfile', function(){
 	    return {
 	      restrict: 'E',
@@ -31147,7 +31038,6 @@
 	      templateUrl: './templates/signin.html'
 	    };
 	  });
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 
 	  app.directive('fileModel', ['$parse', function ($parse) {
 	    return {
@@ -31180,19 +31070,6 @@
 	      controllerAs: 'tabCtrl'
 	    };
 	  });
-<<<<<<< HEAD
-	  app.directive('userInfo', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/user-profile.html',
-	      controller:function($http){
-	        $http.get(gitRoute + '/' + 'repos')
-	        .then((result)=>{
-	          this.repos = result.data;
-	        });
-	      },
-	      controllerAs: 'projectCtrl'
-=======
 	  // app.directive('userInfo', function(){
 	  //   return {
 	  //     restrict: 'E',
@@ -31256,7 +31133,54 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.controller('mapController', ['$window','$http', function($window, $http){
+	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/'
+	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
+	    this.user = {};
+	    this.origin = '';
+	    this.startCoordinates = {}
+	    this.markerPoints = [{lat: 47.615635, lng: -122.203703},{lat: 47.565444, lng: -122.329953}];
+	    this.initialize = function(){
+	      $window.Gmap.initMap();
+	    }
+
+	    this.search = function(cb){
+	      cb = this.postRoutes;
+	      console.log('hitting here in search!')
+	      $window.Gmap.getDirections(this.origin)
+	      $window.Gmap.convertAddressForData(this.origin, function(coordinates){
+	        this.startCoordinates = coordinates;
+	        console.log('startCoordinates : ' + angular.toJson(this.startCoordinates))
+	        cb(angular.toJson(this.startCoordinates));
+	      });
+	    }
+
+	    this.postRoutes = function(coordinates){
+	      console.log('I am inside of postRoute : ' + coordinates);
+	      $http.post(mainRoute + 'routes', coordinates)
+	        .then((err, res)=>{
+	          if(err) return console.log('Errorrrr : ' + err)
+	          console.log('Response back : ' + res);
+	        });
+	    }
+
+	    this.getAllDriverOrigins = function(){
+	      $window.Gmap.markersOnOrigins(this.markerPoints);
+	    }
+
+
+
+	  }]);
+	}
+
+
+/***/ },
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31273,25 +31197,6 @@
 	  }
 
 	};
-	// self.newUser = {};
-	console.log('hit');
-	self.ctrl = function($scope) {
-	    $scope.btns = [{
-	        label: "One",
-	        state: false
-	    }, {
-	        label: "Two",
-	        state: true
-	    }, {
-	        label: "Three",
-	        state: false
-	    }];
-
-	    $scope.toggle = function () {
-	        self.b.state = !self.b.state;
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
-	    };
-	}
 
 	self.getUser = function(){
 	  $http.get(userRoute)
@@ -31348,7 +31253,7 @@
 
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31432,66 +31337,6 @@
 
 
 /***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.controller('mapController', ['$window', function($window){
-	    var pikePlace = {lat: 47.608953, lng: -122.341099};
-	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
-	    this.user = {};
-	    this.startingPoint = {
-	      street: '',
-	      city: '',
-	      state: ''
-	    };
-	    this.destination  = {
-	      street: '',
-	      city: '',
-	      state: ''
-	    };;
-
-	    this.initialize = function(){
-	      $window.Gmap.initMap(pikePlace, bellevueMall);
-	    }
-
-	    this.search = function(){
-	      var start = this.startingPoint.street + ', ' + this.startingPoint.city + this.startingPoint.
-	      $window.Gmap.convertAddress()
-	      console.log(angular.toJson(this.startingPoint));
-	      console.log(angular.toJson(this.destination));
-	    }
-	  }]);
-	}
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.directive('mapRider',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      templateUrl: '/templates/form-rider.html'
-	    }
-	  });
-
-<<<<<<< HEAD
-	       }
-	     };
-	   });
-	};
-
-
-/***/ },
-/* 8 */
-=======
-	}
-
-
-/***/ },
 /* 10 */
 /***/ function(module, exports) {
 
@@ -31509,7 +31354,6 @@
 
 /***/ },
 /* 11 */
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 /***/ function(module, exports) {
 
 	(function(module){
@@ -31519,57 +31363,52 @@
 	  var request;
 
 	  Gmap.initMap = function (){
-	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    var centerCord = {lat: 47.610366, lng: -122.303345};
 	    geocoder = new google.maps.Geocoder();
 	    map = new google.maps.Map(document.getElementById('map'),{
-	      center: pikePlace,
+	      center: centerCord,
 	      scrollwheel: false,
 	      zoom: 12
 	    });
-	  }
+	  };
 
-<<<<<<< HEAD
 	  Gmap.getDirections = function(startPoint){
 	    Gmap.convertAddress(startPoint, function(){
-	      console.log('Is it start point ? ' + startPoint)
+	      console.log('Is it start point ? ' + startPoint);
 	      request = {
 	        destination: {lat: 47.618427, lng: -122.351843},
 	        origin: startPoint,
 	        travelMode: google.maps.TravelMode.DRIVING
-	      }
+	      };
 	      var directionsDisplay = new google.maps.DirectionsRenderer({
-	          map: map
-	        });
-
-	      var directionsService = new google.maps.DirectionsService();
-	        directionsService.route(request, function(res, status){
-	          if(status == google.maps.DirectionsStatus.OK){
-	            directionsDisplay.setDirections(res);
-	          }
+	        map: map
 	      });
 
-=======
-	    var directionsDisplay = new google.maps.DirectionsRenderer({
-	      map: map
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
+	      var directionsService = new google.maps.DirectionsService();
+	      directionsService.route(request, function(res, status){
+	        if(status == google.maps.DirectionsStatus.OK){
+	          directionsDisplay.setDirections(res);
+	        }
+	      });
+
 	    });
-	  }
+	  };
 
 	  Gmap.convertAddressForData = function(address, cb){
 	    geocoder.geocode({'address': address}, function(results, status){
 	      if(status == google.maps.GeocoderStatus.OK){
 	        map.setCenter(results[0].geometry.location);
-	        console.log('inside convert fn : ' + JSON.stringify(results[0].geometry.location));
 	        var marker = new google.maps.Marker({
 	          map: map,
 	          position: results[0].geometry.location,
-	          clickable: true
+	          clickable: true,
+	          animation: google.maps.Animation.DROP
 	        });
 	        var coordinates = results[0].geometry.location;
-	        cb(coordinates)
+	        cb(coordinates);
 	      } else {
 	        alert('Geocode was not successful : ' + status);
-	      };
+	      }
 	    });
 	  };
 
@@ -31577,49 +31416,42 @@
 	    geocoder.geocode({'address': address}, function(results, status){
 	      if(status == google.maps.GeocoderStatus.OK){
 	        map.setCenter(results[0].geometry.location);
-	        console.log('inside convert fn : ' + JSON.stringify(results[0].geometry.location));
 	        var marker = new google.maps.Marker({
 	          map: map,
 	          position: results[0].geometry.location,
-	          clickable: true
+	          clickable: true,
+	          animation: google.maps.Animation.DROP
 	        });
-	        startPoint = results[0].geometry.location
-	        cb(startPoint)
+	        startPoint = results[0].geometry.location;
+	        cb(startPoint);
 	      } else {
 	        alert('Geocode was not successful : ' + status);
-	      };
+	      }
 	    });
 	  };
 
-<<<<<<< HEAD
 	  Gmap.markersOnOrigins = function(markerPoints){
 	    var marker;
+	    var markerImg = 'img/ride-marker.png';
 	    markerPoints.forEach((startingPoint)=>{
-	        marker = new google.maps.Marker({
+	      marker = new google.maps.Marker({
 	        position: startingPoint,
 	        map: map,
-	        title: 'marker??'
+	        clickable: true,
+	        animation: google.maps.Animation.DROP,
+	        icon: markerImg
 	      });
 	    });
 
-	  }
-=======
-	  Gmap.convertAddress = function(fromAddress){
-	    geocoder.geocode({address: fromAddress})
-	  }
+	  };
 
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 	  module.Gmap = Gmap;
 
 	})(window);
 
 
 /***/ },
-<<<<<<< HEAD
-/* 9 */
-=======
 /* 12 */
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 /***/ function(module, exports) {
 
 	'use strict';
