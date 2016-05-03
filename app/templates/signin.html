@@ -1,14 +1,32 @@
-<!-- <section ng-controller="UserController as userctrl" >
+<main class=signin-wrapper>
 
-<a href ng-class="{ active:signinCtrl.isSet(8) }" ng-click="signinCtrl.setTab(8)" ng-show="signinCtrl.isSet(8)">I am a new user</a>
-<form class="sign-up" ng-submit="userctrl.createUser(newUser)" >
 
-  <input ng-model="newUser.username" type="text" placeholder="username">
-  <input ng-model="newUser.email" type="text" placeholder="email">
-  <input ng-model="newUser.password" type="password" placeholder="password">
-  <button type="submit">Sign Up</button>
+<section class="sign"ng-controller="UserController as userctrl" >
+ <!-- <div ng-init="userctrl.getUser()" ng-repeat="user in userctrl.users">
+   <ul>
+ <li>Username: {{user.username}}</li>
+ <li>Password: {{user.password}}</li>
+ <li>email: {{user.email}}</li>
+</ul>
+</div> -->
+<form class="signin-form" ng-submit="userctrl.getUser()" >
+   <input type="text" placeholder="email" ng-model="userctrl.users.email">
+   <input type="text" placeholder="username" ng-model="userctrl.users.username">
+   <input type="password" placeholder="password" ng-model="userctrl.users.password">
+   <button type="submit">Sign In</button>
+ </form>
 
-</form>
-<!-- <user-signup ng-show="signinCtrl.isSet(8)"></user-signup> -->
 
-<!-- </section> -->
+  <form class="signup-form" ng-submit="userctrl.createUser(newUser)" >
+
+    <input ng-model="newUser.username" type="text" placeholder="username">
+    <input ng-model="newUser.email" type="text" placeholder="email">
+    <input ng-model="newUser.password" type="password" placeholder="password">
+    <button type="submit">Sign Up</button>
+
+  </form>
+
+
+  </section>
+
+</main>

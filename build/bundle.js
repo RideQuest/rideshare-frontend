@@ -45,14 +45,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(6);
-	__webpack_require__(7);
-	__webpack_require__(5);
-	__webpack_require__(4);
 	__webpack_require__(8);
+	__webpack_require__(7);
+	__webpack_require__(6);
+	__webpack_require__(5);
 	__webpack_require__(9);
 	__webpack_require__(10);
-	module.exports = __webpack_require__(11);
+	__webpack_require__(11);
+	__webpack_require__(12);
+	module.exports = __webpack_require__(4);
 
 
 /***/ },
@@ -62,14 +63,17 @@
 	'use strict';
 	const angular = __webpack_require__(2);
 	var app = angular.module("rideshareApp", []);
+	// var app = angular.module("rideshareApp", ['ngFileUpload']);
 
 
-
-	// require(__dirname + '/directives/gmap-directive.js')(app);
 	__webpack_require__(4)(app);
-
-	// require(__dirname + '/controller/gmap-controller.js')(app);
+	// require(__dirname + '/directives/gmap-directive.js')(app);
 	__webpack_require__(5)(app);
+
+	// require(__dirname + '/controller/file-controller.js')(app);
+	// require(__dirname + '/controller/gmap-controller.js')(app);
+	__webpack_require__(6)(app);
+	__webpack_require__(7)(app);
 
 
 /***/ },
@@ -30960,78 +30964,79 @@
 	'use strict';
 	module.exports = function (app) {
 
-	  // app.directive('userSignup', function(){
-	  //     return {
-	  //       restrict: 'E',
-	  //       // replace: true,
-	  //       templateUrl: './templates/signin.html',
-	  //       controller: function(){
-	  //         this.tab = 1;
-	  //         this.isSet = function(check){
-	  //           return this.tab === check;
-	  //         };
-	  //         this.setTab = function(active){
-	  //           this.tab = active;
-	  //         };
-	  //       },
-	  //       controllerAs: 'signinCtrl'
-	  //     };
-	  //   });
-	    app.directive('customNav', function(){
-	      return {
-	        restrict: 'E',
-	        templateUrl: './templates/tabs.html',
-	        controller: function(){
-	          this.tab = 1;
-	          this.isSet = function(check){
-	            return this.tab === check;
-	          };
-	          this.setTab = function(active){
-	            this.tab = active;
-	          };
-	        },
-	        controllerAs: 'tabCtrl'
-	      };
-	    });
 
 
+	app.service('fileUpload', ['$http', function ($http) {
+	    this.uploadFileToUrl = function(file, uploadUrl){
+	        var fd = new FormData();
+	        fd.append('file', file);
+	        $http.post(uploadUrl, fd, {
+	            transformRequest: angular.identity,
+	            headers: {'Content-Type': undefined}
+	        })
+	        .success(function(){
+	        })
+	        .error(function(){
+	        });
+	    }
+	}]);
+	};
 
-	//
-	// app.directive('userProfile', function(){
-	//     return {
-	//       restrict: 'E',
-	//       replace: true,
-	//       templateUrl: './templates/user-profile.html'
-	//
-	//     };
-	//   });
 
-	  // app.directive('newProfile', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/portfolio-contact.html',
-	  //     controller:function($http){
-	  //       this.userInfo = contact;
-	  //     },
-	  //     controllerAs: 'contactCtrl'
-	  //   };
-	  // });
-	  // app.directive('customNav', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/tabs.html',
-	  //     controller: function(){
-	  //       this.tab = 1;
-	  //       this.isSet = function(check){
-	  //         return this.tab === check;
-	  //       };
-	  //       this.setTab = function(active){
-	  //         this.tab = active;
-	  //       };
-	  //     },
-	  //     controllerAs: 'tabCtrl'
-	  //   };
-	  // });
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+	module.exports = function (app) {
+
+	app.directive('userProfile', function(){
+	    return {
+	      restrict: 'E',
+	      // replace: true,
+	      templateUrl: './templates/user-profile.html'
+
+	    };
+	  });
+
+	  app.directive('userSignin', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/signin.html'
+	    };
+	  });
+
+	  app.directive('fileModel', ['$parse', function ($parse) {
+	    return {
+	        restrict: 'A',
+	        link: function(scope, element, attrs) {
+	            var model = $parse(attrs.fileModel);
+	            var modelSetter = model.assign;
+
+	            element.bind('change', function(){
+	                scope.$apply(function(){
+	                    modelSetter(scope, element[0].files[0]);
+	                });
+	            });
+	        }
+	    };
+	}]);
+	  app.directive('customNav', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/tabs.html',
+	      controller: function(){
+	        this.tab = 1;
+	        this.isSet = function(check){
+	          return this.tab === check;
+	        };
+	        this.setTab = function(active){
+	          this.tab = active;
+	        };
+	      },
+	      controllerAs: 'tabCtrl'
+	    };
+	  });
 	  // app.directive('userInfo', function(){
 	  //   return {
 	  //     restrict: 'E',
@@ -31095,7 +31100,7 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31103,31 +31108,45 @@
 	module.exports = function(app){
 	app.controller('UserController', ['$http', function($http) {
 	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	this.users = ['user'];
-	this.newUser = {};
+	const self = this;
+	self.users = ['user'];
+
+	// self.newUser = {};
 	console.log('hit');
 
-	this.getUser = function(){
+	self.getUser = function(){
 	  $http.get(userRoute)
 	    .then((result)=>{
-	      this.users = result.data;
+	      self.users = result.data;
 	    }, function(error){
-	      console.log(error);
+	      return error;
 	    });
-
 	};
-	this.createUser = function(user){
+	self.createUser = function(user){
 	  $http.post(userRoute, user)
+	    .then(function(result){
+	      // console.log('post is hit');
+	      self.users.push(res.data);
+	      self.newUser = null;
+	    });
+	  };
+	  self.signIn = function(user){
+	    $http.put(userRoute + user.id)
 	    .then((result)=>{
-	      console.log('post is hit');
-	      this.newUser.push(result.data);
+	      self.users = self.users.map((u)=>{
+	        if(u.id === user.id){
+	          return user;
+	        }else {
+	          return u;
+	        };
+	      });
 	    });
 	  };
 
-	this.updateUser = function(user){
+	self.updateUser = function(user){
 	  $http.put(userRoute + user.id)
 	  .then((result)=>{
-	    this.users = this.users.map((u)=>{
+	    self.users = self.users.map((u)=>{
 	      if(u.id === user.id){
 	        return user;
 	      }else {
@@ -31137,22 +31156,96 @@
 	  });
 	};
 
-	this.removeUser = function(user){
+	self.removeUser = function(user){
 	  $http.delete(userRoute + user.id)
 	  .then((result)=>{
-	    this.users = this.users.filter((u)=> u.id !=u.id);
+	    self.users = self.users.filter((u)=> u.id !=u.id);
 	  });
 	};
 
-
 	}]);
-
 
 	};
 
 
 /***/ },
-/* 6 */
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app){
+	app.controller('ProfileController', ['$http', function($http) {
+	const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
+	const self= this;
+	self.profiles = ['profile'];
+	self.newProfile = {};
+	console.log('hit profile');
+
+	self.getProfile = function(){
+	  $http.get(profileRoute)
+	    .then((result)=>{
+	      console.log();
+	      self.profiles = result.data;
+	    }, function(error){
+	      console.log(error);
+	    });
+
+	};
+	// this.createUser = function(profile){
+	//   $http.post(profileRoute, user)
+	//     .then((result)=>{
+	//       console.log('post is hit');
+	//       this.profiles.push(result.data);
+	//     });
+	//   };
+
+	self.updateProfile = function(profile){
+	  $http.put(profileRoute + profile.id)
+	  .then((result)=>{
+	    self.profiles = self.profiles.map((p)=>{
+	      if(p.id === profile.id){
+	        return profile;
+	      }else {
+	        return p;
+	      };
+	    });
+	  });
+	};
+	// this.onFileSelect = function($files) {
+	//   for(var i=0; < $files.length; i++){
+	//     var $file = $files[i];
+	//     Upload.upload({
+	//       url:
+	//     })
+	//   }
+	// }
+
+	// this.removeUser = function(user){
+	//   $http.delete(userRoute + user.id)
+	//   .then((result)=>{
+	//     this.users = this.users.filter((u)=> u.id !=u.id);
+	//   });
+	// };
+
+
+	}]);
+	app.controller('FileController', ['$scope', 'fileUpload', function($scope, fileUpload){
+
+	    $scope.uploadFile = function(){
+	        var file = $scope.myFile;
+	        console.log('file is ' );
+	        console.dir(file);
+	        var uploadUrl = "/fileUpload";
+	        fileUpload.uploadFileToUrl(file, uploadUrl);
+	    };
+
+	}]);
+	};
+
+
+/***/ },
+/* 8 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -31186,61 +31279,7 @@
 
 
 /***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	// 'use strict';
-	//
-	// module.exports = function(app){
-	// app.controller('ProfileController', ['$http', function($http) {
-	// const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	// this.profiles = ['user'];
-	// this.newProfile = {};
-	// console.log('hit');
-	//
-	// this.getUser = function(){
-	//   $http.get(userRoute)
-	//     .then((result)=>{
-	//       this.users = result.data;
-	//     }, function(error){
-	//       console.log(error);
-	//     });
-	//
-	// };
-	// this.createUser = function(user){
-	//   $http.post(userRoute, user)
-	//     .then((result)=>{
-	//       console.log('post is hit');
-	//       this.newUser.push(result.data);
-	//     });
-	//   };
-	//
-	// this.updateUser = function(user){
-	//   $http.put(userRoute + user.id)
-	//   .then((result)=>{
-	//     this.users = this.users.map((u)=>{
-	//       if(u.id === user.id){
-	//         return user;
-	//       }else {
-	//         return u;
-	//       };
-	//     });
-	//   });
-	// };
-	//
-	// this.removeUser = function(user){
-	//   $http.delete(userRoute + user.id)
-	//   .then((result)=>{
-	//     this.users = this.users.filter((u)=> u.id !=u.id);
-	//   });
-	// };
-	//
-	//
-	// }]);
-
-
-/***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -31256,7 +31295,7 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	// module.exports = function(app){
@@ -31272,7 +31311,7 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	(function(module){
@@ -31316,10 +31355,21 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
-	
+	'use strict';
+	module.exports = function(app) {
+	  app.factory('ErrorService', function() {
+	    var error;
+	    return function(newError) {
+	      if (newError === null) return error = null;
+	      if (!newError) return error;
+	      return error = newError;
+	    };
+	  });
+	};
+
 
 /***/ }
 /******/ ]);

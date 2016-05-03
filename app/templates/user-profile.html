@@ -1,27 +1,33 @@
-<!-- <section class="user-profile">
-<form class="newUser" action="index.html" method="post">
+<main ng-controller="ProfileController as profilectrl" ng-init="profilectrl.getProfile()" >
+  <!-- <div ng-init="profilectrl.getProfile()" ng-repeat="profile in profilectrl.profiles"> -->
+<section class="who-profile">
 
-</form>
-</section> -->
-<!-- <section ng-controller="UserController as userctrl" >
- <div ng-init="userctrl.getUser()" ng-repeat="user in userctrl.users">
-   <ul>
- <li>Username: {{user.username}}</li>
- <li>Password: {{user.password}}</li>
- <li>email: {{user.email}}</li>
-</ul>
+  <h2>My Profile</h2>
+    <div>
+    <p>First Name: {{profilectrl.profiles.first_name}}</p><br>
+    <p>  Last Name: {{profilectrl.profiles.last_name}}</p><br>
+    <p>   Email: {{profilectrl.profiles.email}}</p><br>
+    <p>   Photo: {{profilectrl.profiles.image}}</p><br>
+    <p>   Car Make: {{profilectrl.profiles.car_brand}}</p><br>
+    <p>   Car Seats: {{profilectrl.profiles.car_seat}}</p><br>
+  </div>
+
+  </section>
+<div class="">
+
+  <form class="update-profile" ng-submit="userctrl.updateProfile(profile)" >
+    Update Info
+  First Name:   <input ng-model="profile.first_name" type="text">
+  Last Name:  <input ng-model="profile.last_name" type="text">
+  Email:  <input ng-model="profile.email" type="text">
+  Car Make:   <input ng-model="profile.car_brand" type="text">
+  Car Seats:   <input ng-model="profile.car_seat" type="text">
+    <div ng-controller = "FileController as filectrl">
+  Photo: <input type="file" file-model="myFile"/>
+  <button ng-click="uploadFile()">upload me</button>
 </div>
+    <button type="submit">Save</button>
 
-
+  </form>
 </div>
-<form class="sign-up" data-ng-submit="userctrl.createUser(newUser)" >
-
-  <input ng-model="newUser.username" type="text" placeholder="username">
-  <input ng-model="newUser.email" type="text" placeholder="email">
-  <input ng-model="newUser.password" type="password" placeholder="password">
-  <button type="submit" name="button">Sign Up</button>
-
-</form>
-
-
-</section> -->
+</main>

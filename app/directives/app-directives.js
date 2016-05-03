@@ -1,78 +1,53 @@
 'use strict';
 module.exports = function (app) {
 
-  // app.directive('userSignup', function(){
-  //     return {
-  //       restrict: 'E',
-  //       // replace: true,
-  //       templateUrl: './templates/signin.html',
-  //       controller: function(){
-  //         this.tab = 1;
-  //         this.isSet = function(check){
-  //           return this.tab === check;
-  //         };
-  //         this.setTab = function(active){
-  //           this.tab = active;
-  //         };
-  //       },
-  //       controllerAs: 'signinCtrl'
-  //     };
-  //   });
-    app.directive('customNav', function(){
-      return {
-        restrict: 'E',
-        templateUrl: './templates/tabs.html',
-        controller: function(){
-          this.tab = 1;
-          this.isSet = function(check){
-            return this.tab === check;
-          };
-          this.setTab = function(active){
-            this.tab = active;
-          };
-        },
-        controllerAs: 'tabCtrl'
-      };
-    });
+app.directive('userProfile', function(){
+    return {
+      restrict: 'E',
+      // replace: true,
+      templateUrl: './templates/user-profile.html'
 
+    };
+  });
 
+  app.directive('userSignin', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/signin.html'
+    };
+  });
 
-//
-// app.directive('userProfile', function(){
-//     return {
-//       restrict: 'E',
-//       replace: true,
-//       templateUrl: './templates/user-profile.html'
-//
-//     };
-//   });
+  app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
 
-  // app.directive('newProfile', function(){
-  //   return {
-  //     restrict: 'E',
-  //     templateUrl: './templates/portfolio-contact.html',
-  //     controller:function($http){
-  //       this.userInfo = contact;
-  //     },
-  //     controllerAs: 'contactCtrl'
-  //   };
-  // });
-  // app.directive('customNav', function(){
-  //   return {
-  //     restrict: 'E',
-  //     templateUrl: './templates/tabs.html',
-  //     controller: function(){
-  //       this.tab = 1;
-  //       this.isSet = function(check){
-  //         return this.tab === check;
-  //       };
-  //       this.setTab = function(active){
-  //         this.tab = active;
-  //       };
-  //     },
-  //     controllerAs: 'tabCtrl'
-  //   };
-  // });
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+  app.directive('customNav', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/tabs.html',
+      controller: function(){
+        this.tab = 1;
+        this.isSet = function(check){
+          return this.tab === check;
+        };
+        this.setTab = function(active){
+          this.tab = active;
+        };
+      },
+      controllerAs: 'tabCtrl'
+    };
+  });
   // app.directive('userInfo', function(){
   //   return {
   //     restrict: 'E',
