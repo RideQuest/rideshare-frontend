@@ -1,5 +1,34 @@
-<!-- <section class="user-profile">
-<form class="newUser" action="index.html" method="post">
+<!-- <main ng-controller="ProfileController as profilectrl" ng-init="profilectrl.getProfile()" > -->
+  <!-- <div ng-init="profilectrl.getProfile()" ng-repeat="profile in profilectrl.profiles"> -->
+<section ng-controller="ProfileController as profilectrl" ng-init="profilectrl.getProfile()" class="who-profile">
 
-</form>
-</section> -->
+  <h2>My Profile</h2>
+    <div>
+    <p>First Name: {{profilectrl.profiles.first_name}}</p><br>
+    <p>  Last Name: {{profilectrl.profiles.last_name}}</p><br>
+    <p>   Email: {{profilectrl.profiles.email}}</p><br>
+    <p>   Photo: <img src="{{profilectrl.profiles.image}}" alt="Profile Pic"></p><br>
+    <p>   Car Make: {{profilectrl.profiles.car_brand}}</p><br>
+    <p>   Car Seats: {{profilectrl.profiles.car_seat}}</p><br>
+  </div>
+
+<div class="">
+
+  <form class="update-profile" ng-submit="userctrl.updateProfile(profile)" >
+    Update Info
+  First Name:   <input ng-model="profile.first_name" type="text">
+  Last Name:  <input ng-model="profile.last_name" type="text">
+  Email:  <input ng-model="profile.email" type="text">
+  Car Make:   <input ng-model="profile.car_brand" type="text">
+  Car Seats:   <input ng-model="profile.car_seat" type="text">
+    <div ng-controller = "FileController as filectrl">
+  Photo: <input type="file" file-model="myFile"/>
+  <button ng-click="uploadFile()">upload me</button>
+</div>
+    <button type="submit">Save</button>
+
+  </form>
+</div>
+</section>
+
+<!-- </main> -->

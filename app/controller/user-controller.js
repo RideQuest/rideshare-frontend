@@ -1,49 +1,67 @@
 'use strict';
 
-module.exports = function(app)=>{
+module.exports = function(app){
 app.controller('UserController', ['$http', function($http) {
 const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-this.users = ['user'];
-this.newUser = {};
-console.log('hit');
+const self = this;
+self.users = ['user'];
+self.submit = function(){
+  if(self.users){
+    self.users.push(this.users);
+    self.users = '';
+  }
 
-this.getUser = function(){
+};
+
+self.getUser = function(){
   $http.get(userRoute)
     .then((result)=>{
-      this.users = result.data;
+      self.users = result.data;
     }, function(error){
-      console.log(error);
+      return error;
     });
-  // };
 };
-this.createUser = function(user){
-  $http.post(userRoute)
+self.createUser = function(user){
+  $http.post(userRoute, user)
+    .then(function(result){
+      // console.log('post is hit');
+      self.users.push(res.data);
+      self.newUser = null;
+    });
+  };
+  self.signIn = function(user){
+    $http.put(userRoute + user.id)
     .then((result)=>{
-      this.newUser.push(user);
+      self.users = self.users.map((u)=>{
+        if(u.id === user.id){
+          return user;
+        }else {
+          return u;
+        };
+      });
     });
   };
 
-this.updateUser = function(user){
-  $http.put(userRoute + user._id)
-  
+self.updateUser = function(user){
+  $http.put(userRoute + user.id)
+  .then((result)=>{
+    self.users = self.users.map((u)=>{
+      if(u.id === user.id){
+        return user;
+      }else {
+        return u;
+      };
+    });
+  });
+};
 
-}
+self.removeUser = function(user){
+  $http.delete(userRoute + user.id)
+  .then((result)=>{
+    self.users = self.users.filter((u)=> u.id !=u.id);
+  });
+};
 
 }]);
 
-
-// app.directive('customUser', function($http){
-//   return {
-//     restrict: 'E',
-//     templateUrl: './templates/user-profile.html',
-//     controller: function($http){
-//       $http.get(userRoute)
-//       .then((result)=>{
-//         self.user = result.data;
-//       })
-//
-//     }
-//   }
-//
-// }]);
 };

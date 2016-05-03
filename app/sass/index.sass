@@ -1,23 +1,55 @@
 @import normalize
-// $yellow: #d1ab2a !default
-// $blue: #28abe3 !default
+@import base
 
-$primary-color: #d1ab2a
-$secondary-color: #28abe3
-$teitary-color: #f7eac8
+$turquoise: rgb(89,196,197) !default
+$blue: rgb(0,200,248)  !default
+$dark-yellow: rgb(255,195,60)  !default
+$cream: rgb(251,226,180)  !default
+$pink: rgb(255,76,101)  !default
+$light-orange: rgb(243,134,48)  !default
+$opa-yellow: rgba(255,195,60,0.4)  !default
+$opa-cream: rgba(251,226,180,0.5)  !default
+
+$primary-color: $pink
+$secondary-color: $dark-yellow
+$teitary-color: $light-orange
 $gutter: 5em
 
-
+*
+  text-decoration: none
+  border-color: red
 
 body
   background-color: $teitary-color
+  padding: $gutter
 
-h1
-  color: $primary-color
+main
+  background-color: $opa-cream
+  padding: 2em
+  // width: 100%
+  // height: 100%
+  // margin-left: $gutter
+  // margin-right: $gutter
+
 
 header
   text-align: center
   margin-bottom: $gutter
+  background-color: $blue
+  height: 10em
+  width: auto
+
+.main-title
+  color: white
+  text-align: center
+      // margin-top: $gutter
+  // margin-left: $gutter
+  // margin-right: $gutter
+
+
+// form
+//   text-align: center
+
 
 
 .navbar
@@ -25,13 +57,23 @@ header
   margin-top: $gutter
 
 a
-  color: $secondary-color
+  color: $light-orange
   margin-left: $gutter
 
-.contact-bar
+.sign
   text-align: center
   margin-top: $gutter
 
-.repoList-wrapper
-  text-align: center
+.signin-form
+
+// .update-profile
+//   margin-top: $gutter
+//   display: flex
+//   flex-direction: column
+
+.who-profile
+  // text-align: center
   margin-top: $gutter
+  // background-color: $cream
+  li
+    text-decoration: none
