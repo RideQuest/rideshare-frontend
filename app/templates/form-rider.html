@@ -1,5 +1,6 @@
+<!-- <section ng-show="tabCtrl.isSet(3)">
 
-<form class="contact-list" data-ng-submit="mapCtrl.search()">
+<form class="contact-list" data-ng-submit="mapCtrl.search()" >
   From:
   <input data-ng-model="mapCtrl.startingPoint.street" type="text" placeholder="street address">
   <input data-ng-model="mapCtrl.startingPoint.city" type="text" placeholder="city">
@@ -10,3 +11,9 @@
   <input data-ng-model="mapCtrl.destination.state" type="text" placeholder="state">
   <input type="submit" name="name" value="Search!">
 </form>
+<section data-ng-controller="mapController as mapCtrl">
+
+  <div ng-init="mapCtrl.initialize()" id="map" style="width: 100%; height: 60em;"></div>
+</section>
+
+</section> -->

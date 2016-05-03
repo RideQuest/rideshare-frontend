@@ -45,111 +45,33 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-<<<<<<< HEAD
+	__webpack_require__(6);
+	__webpack_require__(7);
 	__webpack_require__(5);
 	__webpack_require__(4);
-	__webpack_require__(6);
-	module.exports = __webpack_require__(7);
-=======
-	__webpack_require__(4);
-	module.exports = __webpack_require__(5);
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
+	__webpack_require__(8);
+	__webpack_require__(9);
+	__webpack_require__(10);
+	module.exports = __webpack_require__(11);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
-	const angular = __webpack_require__(2);
-	const app = angular.module('myApp', []);
-	__webpack_require__(4)(app);
-
-	app.controller('mapController', ['$window', function($window){
-	  var pikePlace = {lat: 47.608953, lng: -122.341099};
-	  var bellevueMall = {lat: 47.616591, lng: -122.198797};
-	  this.user = {};
-	  this.startingPoint = {
-	    street: '',
-	    city: '',
-	    state: ''
-	  };
-	  this.destination  = {
-	    street: '',
-	    city: '',
-	    state: ''
-	  };;
-
-	  this.initialize = function(){
-	    $window.Gmap.initMap(pikePlace, bellevueMall);
-	  }
-
-	  this.search = function(){
-	    console.log(angular.toJson(this.startingPoint));
-	    console.log(angular.toJson(this.destination));
-	  }
-	}]);
-
-
-=======
 	'use strict';
 	const angular = __webpack_require__(2);
-
-
-
 	var app = angular.module("rideshareApp", []);
 
 
 
-	app.controller('UserController', ['$http', function($http) {
-	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	this.users = ['user'];
-	this.newUser = {};
-	console.log('hit');
+	// require(__dirname + '/directives/gmap-directive.js')(app);
+	__webpack_require__(4)(app);
 
-	this.getUser = function(){
-	  $http.get(userRoute)
-	    .then((result)=>{
-	      // console.log('GET USER' + angular.toJson(result.data));
-	      this.users = result.data;
-	    }, function(error){
-	      console.log(error);
-	    });
-	  // };
-	};
-	// this.createUser = function(user){
-	//   $http.post(userRoute)
-	//     .then((result)=>{
-	//       this.newUser.push(user);
-	//     });
-	//   };
-	//
-	// this.updateUser = function(user){
-	//   $http.put(userRoute + user._id)
-	//
-	// }
-
-	}]);
+	// require(__dirname + '/controller/gmap-controller.js')(app);
+	__webpack_require__(5)(app);
 
 
-	// app.directive('customUser', function($http){
-	//   return {
-	//     restrict: 'E',
-	//     templateUrl: './templates/user-profile.html',
-	//     controller: function($http){
-	//       $http.get(userRoute)
-	//       .then((result)=>{
-	//         self.user = result.data;
-	//       })
-	//
-	//     }
-	//   }
-	//
-	// }]);
-	// };
-
-
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
@@ -31035,56 +30957,52 @@
 /* 4 */
 /***/ function(module, exports) {
 
-<<<<<<< HEAD
-	module.exports = function(app){
-	  app.directive('mapRider',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      templateUrl: '/templates/form-rider.html'
-	    }
-	  });
-
-	}
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	(function(){
-	  var gitRoute = 'https://api.github.com/users/lwenke01';
-
-	  var app = angular.module("rideshareApp", []);
-
-	  app.directive('userProfile', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-contact.html',
-	      controller:function($http){
-	        this.userInfo = contact;
-	      },
-	      controllerAs: 'contactCtrl'
-	    };
-	  });
-	  app.directive('customNav', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-tabs.html',
-=======
 	'use strict';
 	module.exports = function (app) {
 
+	  // app.directive('userSignup', function(){
+	  //     return {
+	  //       restrict: 'E',
+	  //       // replace: true,
+	  //       templateUrl: './templates/signin.html',
+	  //       controller: function(){
+	  //         this.tab = 1;
+	  //         this.isSet = function(check){
+	  //           return this.tab === check;
+	  //         };
+	  //         this.setTab = function(active){
+	  //           this.tab = active;
+	  //         };
+	  //       },
+	  //       controllerAs: 'signinCtrl'
+	  //     };
+	  //   });
+	    app.directive('customNav', function(){
+	      return {
+	        restrict: 'E',
+	        templateUrl: './templates/tabs.html',
+	        controller: function(){
+	          this.tab = 1;
+	          this.isSet = function(check){
+	            return this.tab === check;
+	          };
+	          this.setTab = function(active){
+	            this.tab = active;
+	          };
+	        },
+	        controllerAs: 'tabCtrl'
+	      };
+	    });
+
+
+
+	//
 	// app.directive('userProfile', function(){
 	//     return {
 	//       restrict: 'E',
-	//       templateUrl: './templates/user-profile.html',
-	//       controller:function($http){
-	//         this.userInfo = contact;
-	//       },
-	//       controllerAs: 'contactCtrl'
+	//       replace: true,
+	//       templateUrl: './templates/user-profile.html'
+	//
 	//     };
 	//   });
 
@@ -31098,95 +31016,263 @@
 	  //     controllerAs: 'contactCtrl'
 	  //   };
 	  // });
-	  app.directive('customNav', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/tabs.html',
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
-	      controller: function(){
-	        this.tab = 1;
-	        this.isSet = function(check){
-	          return this.tab === check;
-	        };
-	        this.setTab = function(active){
-	          this.tab = active;
-	        };
-	      },
-	      controllerAs: 'tabCtrl'
-	    };
-	  });
-<<<<<<< HEAD
-	  app.directive('customProject', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-projects.html',
-=======
-	  app.directive('userInfo', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/user-profile.html',
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
-	      controller:function($http){
-	        $http.get(gitRoute + '/' + 'repos')
-	        .then((result)=>{
-	          this.repos = result.data;
-	        });
-	      },
-	      controllerAs: 'projectCtrl'
-	    };
-	  });
-	  app.directive('customHome', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-home.html',
-	      controller:function($http){
-	        $http.get(gitRoute)
-	        .then((result)=>{
-	          this.user = result.data;
-	        });
-	      },
-	      controllerAs:'homeCtrl'
-	    };
-	  });
-	  app.directive('customResume', function(){
-	    return {
-	      retrict: 'E',
-	      templateUrl: './templates/portfolio-resume.html',
-	      controller:function($http){
-	        $http.get('./app/data-json/educationData.json')
-	        .then((result)=>{
-	          this.schools = result.data;
-	        });
-	      },
-	      controllerAs: 'resumeCtrl'
-	    };
-	  });
-	  app.directive('customResources', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/portfolio-resources.html'
-	    };
-	  });
-	  app.directive('directiveLink', function(){
-	    return {
-	      restrict: 'A',
-	      replace: true,
-	      link: function($scope, element) {
-	        element.css('border-radius', '25px');
-	        element.css('text-align', 'center');
-	        element.css('color', 'blue');
-	        element.css('font-size', '3em');
-	        element.css('transform', 'translateX(10px) rotate(10deg) translateY(5px)');
+	  // app.directive('customNav', function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     templateUrl: './templates/tabs.html',
+	  //     controller: function(){
+	  //       this.tab = 1;
+	  //       this.isSet = function(check){
+	  //         return this.tab === check;
+	  //       };
+	  //       this.setTab = function(active){
+	  //         this.tab = active;
+	  //       };
+	  //     },
+	  //     controllerAs: 'tabCtrl'
+	  //   };
+	  // });
+	  // app.directive('userInfo', function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     templateUrl: './templates/user-profile.html',
+	  //     controller:function($http){
+	  //       $http.get(gitRoute + '/' + 'repos')
+	  //       .then((result)=>{
+	  //         this.repos = result.data;
+	  //       });
+	  //     },
+	  //     controllerAs: 'projectCtrl'
+	  //   };
+	  // });
+	  // app.directive('customHome', function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     templateUrl: './templates/portfolio-home.html',
+	  //     controller:function($http){
+	  //       $http.get(gitRoute)
+	  //       .then((result)=>{
+	  //         this.user = result.data;
+	  //       });
+	  //     },
+	  //     controllerAs:'homeCtrl'
+	  //   };
+	  // });
+	  // app.directive('customResume', function(){
+	  //   return {
+	  //     retrict: 'E',
+	  //     templateUrl: './templates/portfolio-resume.html',
+	  //     controller:function($http){
+	  //       $http.get('./app/data-json/educationData.json')
+	  //       .then((result)=>{
+	  //         this.schools = result.data;
+	  //       });
+	  //     },
+	  //     controllerAs: 'resumeCtrl'
+	  //   };
+	  // });
+	  // app.directive('customResources', function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     templateUrl: './templates/portfolio-resources.html'
+	  //   };
+	  // });
+	  // app.directive('directiveLink', function(){
+	  //   return {
+	  //     restrict: 'A',
+	  //     replace: true,
+	  //     link: function($scope, element) {
+	  //       element.css('border-radius', '25px');
+	  //       element.css('text-align', 'center');
+	  //       element.css('color', 'blue');
+	  //       element.css('font-size', '3em');
+	  //       element.css('transform', 'translateX(10px) rotate(10deg) translateY(5px)');
+	  //
+	  //      }
+	  //    };
+	  //  });
+	};
 
-	       }
-	     };
-	   });
-<<<<<<< HEAD
-	})();
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app){
+	app.controller('UserController', ['$http', function($http) {
+	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	this.users = ['user'];
+	this.newUser = {};
+	console.log('hit');
+
+	this.getUser = function(){
+	  $http.get(userRoute)
+	    .then((result)=>{
+	      this.users = result.data;
+	    }, function(error){
+	      console.log(error);
+	    });
+
+	};
+	this.createUser = function(user){
+	  $http.post(userRoute, user)
+	    .then((result)=>{
+	      console.log('post is hit');
+	      this.newUser.push(result.data);
+	    });
+	  };
+
+	this.updateUser = function(user){
+	  $http.put(userRoute + user.id)
+	  .then((result)=>{
+	    this.users = this.users.map((u)=>{
+	      if(u.id === user.id){
+	        return user;
+	      }else {
+	        return u;
+	      };
+	    });
+	  });
+	};
+
+	this.removeUser = function(user){
+	  $http.delete(userRoute + user.id)
+	  .then((result)=>{
+	    this.users = this.users.filter((u)=> u.id !=u.id);
+	  });
+	};
+
+
+	}]);
+
+
+	};
 
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.controller('mapController', ['$window', function($window){
+	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
+	    this.user = {};
+	    this.startingPoint = {
+	      street: '',
+	      city: '',
+	      state: ''
+	    };
+	    this.destination  = {
+	      street: '',
+	      city: '',
+	      state: ''
+	    };;
+
+	    this.initialize = function(){
+	      $window.Gmap.initMap(pikePlace, bellevueMall);
+	    }
+
+	    this.search = function(){
+	      var start = this.startingPoint.street + ', ' + this.startingPoint.city + this.startingPoint.
+	      $window.Gmap.convertAddress()
+	      console.log(angular.toJson(this.startingPoint));
+	      console.log(angular.toJson(this.destination));
+	    }
+	  }]);
+	}
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	// 'use strict';
+	//
+	// module.exports = function(app){
+	// app.controller('ProfileController', ['$http', function($http) {
+	// const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	// this.profiles = ['user'];
+	// this.newProfile = {};
+	// console.log('hit');
+	//
+	// this.getUser = function(){
+	//   $http.get(userRoute)
+	//     .then((result)=>{
+	//       this.users = result.data;
+	//     }, function(error){
+	//       console.log(error);
+	//     });
+	//
+	// };
+	// this.createUser = function(user){
+	//   $http.post(userRoute, user)
+	//     .then((result)=>{
+	//       console.log('post is hit');
+	//       this.newUser.push(result.data);
+	//     });
+	//   };
+	//
+	// this.updateUser = function(user){
+	//   $http.put(userRoute + user.id)
+	//   .then((result)=>{
+	//     this.users = this.users.map((u)=>{
+	//       if(u.id === user.id){
+	//         return user;
+	//       }else {
+	//         return u;
+	//       };
+	//     });
+	//   });
+	// };
+	//
+	// this.removeUser = function(user){
+	//   $http.delete(userRoute + user.id)
+	//   .then((result)=>{
+	//     this.users = this.users.filter((u)=> u.id !=u.id);
+	//   });
+	// };
+	//
+	//
+	// }]);
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.directive('mapRider',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      templateUrl: '/templates/form-rider.html'
+	    }
+	  });
+
+	}
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	// module.exports = function(app){
+	//   app.directive('mapRider',function(){
+	//     return {
+	//       restrict: 'E',
+	//       replace: true,
+	//       templateUrl: '/templates/form-rider.html'
+	//     }
+	//   });
+	//
+	// }
+
+
+/***/ },
+/* 10 */
 /***/ function(module, exports) {
 
 	(function(module){
@@ -31201,8 +31287,6 @@
 	      scrollwheel: false,
 	      zoom: 11
 	  });
-
-
 
 	    var directionsDisplay = new google.maps.DirectionsRenderer({
 	      map: map
@@ -31222,20 +31306,17 @@
 	    });
 	  }
 
+	  Gmap.convertAddress = function(fromAddress){
+	    geocoder.geocode({address: fromAddress})
+	  }
+
 	  module.Gmap = Gmap;
 
 	})(window);
 
 
 /***/ },
-/* 7 */
-=======
-	};
-
-
-/***/ },
-/* 5 */
->>>>>>> 0f729f1305c7993fd339370cf73be930fc509acc
+/* 11 */
 /***/ function(module, exports) {
 
 	

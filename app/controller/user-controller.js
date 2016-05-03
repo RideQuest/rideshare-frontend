@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(app)=>{
+module.exports = function(app){
 app.controller('UserController', ['$http', function($http) {
 const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
 this.users = ['user'];
@@ -14,36 +14,38 @@ this.getUser = function(){
     }, function(error){
       console.log(error);
     });
-  // };
+
 };
 this.createUser = function(user){
-  $http.post(userRoute)
+  $http.post(userRoute, user)
     .then((result)=>{
-      this.newUser.push(user);
+      console.log('post is hit');
+      this.newUser.push(result.data);
     });
   };
 
 this.updateUser = function(user){
-  $http.put(userRoute + user._id)
-  
+  $http.put(userRoute + user.id)
+  .then((result)=>{
+    this.users = this.users.map((u)=>{
+      if(u.id === user.id){
+        return user;
+      }else {
+        return u;
+      };
+    });
+  });
+};
 
-}
+this.removeUser = function(user){
+  $http.delete(userRoute + user.id)
+  .then((result)=>{
+    this.users = this.users.filter((u)=> u.id !=u.id);
+  });
+};
+
 
 }]);
 
 
-// app.directive('customUser', function($http){
-//   return {
-//     restrict: 'E',
-//     templateUrl: './templates/user-profile.html',
-//     controller: function($http){
-//       $http.get(userRoute)
-//       .then((result)=>{
-//         self.user = result.data;
-//       })
-//
-//     }
-//   }
-//
-// }]);
 };
