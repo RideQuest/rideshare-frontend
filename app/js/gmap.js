@@ -36,6 +36,24 @@
     });
   }
 
+  Gmap.convertAddressForData = function(address, cb){
+    geocoder.geocode({'address': address}, function(results, status){
+      if(status == google.maps.GeocoderStatus.OK){
+        map.setCenter(results[0].geometry.location);
+        console.log('inside convert fn : ' + JSON.stringify(results[0].geometry.location));
+        var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location,
+          clickable: true
+        });
+        var coordinates = results[0].geometry.location;
+        cb(coordinates)
+      } else {
+        alert('Geocode was not successful : ' + status);
+      };
+    });
+  };
+
   Gmap.convertAddress = function(address, cb){
     geocoder.geocode({'address': address}, function(results, status){
       if(status == google.maps.GeocoderStatus.OK){
@@ -43,7 +61,8 @@
         console.log('inside convert fn : ' + JSON.stringify(results[0].geometry.location));
         var marker = new google.maps.Marker({
           map: map,
-          position: results[0].geometry.location
+          position: results[0].geometry.location,
+          clickable: true
         });
         startPoint = results[0].geometry.location
         cb(startPoint)
@@ -53,6 +72,17 @@
     });
   };
 
+  Gmap.markersOnOrigins = function(markerPoints){
+    var marker;
+    markerPoints.forEach((startingPoint)=>{
+        marker = new google.maps.Marker({
+        position: startingPoint,
+        map: map,
+        title: 'marker??'
+      });
+    });
+
+  }
   module.Gmap = Gmap;
 
 })(window);
