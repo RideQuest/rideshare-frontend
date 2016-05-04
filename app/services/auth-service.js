@@ -6,27 +6,31 @@ module.exports = function(app){
       createUser(user, cb){
         console.log('grabbing user data : ' + user);
         cb || function(){};
-        $http.post(url + 'auth-token/', user)
+        $http.post(url + '/users', user)
           .then((res)=>{
             token = $window.localStorage.token = res.data.token;
+            cb(null, res);
             console.log('ThisIsToken: ' + token);
           },(err)=>{
             console.log(err);
+            cb(err);
           });
       },
       getToken(){
         return token || $window.localStorage.token;
       },
-      signOut(){
+      signOut(cb){
         token = null;
         $window.localStorage.token = null;
+        if(cb) cb();
       },
 
       signIn(user, cb){
+        console.log('Auth signIn : ' + user);
         cb || function(){};
-        $http.get(url + '/auth-token',{
+        $http.post(url + '/auth-token/',{
           headers: {
-            authorization: 'Basic' + btoa(user.username + ':' + user.password)
+            authorization: 'Basic ' + btoa(user.username + ':' + user.password)
           }
         }).then((res)=>{
           token = $window.localStorage.token = res.data.token;

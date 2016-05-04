@@ -45,12 +45,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(7);
-	__webpack_require__(6);
-	__webpack_require__(11);
 	__webpack_require__(8);
 	__webpack_require__(10);
 	__webpack_require__(9);
+	__webpack_require__(7);
+	__webpack_require__(6);
+	__webpack_require__(11);
 	__webpack_require__(12);
 	__webpack_require__(4);
 	__webpack_require__(13);
@@ -30969,27 +30969,31 @@
 	      createUser(user, cb){
 	        console.log('grabbing user data : ' + user);
 	        cb || function(){};
-	        $http.post(url + 'auth-token/', user)
+	        $http.post(url + '/users', user)
 	          .then((res)=>{
 	            token = $window.localStorage.token = res.data.token;
+	            cb(null, res);
 	            console.log('ThisIsToken: ' + token);
 	          },(err)=>{
 	            console.log(err);
+	            cb(err);
 	          });
 	      },
 	      getToken(){
 	        return token || $window.localStorage.token;
 	      },
-	      signOut(){
+	      signOut(cb){
 	        token = null;
 	        $window.localStorage.token = null;
+	        if(cb) cb();
 	      },
 
 	      signIn(user, cb){
+	        console.log('Auth signIn : ' + user);
 	        cb || function(){};
-	        $http.get(url + '/auth-token',{
+	        $http.post(url + '/auth-token/',{
 	          headers: {
-	            authorization: 'Basic' + btoa(user.username + ':' + user.password)
+	            authorization: 'Basic ' + btoa(user.username + ':' + user.password)
 	          }
 	        }).then((res)=>{
 	          token = $window.localStorage.token = res.data.token;
@@ -31233,85 +31237,91 @@
 	'use strict';
 
 	module.exports = function(app){
-	app.controller('UserController', ['$http','AuthService', function($http, AuthService) {
-	  const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	  const self = this;
-	  self.users = ['user'];
-	  self.submit = function(){
-	    if(self.users){
-	      self.users.push(this.users);
-	      self.users = '';
+	  app.controller('UserController', ['$http','AuthService', function($http, AuthService) {
+	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	    const self = this;
+	    self.users = ['user'];
+	    self.submit = function(){
+	      if(self.users){
+	        self.users.push(this.users);
+	        self.users = '';
+	      }
+
+	    };
+
+	    self.getUser = function(){
+	      $http.get(userRoute)
+	        .then((result)=>{
+	          self.users = result.data;
+	        }, function(error){
+	          return error;
+	        });
+	    };
+
+	    self.createUser = function(user){
+	      $http.post(userRoute, user, {
+	        headers: AuthService.getToken()
+	      })
+	        .then(function(res){
+	          console.log('post is hit');
+	          self.users.push(res.data);
+	          self.newUser = null;
+	        });
+	    };
+
+	    // self.signIn = function(user){
+	    //   $http.put(userRoute + user.id)
+	    //   .then((res)=>{
+	    //     self.users = self.users.map((u)=>{
+	    //       if(u.id === user.id){
+	    //         return user;
+	    //       }else {
+	    //         return u;
+	    //       }
+	    //     });
+	    //   });
+	    // };
+
+	    self.updateUser = function(user){
+	      $http.put(userRoute + user.id, {
+	        headers: AuthService.getToken()
+	      })
+	      .then((result)=>{
+	        self.users = self.users.map((u)=>{
+	          if(u.id === user.id){
+	            return user;
+	          }else {
+	            return u;
+	          }
+	        });
+	      });
+	    };
+
+	    self.removeUser = function(user){
+	      $http.delete(userRoute + user.id, {
+	        headers: AuthService.getToken()
+	      })
+	      .then((result)=>{
+	        self.users = self.users.filter((u)=> u.id !=u.id);
+	      });
+	    };
+
+	    self.signUp = function(user){
+	      AuthService.createUser(user, (err, res)=>{
+	        if(err) return console.log(err);
+	        console.log('hitting' + res);
+	      });
 	    }
 
-	  };
-
-	  self.getUser = function(){
-	    $http.get(userRoute)
-	      .then((result)=>{
-	        self.users = result.data;
-	      }, function(error){
-	        return error;
+	    self.logIn = function(user){
+	      console.dir(angular.toJson(user));
+	      AuthService.signIn(user, (err, res)=>{
+	        if(err) return console.log(err)
+	        console.log('Log in res.body : ' + angular.toJson(res.body));
+	        console.log('Log in res : ' + angular.toJson(res));
 	      });
-	  };
-
-	  self.createUser = function(user){
-	    $http.post(userRoute, user, {
-	      headers: AuthService.getToken()
-	    })
-	      .then(function(res){
-	        console.log('post is hit');
-	        self.users.push(res.data);
-	        self.newUser = null;
-	      });
-	  };
-
-	  // self.signIn = function(user){
-	  //   $http.put(userRoute + user.id)
-	  //   .then((res)=>{
-	  //     self.users = self.users.map((u)=>{
-	  //       if(u.id === user.id){
-	  //         return user;
-	  //       }else {
-	  //         return u;
-	  //       }
-	  //     });
-	  //   });
-	  // };
-
-	  self.updateUser = function(user){
-	    $http.put(userRoute + user.id)
-	    .then((result)=>{
-	      self.users = self.users.map((u)=>{
-	        if(u.id === user.id){
-	          return user;
-	        }else {
-	          return u;
-	        }
-	      });
-	    });
-	  };
-
-	  self.removeUser = function(user){
-	    $http.delete(userRoute + user.id)
-	    .then((result)=>{
-	      self.users = self.users.filter((u)=> u.id !=u.id);
-	    });
-	  };
-
-	  self.signUp = function(user){
-	    AuthService.createUser(user, (err, res)=>{
-	      if(err) return console.log(err);
-	      console.log('hitting' + res);
-	    });
-	  }
-
-	  self.logIn = function(user){
-	    console.log(user);
-	    AuthService.signIn(user, (err, res)=>{
-	      console.log('Log in response : ' + res);
-	    });
-	  };
-	}]);
+	    };
+	  }]);
 
 	};
 

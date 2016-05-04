@@ -7,6 +7,7 @@ module.exports = function(app){
     this.origin = '';
     this.startCoordinates = {};
     this.markerPoints = [{lat: 47.615635, lng: -122.203703},{lat: 47.565444, lng: -122.329953}];
+
     this.initialize = function(){
       $window.Gmap.initMap();
     };
@@ -22,9 +23,10 @@ module.exports = function(app){
       });
     };
 
+    //check if route is with / or without it
     this.postRoutes = function(coordinates){
       console.log('I am inside of postRoute : ' + coordinates);
-      $http.post(mainRoute + 'users', coordinates)
+      $http.post(mainRoute + 'users/', coordinates)
         .then((err, res)=>{
           if(err) return console.log('Errorrrr : ' + err);
           console.log('Response back : ' + res);
