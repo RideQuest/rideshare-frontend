@@ -1,5 +1,6 @@
 @import normalize
 @import base
+@import module
 
 $turquoise: rgb(89,196,197) !default
 $blue: rgb(0,200,248)  !default
@@ -21,23 +22,40 @@ $gutter: 5em
 
 body
   background-color: $teitary-color
-  padding: $gutter
+  // padding: $gutter
 
-main
-  background-color: $opa-cream
-  padding: 2em
+.title
+ padding: $gutter
+
+section
+  // background-color: $opa-cream
+  margin-top: $gutter
+  // padding: 2em
+  height: 100%
+  width: 100%
+  z-index: -100
+
+  .navbar
+  // text-align: center
+  // font-size: 2em
+  // margin-top: $gutter
+  // // background-color: $cream
+  // height: 30px
   // width: 100%
-  // height: 100%
-  // margin-left: $gutter
-  // margin-right: $gutter
-
+  // color: $blue
 
 header
   text-align: center
+  margin-top: -22px
+  // margin-bottom: $gutter
+  // background-color: $blue
+  background-image: url(https://linziboyd.files.wordpress.com/2013/08/open-road.jpg)
+  background-size: cover
+  background-position: center
+  height: 400px
+  width: 100%
   margin-bottom: $gutter
-  background-color: $blue
-  height: 10em
-  width: auto
+
 
 .main-title
   color: white
@@ -52,28 +70,94 @@ header
 
 
 
-.navbar
-  text-align: center
-  margin-top: $gutter
+
 
 a
-  color: $light-orange
+  color: white
   margin-left: $gutter
+  font-size: 1em
+  font-stretch: expanded
+  font-family: sans-serif
+  text-shadow: 1em
 
 .sign
   text-align: center
-  margin-top: $gutter
+
+.logo
+  height: 150px
+  width: 300px
+  background-image: url(https://github.com/RideQuest/rideshare-frontend/blob/layout_lisa/app/images/logo.svg)
+  background-size: contain
+
+.boxes
+  display: flex
+  padding: 5em
+
+.box1
+  height: 250px
+  width: 250px
+  background-image: url(https://raw.githubusercontent.com/RideQuest/rideshare-frontend/layout_lisa/app/images/rslogo.png)
+  background-size: cover
+  padding: 5em
+
+  margin-right: 2em
+  text-align: center
+
+.box2
+  height: 250px
+  width: 250px
+  background-image: url(https://ucsdcfm.files.wordpress.com/2011/03/driving-friends.jpg)
+  background-size: cover
+  padding: 5em
+
+  margin-right: 2em
+  text-align: center
+
+
+  h1
+    font-size: 2em
+    color: white
+  // margin-top: $gutter
+button
+
+   border-top: 1px solid #96d1f8
+   background: #65a9d7
+   background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#65a9d7))
+   background: -webkit-linear-gradient(top, #3e779d, #65a9d7)
+   background: -moz-linear-gradient(top, #3e779d, #65a9d7)
+   background: -ms-linear-gradient(top, #3e779d, #65a9d7)
+   background: -o-linear-gradient(top, #3e779d, #65a9d7)
+   padding: 5px 10px
+   -webkit-border-radius: 8px
+   -moz-border-radius: 8px
+   border-radius: 8px
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0
+   box-shadow: rgba(0,0,0,1) 0 1px 0
+   text-shadow: rgba(0,0,0,.4) 0 1px 0
+   color: white
+   font-size: 14px
+   font-family: 'Lucida Grande', Helvetica, Arial, Sans-Serif
+   text-decoration: none
+   vertical-align: middle
+
+button:hover
+   border-top-color: #28597a
+   background: #28597a
+   color: #ccc
+
+button:active
+   border-top-color: #1b435e
+   background: #1b435e
 
 .signin-form
 
-// .update-profile
-//   margin-top: $gutter
-//   display: flex
-//   flex-direction: column
+.update-profile
+  margin-top: $gutter
+
+
 
 .who-profile
   // text-align: center
   margin-top: $gutter
   // background-color: $cream
-  li
-    text-decoration: none

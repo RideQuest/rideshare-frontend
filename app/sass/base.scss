@@ -1,89 +1,66 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
-
-// body {
-//   background: #456;
+// html, body {
 //   font-family: 'Open Sans', sans-serif;
+//   text-align: justify;
 // }
-
-.login {
-  width: 400px;
-  margin: 16px auto;
-  font-size: 16px;
-}
-
-/* Reset top and bottom margins from certain elements */
-.login-header,
-.login p {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-/* The triangle form is achieved by a CSS hack */
-.login-triangle {
-  width: 0;
-  margin-right: auto;
-  margin-left: auto;
-  border: 12px solid transparent;
-  border-bottom-color: #28d;
-}
-
-.login-header {
-  background: #28d;
-  padding: 20px;
-  font-size: 1.4em;
-  font-weight: normal;
-  text-align: center;
-  text-transform: uppercase;
-  color: #fff;
-}
-
-.login-container {
-  background: #ebebeb;
-  padding: 12px;
-}
-
-/* Every row inside .login-container is defined with p tags */
-.login p {
-  padding: 12px;
-}
-
-.login input {
-  box-sizing: border-box;
-  display: block;
-  width: 100%;
-  border-width: 1px;
-  border-style: solid;
-  padding: 16px;
-  outline: 0;
-  font-family: inherit;
-  font-size: 0.95em;
-}
-
-.login input[type="email"],
-.login input[type="password"] {
-  background: #fff;
-  border-color: #bbb;
-  color: #555;
-}
-
-/* Text fields' focus effect */
-.login input[type="email"]:focus,
-.login input[type="password"]:focus {
-  border-color: #888;
-}
-
-.login input[type="submit"] {
-  background: #28d;
-  border-color: transparent;
-  color: #fff;
-  cursor: pointer;
-}
-
-.login input[type="submit"]:hover {
-  background: #17c;
-}
-
-/* Buttons' focus effect */
-.login input[type="submit"]:focus {
-  border-color: #05a;
-}
+// #left-side {
+//   width: 19%;
+//   height: 100%;
+//   float: left;
+//   /*border: 1px solid black;*/
+// }
+//
+// #right-side {
+//   width: 80%;
+//   margin-top: 30px;
+//   border: 1px solid #fff;
+//   overflow: hidden;
+//   box-shadow: inset 0 0 10px #888;
+//   border-left: 5px solid orange;
+// }
+//
+// article {
+//   margin: 10px 30px;
+//   /*border: 1px solid black;*/
+// }
+//
+// h1 {
+//   padding-left: 10px;
+//   font-family: 'Open Sans', sans-serif;
+//   color: #494949;
+// }
+//
+// p.title-dsc {
+//   padding-left: 10px;
+// }
+//
+// h2 {
+//   border-left: 6px solid orange;
+//   padding-left: 10px;
+//   color: #494949;
+// }
+//
+// p {
+//   font-size: 12px;
+// }
+//
+// ul {
+//   list-style-type:square;
+//   font-size: 13px;
+// }
+//
+// ul p {
+//   line-height: 0px;
+// }
+//
+// @media screen and (max-width: 640px) {
+//   #left-side {
+//     float: none;
+//     width: 100%;
+//     text-align: center;
+//   }
+//
+//   #right-side {
+//     width:98%;
+//
+//   }
+// }
