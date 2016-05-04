@@ -45,11 +45,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+	__webpack_require__(10);
+	__webpack_require__(9);
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
-	__webpack_require__(10);
-	__webpack_require__(9);
 	__webpack_require__(13);
 	__webpack_require__(14);
 	__webpack_require__(7);
@@ -32103,10 +32103,10 @@
 	      signIn(user, cb){
 	        console.log('Auth signIn : ' + angular.toJson(user));
 	        cb || function(){};
-	        $http.post(url + '/auth-token/',{
+	        $http.post(url + '/auth-token/',{},{
 	          headers: {
-	            type: 'application/json',
-	            Authorization: 'Basic ' + btoa(user.username + ':' + user.password)
+	            'Content-Type': 'application/json',
+	            'Authorization': 'Basic ' + btoa(user.username + ':' + user.password)
 	          }
 	        }).then((res)=>{
 	          console.log('here' + res.body);

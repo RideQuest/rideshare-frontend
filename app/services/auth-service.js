@@ -30,10 +30,10 @@ module.exports = function(app){
       signIn(user, cb){
         console.log('Auth signIn : ' + angular.toJson(user));
         cb || function(){};
-        $http.post(url + '/auth-token/',{
+        $http.post(url + '/auth-token/',{},{
           headers: {
-            type: 'application/json',
-            Authorization: 'Basic ' + btoa(user.username + ':' + user.password)
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + btoa(user.username + ':' + user.password)
           }
         }).then((res)=>{
           console.log('here' + res.body);
