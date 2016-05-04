@@ -4,11 +4,26 @@ module.exports = function (app) {
 app.directive('userProfile', function(){
     return {
       restrict: 'E',
-      // replace: true,
       templateUrl: './templates/user-profile.html'
 
     };
   });
+
+  app.directive('home', function(){
+      return {
+        restrict: 'E',
+        templateUrl: './views/01_home.html'
+
+      };
+    });
+
+    app.directive('dashboardPage', function(){
+        return {
+          restrict: 'E',
+          templateUrl: './views/02_dashboard.html'
+
+        };
+      });
 
   app.directive('userSignin', function(){
     return {
@@ -16,6 +31,14 @@ app.directive('userProfile', function(){
       templateUrl: './templates/signin.html'
     };
   });
+
+  app.directive('aboutUs', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/about-us.html'
+    };
+  });
+
 
   app.directive('fileModel', ['$parse', function ($parse) {
     return {
@@ -48,64 +71,5 @@ app.directive('userProfile', function(){
       controllerAs: 'tabCtrl'
     };
   });
-  // app.directive('userInfo', function(){
-  //   return {
-  //     restrict: 'E',
-  //     templateUrl: './templates/user-profile.html',
-  //     controller:function($http){
-  //       $http.get(gitRoute + '/' + 'repos')
-  //       .then((result)=>{
-  //         this.repos = result.data;
-  //       });
-  //     },
-  //     controllerAs: 'projectCtrl'
-  //   };
-  // });
-  // app.directive('customHome', function(){
-  //   return {
-  //     restrict: 'E',
-  //     templateUrl: './templates/portfolio-home.html',
-  //     controller:function($http){
-  //       $http.get(gitRoute)
-  //       .then((result)=>{
-  //         this.user = result.data;
-  //       });
-  //     },
-  //     controllerAs:'homeCtrl'
-  //   };
-  // });
-  // app.directive('customResume', function(){
-  //   return {
-  //     retrict: 'E',
-  //     templateUrl: './templates/portfolio-resume.html',
-  //     controller:function($http){
-  //       $http.get('./app/data-json/educationData.json')
-  //       .then((result)=>{
-  //         this.schools = result.data;
-  //       });
-  //     },
-  //     controllerAs: 'resumeCtrl'
-  //   };
-  // });
-  // app.directive('customResources', function(){
-  //   return {
-  //     restrict: 'E',
-  //     templateUrl: './templates/portfolio-resources.html'
-  //   };
-  // });
-  // app.directive('directiveLink', function(){
-  //   return {
-  //     restrict: 'A',
-  //     replace: true,
-  //     link: function($scope, element) {
-  //       element.css('border-radius', '25px');
-  //       element.css('text-align', 'center');
-  //       element.css('color', 'blue');
-  //       element.css('font-size', '3em');
-  //       element.css('transform', 'translateX(10px) rotate(10deg) translateY(5px)');
-  //
-  //      }
-  //    };
-  //  });
+
 };
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da

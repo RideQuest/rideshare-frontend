@@ -1,12 +1,13 @@
 'use strict';
 
 module.exports = function(app){
-app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
+app.controller('ProfileController', ['$http', '$scope',function($http, $scope) {
 const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
 // const self= this;
 $scope.profiles = ['profile'];
 $scope.newProfile = {};
 console.log('hit profile');
+
 
 $scope.getProfile = function(){
   $http.get(profileRoute)
@@ -18,7 +19,7 @@ $scope.getProfile = function(){
     });
 
 };
-// this.createUser = function(profile){
+// this.createProfile = function(profile){
 //   $http.post(profileRoute, user)
 //     .then((result)=>{
 //       console.log('post is hit');

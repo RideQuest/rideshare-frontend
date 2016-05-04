@@ -1,10 +1,6 @@
 
 <!DOCTYPE html>
-<<<<<<< HEAD
-<html data-ng-app="rideshareApp">
-=======
-<html>
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
+<html ng-app="rideshareApp">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="index.css"/>
@@ -16,32 +12,31 @@
        }
      </style>
   </head>
-<<<<<<< HEAD
   <body>
-    <section data-ng-controller="mapController as mapCtrl">
-      <map-rider></map-rider>
-      <map-driver></map-driver>
-      <div ng-init="mapCtrl.initialize()" id="map" style="width: 70%; height: 40em;"></div>
-    </section>
-=======
-  <body ng-app="rideshareApp">
     <header>
-      <h1 class="main-title">RideShare Rulez!</h1>
+  <div class="inner">
+    <img class="logo" src="https://placeholdit.imgix.net/~text?txtsize=18&bg=000000&txt=200%C3%9770&w=200&h=70" />
+
+    <img class="hamburger" src="https://cdn4.iconfinder.com/data/icons/wirecons-free-vector-icons/32/menu-alt-512.png" />
+
       <custom-nav></custom-nav>
-</header>
+    </header>
+
+
 <main ng-view>
 
 </main>
 
+<footer></footer>
 
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
 
 
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvgiNNUfAJl3Kl_NlrfPS1nXyiMn23baE" async defer></script> -->
+
+
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvgiNNUfAJl3Kl_NlrfPS1nXyiMn23baE" async defer></script>
     <script src="./bundle.js" type="text/javascript"></script>
-<<<<<<< HEAD
-=======
-    <!-- <footer>Foooteeerrrr</footer> -->
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da
+
   </body>
 </html>
