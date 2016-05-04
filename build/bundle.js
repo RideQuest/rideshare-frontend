@@ -45,14 +45,14 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+	__webpack_require__(18);
 	__webpack_require__(21);
 	__webpack_require__(22);
 	__webpack_require__(23);
-	__webpack_require__(20);
-	__webpack_require__(19);
-	__webpack_require__(18);
 	__webpack_require__(24);
 	__webpack_require__(25);
+	__webpack_require__(20);
+	__webpack_require__(19);
 	__webpack_require__(26);
 	__webpack_require__(27);
 	__webpack_require__(28);
@@ -66318,6 +66318,48 @@
 /***/ function(module, exports) {
 
 	module.exports = function(app){
+	  app.directive('mapRider',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      controller: 'mapController',
+	      templateUrl: '/templates/form-rider.html'
+	    }
+	  });
+
+	  app.directive('mapDriver',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      controller: 'mapController',
+	      templateUrl: '/templates/form-driver.html'
+	    }
+	  });
+
+	}
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	// module.exports = function(app){
+	//   app.directive('mapRider',function(){
+	//     return {
+	//       restrict: 'E',
+	//       replace: true,
+	//       templateUrl: '/templates/form-rider.html'
+	//     }
+	//   });
+	//
+	// }
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
 
 
 
@@ -66331,7 +66373,7 @@
 
 
 /***/ },
-/* 22 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -66378,52 +66420,10 @@
 
 
 /***/ },
-/* 23 */
-/***/ function(module, exports) {
-
-	
-
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.directive('mapRider',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/form-rider.html'
-	    }
-	  });
-
-	  app.directive('mapDriver',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/form-driver.html'
-	    }
-	  });
-
-	}
-
-
-/***/ },
 /* 25 */
 /***/ function(module, exports) {
 
-	// module.exports = function(app){
-	//   app.directive('mapRider',function(){
-	//     return {
-	//       restrict: 'E',
-	//       replace: true,
-	//       templateUrl: '/templates/form-rider.html'
-	//     }
-	//   });
-	//
-	// }
-
+	
 
 /***/ },
 /* 26 */
