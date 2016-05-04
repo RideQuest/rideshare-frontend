@@ -6,7 +6,8 @@ const sourcemaps = require('gulp-sourcemaps');
 const sources = {
   html: __dirname + '/app/**/*.html',
   js: __dirname + '/app/**/*.js',
-  test: __dirname + '/test/*_spec.js'
+  test: __dirname + '/test/*_spec.js',
+  img: __dirname + '/app/**/*.png'
 };
 
 gulp.task('build:css', function() {
@@ -24,14 +25,18 @@ gulp.task('bundle:dev', () => {
         filename: 'bundle.js'
       }
     }))
-    .pipe(gulp.dest('./build'))
+    .pipe(gulp.dest('./build'));
 });
 
 gulp.task('copy', () => {
   return gulp.src(sources.html)
-    .pipe(gulp.dest('./build'))
+    .pipe(gulp.dest('./build'));
 });
 
+gulp.task('copyImg', () => {
+  return gulp.src(sources.img)
+    .pipe(gulp.dest('./build'));
+});
 
 
 gulp.task('bundle:test', () => {
@@ -41,4 +46,4 @@ gulp.task('bundle:test', () => {
 });
 
 
-gulp.task('default', ['bundle:dev', 'build:css', 'copy']);
+gulp.task('default', ['bundle:dev', 'build:css', 'copy', 'copyImg']);

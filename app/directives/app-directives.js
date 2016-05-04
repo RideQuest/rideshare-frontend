@@ -108,4 +108,3 @@ app.directive('userProfile', function(){
   //    };
   //  });
 };
->>>>>>> 088af675665b50dc44bebcf88058c0d26bd0d4da

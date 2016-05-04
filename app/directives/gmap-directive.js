@@ -17,4 +17,12 @@ module.exports = function(app){
     }
   });
 
+  app.directive('mapView',function(){
+    return {
+      restrict: 'E',
+      replace: true,
+      controller: 'mapController',
+      templateUrl: '/templates/gmap-view.html'
+    }
+  });
 }
