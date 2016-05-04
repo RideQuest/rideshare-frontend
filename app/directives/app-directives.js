@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function (app) {
 
-app.directive('userProfile', function(){
+  app.directive('userProfile', function(){
     return {
       restrict: 'E',
       templateUrl: './templates/user-profile.html'
@@ -10,21 +10,21 @@ app.directive('userProfile', function(){
   });
 
   app.directive('home', function(){
-      return {
-        restrict: 'E',
-        templateUrl: './views/01_home.html'
+    return {
+      restrict: 'E',
+      templateUrl: './views/01_home.html'
 
-      };
-    });
+    };
+  });
 
-    app.directive('dashboardPage', function(){
-        return {
-          restrict: 'E',
-          templateUrl: './templates/dashboard.html',
-          controller: 'ProfileController'
+  app.directive('dashboardPage', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/dashboard.html',
+      controller: 'ProfileController'
 
-        };
-      });
+    };
+  });
 
   app.directive('userSignin', function(){
     return {
@@ -43,19 +43,20 @@ app.directive('userProfile', function(){
 
   app.directive('fileModel', ['$parse', function ($parse) {
     return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-            var model = $parse(attrs.fileModel);
-            var modelSetter = model.assign;
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        var model = $parse(attrs.fileModel);
+        var modelSetter = model.assign;
 
-            element.bind('change', function(){
-                scope.$apply(function(){
-                    modelSetter(scope, element[0].files[0]);
-                });
-            });
-        }
+        element.bind('change', function(){
+          scope.$apply(function(){
+            modelSetter(scope, element[0].files[0]);
+          });
+        });
+      }
     };
-}]);
+  }]);
+
   app.directive('customNav', function(){
     return {
       restrict: 'E',

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(app){
   app.factory('AuthService', ['$http', '$window', function($http, $window){
     var token;
@@ -12,7 +14,7 @@ module.exports = function(app){
             cb(null, res);
             console.log('ThisIsToken: ' + token);
           },(err)=>{
-            console.log(err);
+            console.log('Error obj : ' + err);
             cb(err);
           });
       },
@@ -26,13 +28,15 @@ module.exports = function(app){
       },
 
       signIn(user, cb){
-        console.log('Auth signIn : ' + user);
+        console.log('Auth signIn : ' + angular.toJson(user));
         cb || function(){};
         $http.post(url + '/auth-token/',{
           headers: {
-            authorization: 'Basic ' + btoa(user.username + ':' + user.password)
+            type: 'application/json',
+            Authorization: 'Basic ' + btoa(user.username + ':' + user.password)
           }
         }).then((res)=>{
+          console.log('here' + res.body);
           token = $window.localStorage.token = res.data.token;
           cb(null, res);
         }, (err)=>{
