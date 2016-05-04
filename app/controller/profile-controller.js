@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = function(app){
+
   app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
     const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
     // const self= this;
@@ -25,6 +26,7 @@ module.exports = function(app){
     //       this.profiles.push(result.data);
     //     });
     //   };
+
 
     $scope.updateProfile = function(profile){
       $http.put(profileRoute + profile.id)

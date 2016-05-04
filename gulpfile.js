@@ -7,7 +7,9 @@ const sources = {
   html: __dirname + '/app/**/*.html',
   js: __dirname + '/app/**/*.js',
   test: __dirname + '/test/*_spec.js',
+  images: __dirname + '/app/images/*.png',
   img: __dirname + '/app/**/*.png'
+
 };
 
 gulp.task('build:css', function() {
@@ -33,9 +35,15 @@ gulp.task('copy', () => {
     .pipe(gulp.dest('./build'));
 });
 
+
+gulp.task('copy:image', () => {
+  return gulp.src(sources.images)
+    .pipe(gulp.dest('./build'))
+
 gulp.task('copyImg', () => {
   return gulp.src(sources.img)
     .pipe(gulp.dest('./build'));
+
 });
 
 
@@ -46,4 +54,5 @@ gulp.task('bundle:test', () => {
 });
 
 
-gulp.task('default', ['bundle:dev', 'build:css', 'copy', 'copyImg']);
+
+gulp.task('default', ['bundle:dev', 'build:css', 'copy:image', 'copy', 'copyImg']);

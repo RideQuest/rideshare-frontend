@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-ng-app="rideshareApp">
+<html ng-app="rideshareApp">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="index.css"/>
@@ -13,13 +13,30 @@
   </head>
   <body>
     <header>
+      <div class="logo">
+        </div>
+      <h1 class="title">Ride Share</h1>
+        <custom-nav></custom-nav>
+
+    </header>
+
+
+<main ng-view>
+
       <h1 class="main-title">RideShare Rulez!</h1>
       <custom-nav></custom-nav>
+      <map-view></map-view>
     </header>
     <map-view></map-view>
-  <main ng-view>
+
 
   </main>
+
+
+
+<footer></footer>
+
+
 
 
 
