@@ -1,19 +1,20 @@
+<!-- sign in form  -->
 <section class="sign"ng-controller="UserController as userctrl" >
   <div><button id="login-button" ng-hide="userlogin" ng-click="userlogin = userlogin == true ? false : true;">Login</button></div>
       <div class="login">
     <div><div ng-show="userlogin" class="hideByDefault">
         <div class="login-triangle"></div>
       <h2 class="login-header">Log in</h2>
-      <form class="signin-form" ng-submit="userctrl.getUser()">
-        <input type="email" placeholder="email" ng-model="userctrl.users.email">
-        <input type="text" placeholder="username" ng-model="userctrl.users.username">
-        <input type="password" placeholder="password" ng-model="userctrl.users.password">
+      <form class="signin-form" ng-submit="userctrl.logIn(users)">
+        <!-- <input type="email" placeholder="email" ng-model="users.email"> -->
+        <input type="text" placeholder="username" ng-model="users.username">
+        <input type="password" placeholder="password" ng-model="users.password">
         <input type="submit" value="Log in">
       </div></div>
     </form>
   </div>
 
-
+<!-- sing up forms -->
     <div><button id="signup-button" ng-hide="newuser" ng-click="newuser = newuser == true ? false : true;">Sign Up Here</button></div>
 <div class="login">
     <div><div ng-show="newuser" class="hideByDefault">

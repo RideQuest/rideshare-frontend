@@ -38,8 +38,7 @@ gulp.task('copy', () => {
 
 gulp.task('copy:image', () => {
   return gulp.src(sources.images)
-    .pipe(gulp.dest('./build'))
-
+    .pipe(gulp.dest('./build'));
 });
 
 gulp.task('copyImg', () => {

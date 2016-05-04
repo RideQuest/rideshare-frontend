@@ -10,7 +10,7 @@ module.exports = function(app){
         self.users.push(self.users);
         self.users = '';
       }
-};
+    };
 
     self.getUser = function(){
       $http.get(userRoute)
@@ -74,12 +74,12 @@ module.exports = function(app){
         if(err) return console.log(err);
         console.log('hitting' + res);
       });
-    }
+    };
 
     self.logIn = function(user){
-      console.dir(angular.toJson(user));
+      // console.dir(angular.toJson(user));
       AuthService.signIn(user, (err, res)=>{
-        if(err) return console.log(err)
+        if(err) return console.log(err);
         console.log('Log in res.body : ' + angular.toJson(res.body));
         console.log('Log in res : ' + angular.toJson(res));
         $location.path('/dashboard');
