@@ -32,19 +32,6 @@ module.exports = function(app){
         });
     };
 
-    // self.signIn = function(user){
-    //   $http.put(userRoute + user.id)
-    //   .then((res)=>{
-    //     self.users = self.users.map((u)=>{
-    //       if(u.id === user.id){
-    //         return user;
-    //       }else {
-    //         return u;
-    //       }
-    //     });
-    //   });
-    // };
-
     self.updateUser = function(user){
       $http.put(userRoute + user.id, {
         headers: AuthService.getToken()
@@ -69,12 +56,23 @@ module.exports = function(app){
       });
     };
 
+//auth routes
+
     self.signUp = function(user){
       AuthService.createUser(user, (err, res)=>{
         if(err) return console.log(err);
         console.log('hitting' + res);
       });
     };
+
+    self.logOut = function(user){
+      AuthService.signOut((err, res)=>{
+        if(err) return console.log(err);
+        console.log('hitting' + res);
+        $location.path('/signin')
+      });
+    };
+
 
     self.logIn = function(user){
       // console.dir(angular.toJson(user));

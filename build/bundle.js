@@ -45,11 +45,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(10);
-	__webpack_require__(9);
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
+	__webpack_require__(10);
+	__webpack_require__(9);
 	__webpack_require__(13);
 	__webpack_require__(14);
 	__webpack_require__(7);
@@ -92,9 +92,20 @@
 	  })
 	  .when('/home', {
 	    controller: 'UserController',
+	    templateUrl: './views/home.html'
+	  })
+	  .when('/', {
+	    controller: 'UserController',
+	    templateUrl: './views/home.html'
+	  })
+	  .when('/signup', {
+	    controller: 'UserController',
 	    template: './templates/dashboard.html'
+	  })
+	  .when('/profile', {
+	    controller: 'ProfileController',
+	    templateUrl: './views/home.html'
 	  });
-
 	}]);
 
 
@@ -32302,19 +32313,6 @@
 	        });
 	    };
 
-	    // self.signIn = function(user){
-	    //   $http.put(userRoute + user.id)
-	    //   .then((res)=>{
-	    //     self.users = self.users.map((u)=>{
-	    //       if(u.id === user.id){
-	    //         return user;
-	    //       }else {
-	    //         return u;
-	    //       }
-	    //     });
-	    //   });
-	    // };
-
 	    self.updateUser = function(user){
 	      $http.put(userRoute + user.id, {
 	        headers: AuthService.getToken()
@@ -32339,12 +32337,23 @@
 	      });
 	    };
 
+	//auth routes
+
 	    self.signUp = function(user){
 	      AuthService.createUser(user, (err, res)=>{
 	        if(err) return console.log(err);
 	        console.log('hitting' + res);
 	      });
 	    };
+
+	    self.logOut = function(user){
+	      AuthService.signOut((err, res)=>{
+	        if(err) return console.log(err);
+	        console.log('hitting' + res);
+	        $location.path('/signin')
+	      });
+	    };
+
 
 	    self.logIn = function(user){
 	      // console.dir(angular.toJson(user));

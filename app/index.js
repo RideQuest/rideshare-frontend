@@ -29,7 +29,18 @@ app.config(['$routeProvider', function(routeProvider){
   })
   .when('/home', {
     controller: 'UserController',
+    templateUrl: './views/home.html'
+  })
+  .when('/', {
+    controller: 'UserController',
+    templateUrl: './views/home.html'
+  })
+  .when('/signup', {
+    controller: 'UserController',
     template: './templates/dashboard.html'
+  })
+  .when('/profile', {
+    controller: 'ProfileController',
+    templateUrl: './views/home.html'
   });
-
 }]);
