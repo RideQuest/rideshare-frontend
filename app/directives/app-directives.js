@@ -20,7 +20,8 @@ app.directive('userProfile', function(){
     app.directive('dashboardPage', function(){
         return {
           restrict: 'E',
-          templateUrl: './views/02_dashboard.html'
+          templateUrl: './templates/dashboard.html',
+          controller: 'ProfileController'
 
         };
       });

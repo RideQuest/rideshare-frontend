@@ -1,3 +1,36 @@
-<!-- <section class="contact-list" ng-show="tabCtrl.isSet(4)">
+<section data-ng-controller="UserController as userCtrl">
+<h1>Welcome {{userCtrl.users.username}}</h1>
 
-</section> -->
+<section ng-controller="ProfileController as profileCtrl" ng-init="profileCtrl.getProfile()" class="who-profile">
+    <div class="content-wrapper">
+  <h2>My Profile</h2>
+
+    <p>First Name: {{profileCtrl.profiles.first_name}}</p><br>
+    <p>  Last Name: {{profileCtrl.profiles.last_name}}</p><br>
+    <p>   Email: {{profileCtrl.profiles.email}}</p><br>
+    <p>   Photo: <img src="{{profileCtrl.profiles.image}}" alt="Profile Pic"></p><br>
+    <p>   Car Make: {{profileCtrl.profiles.car_brand}}</p><br>
+    <p>   Car Seats: {{profileCtrl.profiles.car_seat}}</p><br>
+
+
+
+    <div ng-show="editprofile" class="hideByDefault">
+    <button class="login" id="edit-button" ng-hide="editprofile" ng-click="editprofile = editprofile == true ? false : true;">Edit Profile</button></div>
+
+
+
+
+<form class="update-profile" ng-hide="editprofile" ng-submit="userctrl.updateProfile(profile)">
+  Update Info
+First Name:   <input ng-model="profile.first_name" type="text">
+Last Name:  <input ng-model="profile.last_name" type="text">
+Email:  <input ng-model="profile.email" type="text">
+Car Make:   <input ng-model="profile.car_brand" type="text">
+Car Seats:   <input ng-model="profile.car_seat" type="text">
+  <button type="submit">Save</button>
+
+</form>
+</div>
+</section>
+
+</section>

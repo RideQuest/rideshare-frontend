@@ -6,6 +6,7 @@ module.exports = function(app){
     const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
     // const self= this;
     $scope.profiles = ['profile'];
+    $scope.editingProfile = false;
     $scope.newProfile = {};
     console.log('hit profile');
 
@@ -41,6 +42,10 @@ module.exports = function(app){
         });
     };
 
+    $scope.editButtonShow = function(){
+      $scope.editingProfile = true;
+    };
+
     $scope.submit = function(profile){
       if($scope.profiles){
         $scope.profiles.push(this.profiles);
@@ -48,22 +53,6 @@ module.exports = function(app){
       }
 
     };
-    // this.onFileSelect = function($files) {
-    //   for(var i=0; < $files.length; i++){
-    //     var $file = $files[i];
-    //     Upload.upload({
-    //       url:
-    //     })
-    //   }
-    // }
-
-    // this.removeUser = function(user){
-    //   $http.delete(userRoute + user.id)
-    //   .then((result)=>{
-    //     this.users = this.users.filter((u)=> u.id !=u.id);
-    //   });
-    // };
-
 
   }]);
 

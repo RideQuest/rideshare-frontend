@@ -1,23 +1,22 @@
 'use strict';
 
 module.exports = function(app){
-  app.controller('UserController', ['$http','AuthService', function($http, AuthService) {
+  app.controller('UserController', ['$http','AuthService', '$location', function($http, AuthService, $location) {
     const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
     const self = this;
     self.users = ['user'];
     self.submit = function(){
       if(self.users){
-        self.users.push(this.users);
+        self.users.push(self.users);
         self.users = '';
       }
-
-    };
+};
 
     self.getUser = function(){
       $http.get(userRoute)
         .then((result)=>{
           self.users = result.data;
-        }, function(error){
+        }, (error)=>{
           return error;
         });
     };
@@ -83,6 +82,7 @@ module.exports = function(app){
         if(err) return console.log(err)
         console.log('Log in res.body : ' + angular.toJson(res.body));
         console.log('Log in res : ' + angular.toJson(res));
+        $location.path('/dashboard');
       });
     };
   }]);
