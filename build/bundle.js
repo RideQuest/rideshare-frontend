@@ -45,32 +45,20 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-<<<<<<< HEAD
-	__webpack_require__(21);
-	__webpack_require__(22);
-	__webpack_require__(23);
-	__webpack_require__(20);
-	__webpack_require__(19);
-	__webpack_require__(18);
-	__webpack_require__(24);
 	__webpack_require__(25);
+	__webpack_require__(17);
 	__webpack_require__(26);
+	__webpack_require__(24);
+	__webpack_require__(23);
+	__webpack_require__(21);
+	__webpack_require__(20);
 	__webpack_require__(27);
 	__webpack_require__(28);
-	__webpack_require__(17);
-	module.exports = __webpack_require__(29);
-=======
-	__webpack_require__(8);
-	__webpack_require__(10);
-	__webpack_require__(9);
-	__webpack_require__(7);
-	__webpack_require__(6);
-	__webpack_require__(11);
-	__webpack_require__(12);
-	__webpack_require__(4);
-	__webpack_require__(13);
-	module.exports = __webpack_require__(5);
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
+	__webpack_require__(29);
+	__webpack_require__(18);
+	__webpack_require__(30);
+	__webpack_require__(19);
+	module.exports = __webpack_require__(22);
 
 
 /***/ },
@@ -78,6 +66,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
 	const angular = __webpack_require__(2);
 	__webpack_require__(4);
 	__webpack_require__(5);
@@ -86,31 +75,37 @@
 	__webpack_require__(12);
 	__webpack_require__(13);
 	__webpack_require__(15);
-	var app = angular.module("rideshareApp", []);
 
-<<<<<<< HEAD
-	// require(__dirname + '/js/main.js')(app);
+	var app = angular.module("rideshareApp", ['ngRoute']);
+
+	//controller
 	__webpack_require__(17)(app);
-	// require(__dirname + '/directives/gmap-directive.js')(app);
-	__webpack_require__(18)(app);
-	// require(__dirname + '/services/profile-services.js')(app);
 
-	// require(__dirname + '/controller/gmap-controller.js')(app);
+	__webpack_require__(18)(app);
 	__webpack_require__(19)(app);
 	__webpack_require__(20)(app);
-	// require(__dirname + '/controller/dashboard-controller.js')(app);
-	// require(__dirname + '/controller/home-controller.js')(app);
-=======
+	__webpack_require__(21)(app);
+	__webpack_require__(22)(app);
 
-	__webpack_require__(4)(app);
-	__webpack_require__(5)(app);
-	__webpack_require__(6)(app);
-	__webpack_require__(7)(app);
+	__webpack_require__(23)(app);
+	__webpack_require__(24)(app);
+	__webpack_require__(25)(app);
+	__webpack_require__(26)(app);
 
-	__webpack_require__(8)(app);
-	__webpack_require__(9)(app);
-	__webpack_require__(10)(app);
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
+	//angular router
+
+	app.config(['$routeProvider', function(routeProvider){
+	  routeProvider
+	  .when('/signin', {
+	    controller: 'UserController',
+	    templateUrl: './templates/signin.html'
+
+	  })
+	  .when('/home', {
+	    controller: 'UserController',
+	    template
+	  })
+	}])
 
 
 /***/ },
@@ -30996,7 +30991,6 @@
 
 /***/ },
 /* 4 */
-<<<<<<< HEAD
 /***/ function(module, exports, __webpack_require__) {
 
 	// Should already be required, here for clarity
@@ -31112,115 +31106,6 @@
 	  }
 	  return arg;
 	}
-=======
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.factory('AuthService', ['$http', '$window', function($http, $window){
-	    var token;
-	    var url = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com';
-	    var auth = {
-	      createUser(user, cb){
-	        console.log('grabbing user data : ' + user);
-	        cb || function(){};
-	        $http.post(url + '/users', user)
-	          .then((res)=>{
-	            token = $window.localStorage.token = res.data.token;
-	            cb(null, res);
-	            console.log('ThisIsToken: ' + token);
-	          },(err)=>{
-	            console.log(err);
-	            cb(err);
-	          });
-	      },
-	      getToken(){
-	        return token || $window.localStorage.token;
-	      },
-	      signOut(cb){
-	        token = null;
-	        $window.localStorage.token = null;
-	        if(cb) cb();
-	      },
-
-	      signIn(user, cb){
-	        console.log('Auth signIn : ' + user);
-	        cb || function(){};
-	        $http.post(url + '/auth-token/',{
-	          headers: {
-	            authorization: 'Basic ' + btoa(user.username + ':' + user.password)
-	          }
-	        }).then((res)=>{
-	          token = $window.localStorage.token = res.data.token;
-	          cb(null, res);
-	        }, (err)=>{
-	          console.log(err);
-	          cb(err);
-	        });
-	      }
-	    };
-	    return auth;
-	  }]);
-	};
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	'use strict';
-	module.exports = function (app) {
-
-	  app.service('fileUpload', ['$http', function ($http) {
-	    this.uploadFileToUrl = function(file, uploadUrl){
-	      var fd = new FormData();
-	      fd.append('file', file);
-	      $http.post(uploadUrl, fd, {
-	        transformRequest: angular.identity,
-	        headers: {'Content-Type': undefined}
-	      })
-	        .success(function(){
-	        })
-	        .error(function(){
-	        });
-	    };
-	  }]);
-	};
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.directive('mapRider',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/form-rider.html'
-	    }
-	  });
-
-	  app.directive('mapDriver',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/form-driver.html'
-	    }
-	  });
-
-	  app.directive('mapView',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/gmap-view.html'
-	    }
-	  });
-	}
-
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	function mergeClasses(a,b) {
 	  if (!a && !b) return '';
@@ -31231,7 +31116,6 @@
 	  return a + ' ' + b;
 	}
 
-<<<<<<< HEAD
 	function packageStyles(options) {
 	  var styles = {};
 	  if (options && (options.to || options.from)) {
@@ -31240,16 +31124,6 @@
 	  }
 	  return styles;
 	}
-=======
-	'use strict';
-	module.exports = function (app) {
-
-	app.directive('userProfile', function(){
-	    return {
-	      restrict: 'E',
-	      // replace: true,
-	      templateUrl: './templates/user-profile.html'
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	function pendClasses(classes, fix, isPrefix) {
 	  var className = '';
@@ -31268,21 +31142,12 @@
 	  return className;
 	}
 
-<<<<<<< HEAD
 	function removeFromArray(arr, val) {
 	  var index = arr.indexOf(val);
 	  if (val >= 0) {
 	    arr.splice(index, 1);
 	  }
 	}
-=======
-	  app.directive('userSignin', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/signin.html'
-	    };
-	  });
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	function stripCommentsFromElement(element) {
 	  if (element instanceof jqLite) {
@@ -31298,7 +31163,6 @@
 	        if (element[0].nodeType === ELEMENT_NODE) {
 	          return element;
 	        }
-<<<<<<< HEAD
 	        break;
 
 	      default:
@@ -31360,151 +31224,18 @@
 	  }
 	  return options;
 	}
-=======
-	    };
-	}]);
-	  app.directive('customNav', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/tabs.html',
-	      controller: function(){
-	        this.tab = 1;
-	        this.isSet = function(check){
-	          return this.tab === check;
-	        };
-	        this.setTab = function(active){
-	          this.tab = active;
-	        };
-	      },
-	      controllerAs: 'tabCtrl'
-	    };
-	  });
-	  // app.directive('userInfo', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/user-profile.html',
-	  //     controller:function($http){
-	  //       $http.get(gitRoute + '/' + 'repos')
-	  //       .then((result)=>{
-	  //         this.repos = result.data;
-	  //       });
-	  //     },
-	  //     controllerAs: 'projectCtrl'
-	  //   };
-	  // });
-	  // app.directive('customHome', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/portfolio-home.html',
-	  //     controller:function($http){
-	  //       $http.get(gitRoute)
-	  //       .then((result)=>{
-	  //         this.user = result.data;
-	  //       });
-	  //     },
-	  //     controllerAs:'homeCtrl'
-	  //   };
-	  // });
-	  // app.directive('customResume', function(){
-	  //   return {
-	  //     retrict: 'E',
-	  //     templateUrl: './templates/portfolio-resume.html',
-	  //     controller:function($http){
-	  //       $http.get('./app/data-json/educationData.json')
-	  //       .then((result)=>{
-	  //         this.schools = result.data;
-	  //       });
-	  //     },
-	  //     controllerAs: 'resumeCtrl'
-	  //   };
-	  // });
-	  // app.directive('customResources', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/portfolio-resources.html'
-	  //   };
-	  // });
-	  // app.directive('directiveLink', function(){
-	  //   return {
-	  //     restrict: 'A',
-	  //     replace: true,
-	  //     link: function($scope, element) {
-	  //       element.css('border-radius', '25px');
-	  //       element.css('text-align', 'center');
-	  //       element.css('color', 'blue');
-	  //       element.css('font-size', '3em');
-	  //       element.css('transform', 'translateX(10px) rotate(10deg) translateY(5px)');
-	  //
-	  //      }
-	  //    };
-	  //  });
-	};
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
-	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
-	    var pikePlace = {lat: 47.608953, lng: -122.341099};
-	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
-	    this.user = {};
-	    this.origin = '';
-	    this.startCoordinates = {};
-	    this.markerPoints = [{lat: 47.615635, lng: -122.203703},{lat: 47.565444, lng: -122.329953}];
-	    this.initialize = function(){
-	      $window.Gmap.initMap();
-	    };
-
-	    this.search = function(cb){
-	      cb = this.postRoutes;
-	      console.log('hitting here in search!');
-	      $window.Gmap.getDirections(this.origin);
-	      $window.Gmap.convertAddressForData(this.origin, function(coordinates){
-	        this.startCoordinates = coordinates;
-	        console.log('startCoordinates : ' + JSON.stringify(this.startCoordinates));
-	        cb(JSON.stringify(this.startCoordinates));
-	      });
-	    };
-
-	    this.postRoutes = function(coordinates){
-	      console.log('I am inside of postRoute : ' + coordinates);
-	      $http.post(mainRoute + 'users', coordinates)
-	        .then((err, res)=>{
-	          if(err) return console.log('Errorrrr : ' + err);
-	          console.log('Response back : ' + res);
-	        });
-	    };
-
-	    this.getAllDriverOrigins = function(){
-	      $window.Gmap.markersOnOrigins(this.markerPoints);
-	    };
-
-
-
-	  }]);
-	};
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	function applyAnimationStyles(element, options) {
 	  applyAnimationFromStyles(element, options);
 	  applyAnimationToStyles(element, options);
 	}
 
-<<<<<<< HEAD
 	function applyAnimationFromStyles(element, options) {
 	  if (options.from) {
 	    element.css(options.from);
 	    options.from = null;
 	  }
 	}
-=======
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	function applyAnimationToStyles(element, options) {
 	  if (options.to) {
@@ -31513,7 +31244,6 @@
 	  }
 	}
 
-<<<<<<< HEAD
 	function mergeAnimationDetails(element, oldAnimation, newAnimation) {
 	  var target = oldAnimation.options || {};
 	  var newOptions = newAnimation.options || {};
@@ -31561,103 +31291,12 @@
 
 	  var flags = {};
 	  existing = splitClassesToLookup(existing);
-=======
-	module.exports = function(app){
-	  app.controller('UserController', ['$http','AuthService', function($http, AuthService) {
-	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	    const self = this;
-	    self.users = ['user'];
-	    self.submit = function(){
-	      if(self.users){
-	        self.users.push(this.users);
-	        self.users = '';
-	      }
-
-	    };
-
-	    self.getUser = function(){
-	      $http.get(userRoute)
-	        .then((result)=>{
-	          self.users = result.data;
-	        }, function(error){
-	          return error;
-	        });
-	    };
-
-	    self.createUser = function(user){
-	      $http.post(userRoute, user, {
-	        headers: AuthService.getToken()
-	      })
-	        .then(function(res){
-	          console.log('post is hit');
-	          self.users.push(res.data);
-	          self.newUser = null;
-	        });
-	    };
-
-	    // self.signIn = function(user){
-	    //   $http.put(userRoute + user.id)
-	    //   .then((res)=>{
-	    //     self.users = self.users.map((u)=>{
-	    //       if(u.id === user.id){
-	    //         return user;
-	    //       }else {
-	    //         return u;
-	    //       }
-	    //     });
-	    //   });
-	    // };
-
-	    self.updateUser = function(user){
-	      $http.put(userRoute + user.id, {
-	        headers: AuthService.getToken()
-	      })
-	      .then((result)=>{
-	        self.users = self.users.map((u)=>{
-	          if(u.id === user.id){
-	            return user;
-	          }else {
-	            return u;
-	          }
-	        });
-	      });
-	    };
-
-	    self.removeUser = function(user){
-	      $http.delete(userRoute + user.id, {
-	        headers: AuthService.getToken()
-	      })
-	      .then((result)=>{
-	        self.users = self.users.filter((u)=> u.id !=u.id);
-	      });
-	    };
-
-	    self.signUp = function(user){
-	      AuthService.createUser(user, (err, res)=>{
-	        if(err) return console.log(err);
-	        console.log('hitting' + res);
-	      });
-	    }
-
-	    self.logIn = function(user){
-	      console.dir(angular.toJson(user));
-	      AuthService.signIn(user, (err, res)=>{
-	        if(err) return console.log(err)
-	        console.log('Log in res.body : ' + angular.toJson(res.body));
-	        console.log('Log in res : ' + angular.toJson(res));
-	      });
-	    };
-	  }]);
-
-	};
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	  toAdd = splitClassesToLookup(toAdd);
 	  forEach(toAdd, function(value, key) {
 	    flags[key] = ADD_CLASS;
 	  });
 
-<<<<<<< HEAD
 	  toRemove = splitClassesToLookup(toRemove);
 	  forEach(toRemove, function(value, key) {
 	    flags[key] = flags[key] === ADD_CLASS ? null : REMOVE_CLASS;
@@ -31744,91 +31383,6 @@
 	  applyInlineStyle(node, [TRANSITION_DELAY_PROP, value]);
 	  return [TRANSITION_DELAY_PROP, value];
 	}
-=======
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(app){
-	  app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
-	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
-	    // const self= this;
-	    $scope.profiles = ['profile'];
-	    $scope.newProfile = {};
-	    console.log('hit profile');
-
-	    $scope.getProfile = function(){
-	      $http.get(profileRoute)
-	        .then((result)=>{
-	          console.log();
-	          $scope.profiles = result.data;
-	        }, function(error){
-	          console.log(error);
-	        });
-
-	    };
-	    // this.createUser = function(profile){
-	    //   $http.post(profileRoute, user)
-	    //     .then((result)=>{
-	    //       console.log('post is hit');
-	    //       this.profiles.push(result.data);
-	    //     });
-	    //   };
-
-	    $scope.updateProfile = function(profile){
-	      $http.put(profileRoute + profile.id)
-	        .then((result)=>{
-	          $scope.profiles = $scope.profiles.map((p)=>{
-	            if(p.id === profile.id){
-	              return profile;
-	            } else {
-	              return p;
-	            }
-	          });
-	        });
-	    };
-
-	    $scope.submit = function(profile){
-	      if($scope.profiles){
-	        $scope.profiles.push(this.profiles);
-	        $scope.profiles = '';
-	      }
-
-	    };
-	    // this.onFileSelect = function($files) {
-	    //   for(var i=0; < $files.length; i++){
-	    //     var $file = $files[i];
-	    //     Upload.upload({
-	    //       url:
-	    //     })
-	    //   }
-	    // }
-
-	    // this.removeUser = function(user){
-	    //   $http.delete(userRoute + user.id)
-	    //   .then((result)=>{
-	    //     this.users = this.users.filter((u)=> u.id !=u.id);
-	    //   });
-	    // };
-
-
-	  }]);
-
-	  app.controller('FileController', ['$scope', 'fileUpload', function($scope, fileUpload){
-
-	    $scope.uploadFile = function(){
-	      var file = $scope.myFile;
-	      console.log('file is ' );
-	      console.dir(file);
-	      var uploadUrl = '/fileUpload';
-	      fileUpload.uploadFileToUrl(file, uploadUrl);
-	    };
-
-	  }]);
-	};
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	function blockKeyframeAnimations(node, applyBlock) {
 	  var value = applyBlock ? 'paused' : '';
@@ -31837,17 +31391,11 @@
 	  return [key, value];
 	}
 
-<<<<<<< HEAD
 	function applyInlineStyle(node, styleTuple) {
 	  var prop = styleTuple[0];
 	  var value = styleTuple[1];
 	  node.style[prop] = value;
 	}
-=======
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	function concatWithSpace(a,b) {
 	  if (!a) return b;
@@ -31858,7 +31406,6 @@
 	var $$rAFSchedulerFactory = ['$$rAF', function($$rAF) {
 	  var queue, cancelFn;
 
-<<<<<<< HEAD
 	  function scheduler(tasks) {
 	    // we make a copy since RAFScheduler mutates the state
 	    // of the passed in array variable and this would be difficult
@@ -31866,15 +31413,9 @@
 	    queue = queue.concat(tasks);
 	    nextTick();
 	  }
-=======
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	  queue = scheduler.queue = [];
 
-<<<<<<< HEAD
 	  /* waitUntilQuiet does two things:
 	   * 1. It will run the FINAL `fn` value only when an uncanceled RAF has passed through
 	   * 2. It will delay the next wave of tasks from running until the quiet `fn` has run.
@@ -66531,30 +66072,163 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	'use strict';
-	module.exports = function (app) {
+	module.exports = function(app){
+	  app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
+	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
+	    var pikePlace = {lat: 47.608953, lng: -122.341099};
+	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
+	    this.user = {};
+	    this.origin = '';
+	    this.startCoordinates = {};
+	    this.markerPoints = [{lat: 47.615635, lng: -122.203703},{lat: 47.565444, lng: -122.329953}];
 
+	    this.initialize = function(){
+	      $window.Gmap.initMap();
+	    };
 
+	    this.search = function(cb){
+	      cb = this.postRoutes;
+	      console.log('hitting here in search!');
+	      $window.Gmap.getDirections(this.origin);
+	      $window.Gmap.convertAddressForData(this.origin, function(coordinates){
+	        this.startCoordinates = coordinates;
+	        console.log('startCoordinates : ' + JSON.stringify(this.startCoordinates));
+	        cb(JSON.stringify(this.startCoordinates));
+	      });
+	    };
 
-	app.service('fileUpload', ['$http', function ($http) {
-	    this.uploadFileToUrl = function(file, uploadUrl){
-	        var fd = new FormData();
-	        fd.append('file', file);
-	        $http.post(uploadUrl, fd, {
-	            transformRequest: angular.identity,
-	            headers: {'Content-Type': undefined}
-	        })
-	        .success(function(){
-	        })
-	        .error(function(){
+	    //check if route is with / or without it
+	    this.postRoutes = function(coordinates){
+	      console.log('I am inside of postRoute : ' + coordinates);
+	      $http.post(mainRoute + 'users/', coordinates)
+	        .then((err, res)=>{
+	          if(err) return console.log('Errorrrr : ' + err);
+	          console.log('Response back : ' + res);
 	        });
-	    }
-	}]);
+	    };
+
+	    this.getAllDriverOrigins = function(){
+	      $window.Gmap.markersOnOrigins(this.markerPoints);
+	    };
+
+
+
+	  }]);
 	};
 
 
 /***/ },
 /* 18 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.factory('AuthService', ['$http', '$window', function($http, $window){
+	    var token;
+	    var url = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com';
+	    var auth = {
+	      createUser(user, cb){
+	        console.log('grabbing user data : ' + user);
+	        cb || function(){};
+	        $http.post(url + '/users', user)
+	          .then((res)=>{
+	            token = $window.localStorage.token = res.data.token;
+	            cb(null, res);
+	            console.log('ThisIsToken: ' + token);
+	          },(err)=>{
+	            console.log(err);
+	            cb(err);
+	          });
+	      },
+	      getToken(){
+	        return token || $window.localStorage.token;
+	      },
+	      signOut(cb){
+	        token = null;
+	        $window.localStorage.token = null;
+	        if(cb) cb();
+	      },
+
+	      signIn(user, cb){
+	        console.log('Auth signIn : ' + user);
+	        cb || function(){};
+	        $http.post(url + '/auth-token/',{
+	          headers: {
+	            authorization: 'Basic ' + btoa(user.username + ':' + user.password)
+	          }
+	        }).then((res)=>{
+	          token = $window.localStorage.token = res.data.token;
+	          cb(null, res);
+	        }, (err)=>{
+	          console.log(err);
+	          cb(err);
+	        });
+	      }
+	    };
+	    return auth;
+	  }]);
+	};
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	'use strict';
+	module.exports = function (app) {
+
+	  app.service('fileUpload', ['$http', function ($http) {
+	    this.uploadFileToUrl = function(file, uploadUrl){
+	      var fd = new FormData();
+	      fd.append('file', file);
+	      $http.post(uploadUrl, fd, {
+	        transformRequest: angular.identity,
+	        headers: {'Content-Type': undefined}
+	      })
+	        .success(function(){
+	        })
+	        .error(function(){
+	        });
+	    };
+	  }]);
+	};
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.directive('mapRider',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      controller: 'mapController',
+	      templateUrl: '/templates/form-rider.html'
+	    }
+	  });
+
+	  app.directive('mapDriver',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      controller: 'mapController',
+	      templateUrl: '/templates/form-driver.html'
+	    }
+	  });
+
+	  app.directive('mapView',function(){
+	    return {
+	      restrict: 'E',
+	      replace: true,
+	      controller: 'mapController',
+	      templateUrl: '/templates/gmap-view.html'
+	    }
+	  });
+	}
+
+
+/***/ },
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -66579,7 +66253,8 @@
 	    app.directive('dashboardPage', function(){
 	        return {
 	          restrict: 'E',
-	          templateUrl: './views/02_dashboard.html'
+	          templateUrl: './templates/dashboard.html',
+	          controller: 'ProfileController'
 
 	        };
 	      });
@@ -66635,165 +66310,211 @@
 
 
 /***/ },
-/* 19 */
+/* 22 */
 /***/ function(module, exports) {
 
-	'use strict';
-
-	module.exports = function(app){
-	app.controller('UserController', ['$http', function($http) {
-	const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	const self = this;
-	self.users = ['user'];
-	self.submit = function(){
-	  if(self.users){
-	    self.users.push(this.users);
-	    self.users = '';
-	  }
-
-	};
-
-	self.getUser = function(){
-	  $http.get(userRoute)
-	    .then((result)=>{
-	      self.users = result.data;
-	    }, function(error){
-	      return error;
-	    });
-	};
-	self.createUser = function(user){
-	  $http.post(userRoute, user)
-	    .then(function(result){
-	      // console.log('post is hit');
-	      self.users.push(res.data);
-	      self.newUser = null;
-	    });
-	  };
-	  self.signIn = function(user){
-	    $http.put(userRoute + user.id)
-	    .then((result)=>{
-	      self.users = self.users.map((u)=>{
-	        if(u.id === user.id){
-	          return user;
-	        }else {
-	          return u;
-	        };
-	      });
-	    });
-	  };
-
-	self.updateUser = function(user){
-	  $http.put(userRoute + user.id)
-	  .then((result)=>{
-	    self.users = self.users.map((u)=>{
-	      if(u.id === user.id){
-	        return user;
-	      }else {
-	        return u;
-	      };
-	    });
-	  });
-	};
-
-	self.removeUser = function(user){
-	  $http.delete(userRoute + user.id)
-	  .then((result)=>{
-	    self.users = self.users.filter((u)=> u.id !=u.id);
-	  });
-	};
-
-	}]);
-
-	};
-
-
-/***/ },
-/* 20 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(app){
-	app.controller('ProfileController', ['$http', '$scope',function($http, $scope) {
-	const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
-	// const self= this;
-	$scope.profiles = ['profile'];
-	$scope.newProfile = {};
-	console.log('hit profile');
-
-
-	$scope.getProfile = function(){
-	  $http.get(profileRoute)
-	    .then((result)=>{
-	      console.log();
-	      $scope.profiles = result.data;
-	    }, function(error){
-	      console.log(error);
-	    });
-
-	};
-	// this.createProfile = function(profile){
-	//   $http.post(profileRoute, user)
-	//     .then((result)=>{
-	//       console.log('post is hit');
-	//       this.profiles.push(result.data);
-	//     });
-	//   };
-
-	$scope.updateProfile = function(profile){
-	  $http.put(profileRoute + profile.id)
-	  .then((result)=>{
-	    $scope.profiles = $scope.profiles.map((p)=>{
-	      if(p.id === profile.id){
-	        return profile;
-	      }else {
-	        return p;
-	      };
-	    });
-	  });
-	};
-
-	$scope.submit = function(profile){
-	  if($scope.profiles){
-	    $scope.profiles.push(this.profiles);
-	    $scope.profiles = '';
-	  }
-
-	};
-	// this.onFileSelect = function($files) {
-	//   for(var i=0; < $files.length; i++){
-	//     var $file = $files[i];
-	//     Upload.upload({
-	//       url:
-	//     })
-	//   }
-	// }
-
-	// this.removeUser = function(user){
-	//   $http.delete(userRoute + user.id)
-	//   .then((result)=>{
-	//     this.users = this.users.filter((u)=> u.id !=u.id);
-	//   });
+	// 'use strict';
+	// module.exports = function (app) {
+	//
+	//
+	//   app.service("profileService", function(){
+	//
+	//
+	//             $scope.getProfile = function(){
+	//               $http.get(profileRoute)
+	//                 .then((result)=>{
+	//                   console.log();
+	//                   $scope.profiles = result.data;
+	//                 }, function(error){
+	//                   console.log(error);
+	//                 });
+	//                 // return this.profiles;
+	//
+	//             };
+	//
+	//
+	//
+	//           $scope.updateInfo = function(profile, obj){
+	//               $scope.profiles.splice(profile, 1, obj)
+	//           }
+	//       });
 	// };
 
 
-	}]);
-	app.controller('FileController', ['$scope', 'fileUpload', function($scope, fileUpload){
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
 
-	    $scope.uploadFile = function(){
-	        var file = $scope.myFile;
-	        console.log('file is ' );
-	        console.dir(file);
-	        var uploadUrl = "/fileUpload";
-	        fileUpload.uploadFileToUrl(file, uploadUrl);
+	'use strict';
+
+	module.exports = function(app){
+	  app.controller('UserController', ['$http','AuthService', '$location', function($http, AuthService, $location) {
+	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	    const self = this;
+	    self.users = ['user'];
+	    self.submit = function(){
+	      if(self.users){
+	        self.users.push(self.users);
+	        self.users = '';
+	      }
+	};
+
+	    self.getUser = function(){
+	      $http.get(userRoute)
+	        .then((result)=>{
+	          self.users = result.data;
+	        }, (error)=>{
+	          return error;
+	        });
 	    };
 
-	}]);
+	    self.createUser = function(user){
+	      $http.post(userRoute, user, {
+	        headers: AuthService.getToken()
+	      })
+	        .then(function(res){
+	          console.log('post is hit');
+	          self.users.push(res.data);
+	          self.newUser = null;
+	        });
+	    };
+
+	    // self.signIn = function(user){
+	    //   $http.put(userRoute + user.id)
+	    //   .then((res)=>{
+	    //     self.users = self.users.map((u)=>{
+	    //       if(u.id === user.id){
+	    //         return user;
+	    //       }else {
+	    //         return u;
+	    //       }
+	    //     });
+	    //   });
+	    // };
+
+	    self.updateUser = function(user){
+	      $http.put(userRoute + user.id, {
+	        headers: AuthService.getToken()
+	      })
+	      .then((result)=>{
+	        self.users = self.users.map((u)=>{
+	          if(u.id === user.id){
+	            return user;
+	          }else {
+	            return u;
+	          }
+	        });
+	      });
+	    };
+
+	    self.removeUser = function(user){
+	      $http.delete(userRoute + user.id, {
+	        headers: AuthService.getToken()
+	      })
+	      .then((result)=>{
+	        self.users = self.users.filter((u)=> u.id !=u.id);
+	      });
+	    };
+
+	    self.signUp = function(user){
+	      AuthService.createUser(user, (err, res)=>{
+	        if(err) return console.log(err);
+	        console.log('hitting' + res);
+	      });
+	    }
+
+	    self.logIn = function(user){
+	      console.dir(angular.toJson(user));
+	      AuthService.signIn(user, (err, res)=>{
+	        if(err) return console.log(err)
+	        console.log('Log in res.body : ' + angular.toJson(res.body));
+	        console.log('Log in res : ' + angular.toJson(res));
+	        $location.path('/dashboard');
+	      });
+	    };
+	  }]);
+
 	};
 
 
 /***/ },
-/* 21 */
+/* 24 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app){
+
+	  app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
+	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
+	    // const self= this;
+	    $scope.profiles = ['profile'];
+	    $scope.editingProfile = false;
+	    $scope.newProfile = {};
+	    console.log('hit profile');
+
+	    $scope.getProfile = function(){
+	      $http.get(profileRoute)
+	        .then((result)=>{
+	          console.log();
+	          $scope.profiles = result.data;
+	        }, function(error){
+	          console.log(error);
+	        });
+
+	    };
+	    // this.createUser = function(profile){
+	    //   $http.post(profileRoute, user)
+	    //     .then((result)=>{
+	    //       console.log('post is hit');
+	    //       this.profiles.push(result.data);
+	    //     });
+	    //   };
+
+
+	    $scope.updateProfile = function(profile){
+	      $http.put(profileRoute + profile.id)
+	        .then((result)=>{
+	          $scope.profiles = $scope.profiles.map((p)=>{
+	            if(p.id === profile.id){
+	              return profile;
+	            } else {
+	              return p;
+	            }
+	          });
+	        });
+	    };
+
+	    $scope.editButtonShow = function(){
+	      $scope.editingProfile = true;
+	    };
+
+	    $scope.submit = function(profile){
+	      if($scope.profiles){
+	        $scope.profiles.push(this.profiles);
+	        $scope.profiles = '';
+	      }
+
+	    };
+
+	  }]);
+
+	  app.controller('FileController', ['$scope', 'fileUpload', function($scope, fileUpload){
+
+	    $scope.uploadFile = function(){
+	      var file = $scope.myFile;
+	      console.log('file is ' );
+	      console.dir(file);
+	      var uploadUrl = '/fileUpload';
+	      fileUpload.uploadFileToUrl(file, uploadUrl);
+	    };
+
+	  }]);
+	};
+
+
+/***/ },
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -66810,86 +66531,13 @@
 
 
 /***/ },
-/* 22 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.controller('mapController', ['$window','$http', function($window, $http){
-	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/'
-	    var pikePlace = {lat: 47.608953, lng: -122.341099};
-	    var bellevueMall = {lat: 47.616591, lng: -122.198797};
-	    this.user = {};
-	    this.origin = '';
-	    this.startCoordinates = {}
-	    this.markerPoints = [{lat: 47.615635, lng: -122.203703},{lat: 47.565444, lng: -122.329953}];
-	    this.initialize = function(){
-	      $window.Gmap.initMap();
-	    }
-
-	    this.search = function(cb){
-	      cb = this.postRoutes;
-	      console.log('hitting here in search!')
-	      $window.Gmap.getDirections(this.origin)
-	      $window.Gmap.convertAddressForData(this.origin, function(coordinates){
-	        this.startCoordinates = coordinates;
-	        console.log('startCoordinates : ' + angular.toJson(this.startCoordinates))
-	        cb(angular.toJson(this.startCoordinates));
-	      });
-	    }
-
-	    this.postRoutes = function(coordinates){
-	      console.log('I am inside of postRoute : ' + coordinates);
-	      $http.post(mainRoute + 'routes', coordinates)
-	        .then((err, res)=>{
-	          if(err) return console.log('Errorrrr : ' + err)
-	          console.log('Response back : ' + res);
-	        });
-	    }
-
-	    this.getAllDriverOrigins = function(){
-	      $window.Gmap.markersOnOrigins(this.markerPoints);
-	    }
-
-
-
-	  }]);
-	}
-
-
-/***/ },
-/* 23 */
+/* 26 */
 /***/ function(module, exports) {
 
 	
 
 /***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.directive('mapRider',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/form-rider.html'
-	    }
-	  });
-
-	  app.directive('mapDriver',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/form-driver.html'
-	    }
-	  });
-
-	}
-
-
-/***/ },
-/* 25 */
+/* 27 */
 /***/ function(module, exports) {
 
 	// module.exports = function(app){
@@ -66905,7 +66553,7 @@
 
 
 /***/ },
-/* 26 */
+/* 28 */
 /***/ function(module, exports) {
 
 	(function(module){
@@ -66914,38 +66562,6 @@
 	  var geocoder;
 	  var request;
 
-	  Gmap.initMap = function (){
-	    var pikePlace = {lat: 47.608953, lng: -122.341099};
-	    geocoder = new google.maps.Geocoder();
-	    map = new google.maps.Map(document.getElementById('map'),{
-	      center: pikePlace,
-	      scrollwheel: false,
-	      zoom: 12
-	    });
-	  }
-
-	  Gmap.getDirections = function(startPoint){
-	    Gmap.convertAddress(startPoint, function(){
-	      console.log('Is it start point ? ' + startPoint)
-	      request = {
-	        destination: {lat: 47.618427, lng: -122.351843},
-	        origin: startPoint,
-	        travelMode: google.maps.TravelMode.DRIVING
-	      }
-	      var directionsDisplay = new google.maps.DirectionsRenderer({
-	          map: map
-	        });
-
-	      var directionsService = new google.maps.DirectionsService();
-	        directionsService.route(request, function(res, status){
-	          if(status == google.maps.DirectionsStatus.OK){
-	            directionsDisplay.setDirections(res);
-	          }
-	      });
-
-	    });
-	  }
-=======
 	  Gmap.initMap = function (){
 	    var centerCord = {lat: 47.610366, lng: -122.303345};
 	    geocoder = new google.maps.Geocoder();
@@ -66977,7 +66593,6 @@
 
 	    });
 	  };
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 
 	  Gmap.convertAddressForData = function(address, cb){
 	    geocoder.geocode({'address': address}, function(results, status){
@@ -67028,20 +66643,15 @@
 	      });
 	    });
 
-<<<<<<< HEAD
-	  }
-=======
 	  };
 
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
 	  module.Gmap = Gmap;
 
 	})(window);
 
 
 /***/ },
-<<<<<<< HEAD
-/* 27 */
+/* 29 */
 /***/ function(module, exports) {
 
 	// $(document).ready(function() {
@@ -67086,10 +66696,7 @@
 
 
 /***/ },
-/* 28 */
-=======
-/* 13 */
->>>>>>> c9fb205770fafc5419be58284d1b5765e289ae0b
+/* 30 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -67103,38 +66710,6 @@
 	    };
 	  });
 	};
-
-
-/***/ },
-/* 29 */
-/***/ function(module, exports) {
-
-	// 'use strict';
-	// module.exports = function (app) {
-	//
-	//
-	//   app.service("profileService", function(){
-	//
-	//
-	//             $scope.getProfile = function(){
-	//               $http.get(profileRoute)
-	//                 .then((result)=>{
-	//                   console.log();
-	//                   $scope.profiles = result.data;
-	//                 }, function(error){
-	//                   console.log(error);
-	//                 });
-	//                 // return this.profiles;
-	//
-	//             };
-	//
-	//
-	//
-	//           $scope.updateInfo = function(profile, obj){
-	//               $scope.profiles.splice(profile, 1, obj)
-	//           }
-	//       });
-	// };
 
 
 /***/ }

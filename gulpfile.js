@@ -40,6 +40,8 @@ gulp.task('copy:image', () => {
   return gulp.src(sources.images)
     .pipe(gulp.dest('./build'))
 
+});
+
 gulp.task('copyImg', () => {
   return gulp.src(sources.img)
     .pipe(gulp.dest('./build'));
