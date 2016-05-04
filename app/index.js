@@ -9,7 +9,7 @@ require('angular-sanitize');
 require('angular-route');
 var app = angular.module("rideshareApp", []);
 
-
+// require(__dirname + '/js/main.js')(app);
 require(__dirname + '/services/file-service.js')(app);
 // require(__dirname + '/directives/gmap-directive.js')(app);
 require(__dirname + '/directives/app-directives.js')(app);

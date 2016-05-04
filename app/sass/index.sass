@@ -22,21 +22,40 @@ $gutter: 5em
 
 body
   background-color: $teitary-color
-  padding: $gutter
+  // padding: $gutter
 
-main
-  background-color: $opa-cream
-  padding: 2em
+.title
+ padding: $gutter
 
+section
+  // background-color: $opa-cream
+  margin-top: $gutter
+  // padding: 2em
+  height: 100%
+  width: 100%
+  z-index: -100
 
+  .navbar
+  // text-align: center
+  // font-size: 2em
+  // margin-top: $gutter
+  // // background-color: $cream
+  // height: 30px
+  // width: 100%
+  // color: $blue
 
 header
   text-align: center
-  margin-bottom: $gutter
+  margin-top: -22px
+  // margin-bottom: $gutter
   // background-color: $blue
-  background-image: url('/images/laughing.png')
-  height: 10em
-  width: auto
+  background-image: url(https://linziboyd.files.wordpress.com/2013/08/open-road.jpg)
+  background-size: cover
+  background-position: center
+  height: 400px
+  width: 100%
+  margin-bottom: $gutter
+
 
 .main-title
   color: white
@@ -51,28 +70,67 @@ header
 
 
 
-.navbar
-  text-align: center
-  margin-top: $gutter
+
 
 a
-  color: $light-orange
+  color: white
   margin-left: $gutter
+  font-size: 1em
+  font-stretch: expanded
+  font-family: sans-serif
+  text-shadow: 1em
 
 .sign
   text-align: center
-  margin-top: $gutter
+  // margin-bottom: 80%
+  display: flex
+  flex-wrap: wrap
+  flex-direction: row-reverse
+  justify-content: space-between
+
+
+
+  // margin-top: $gutter
+button
+
+   border-top: 1px solid #96d1f8
+   background: #65a9d7
+   background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#65a9d7))
+   background: -webkit-linear-gradient(top, #3e779d, #65a9d7)
+   background: -moz-linear-gradient(top, #3e779d, #65a9d7)
+   background: -ms-linear-gradient(top, #3e779d, #65a9d7)
+   background: -o-linear-gradient(top, #3e779d, #65a9d7)
+   padding: 5px 10px
+   -webkit-border-radius: 8px
+   -moz-border-radius: 8px
+   border-radius: 8px
+   -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0
+   -moz-box-shadow: rgba(0,0,0,1) 0 1px 0
+   box-shadow: rgba(0,0,0,1) 0 1px 0
+   text-shadow: rgba(0,0,0,.4) 0 1px 0
+   color: white
+   font-size: 14px
+   font-family: 'Lucida Grande', Helvetica, Arial, Sans-Serif
+   text-decoration: none
+   vertical-align: middle
+
+button:hover
+   border-top-color: #28597a
+   background: #28597a
+   color: #ccc
+
+button:active
+   border-top-color: #1b435e
+   background: #1b435e
 
 .signin-form
 
-// .update-profile
-//   margin-top: $gutter
-//   display: flex
-//   flex-direction: column
+.update-profile
+  margin-top: $gutter
+
+
 
 .who-profile
   // text-align: center
   margin-top: $gutter
   // background-color: $cream
-  li
-    text-decoration: none

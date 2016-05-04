@@ -5,24 +5,26 @@
     <div><div ng-show="userlogin" class="hideByDefault">
         <div class="login-triangle"></div>
       <h2 class="login-header">Log in</h2>
-      <form class="signin-form" ng-submit="userctrl.getUser()"></p>
-        <p><input type="email" placeholder="email" ng-model="userctrl.users.email"></p>
-        <p><input type="text" placeholder="username" ng-model="userctrl.users.username"></p>
-        <p><input type="password" placeholder="password" ng-model="userctrl.users.password"></p>
-        <p><input type="submit" value="Log in"></p>
+      <form class="signin-form" ng-submit="userctrl.getUser()">
+        <input type="email" placeholder="email" ng-model="userctrl.users.email">
+        <input type="text" placeholder="username" ng-model="userctrl.users.username">
+        <input type="password" placeholder="password" ng-model="userctrl.users.password">
+        <input type="submit" value="Log in">
       </div></div>
     </form>
   </div>
 
 
-  <div class="signup-wrapper">
-    <div><button id="signup-button" ng-hide="newuser" ng-click="newuser = newuser == true ? false : true;">Sign Up</button></div>
+    <div><button id="signup-button" ng-hide="newuser" ng-click="newuser = newuser == true ? false : true;">Sign Up Here</button></div>
+<div class="login">
     <div><div ng-show="newuser" class="hideByDefault">
+      <div class="login-triangle"></div>
+    <h2 class="login-header">Sign Up</h2>
       <form class="signup-form" ng-submit="userctrl.createUser(newUser)" >
         <input ng-model="newUser.username" type="text" placeholder="username">
         <input ng-model="newUser.email" type="email" placeholder="email">
         <input ng-model="newUser.password" type="password" placeholder="password">
-        <button type="submit">Sign Up</button>
+        <input type="submit" value="Sign Up">
       </div></div>
     </form>
 
