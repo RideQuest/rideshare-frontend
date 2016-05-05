@@ -40,7 +40,7 @@ app.config(['$routeProvider', function(routeProvider){
   })
   .when('/profile', {
     controller: 'ProfileController',
-    templateUrl: './views/home.html'
+    templateUrl: './templates/user-profile.html'
   })
   .when('/search', {
     controller: 'ProfileController',
