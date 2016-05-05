@@ -22,13 +22,20 @@ require(__dirname + '/controller/profile-controller.js')(app);
 
 app.config(['$routeProvider', function(routeProvider){
   routeProvider
+
+  //home
   .when('/signin', {
     controller: 'UserController',
     templateUrl: './templates/signin.html'
   })
-  .when('/home', {
+  // .when('/home', {
+  //   controller: 'UserController',
+  //   templateUrl: './views/home.html'
+  // })
+
+  .when('/dashboard', {
     controller: 'UserController',
-    templateUrl: './views/home.html'
+    templateUrl: './templates/signin.html'
   })
   .when('/', {
     controller: 'UserController',
