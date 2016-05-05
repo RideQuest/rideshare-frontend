@@ -2,6 +2,7 @@
 <html ng-app="rideShareApp">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Yellowtail|Satisfy' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="index.css"/>
 
     <title>RideShare App</title>
@@ -11,18 +12,17 @@
 
     <header>
       <div class="top-bar">
-        <div class="logo"></div>
+        <div class="logo">Ride Share</div>
       </div>
-      <h1 class="title">Ride Share</h1>
-      <div class="header-image"></div>
       <custom-nav></custom-nav>
     </header>
+    <!-- <div class="header-image"></div> -->
 
-    <main ng-view>
-      <h1 class="main-title">RideShare Rulez!</h1>
-      <map-view></map-view>
+    <main>
+
+
     </main>
-    <footer></footer>
+    <footer>&copy 2016 Ride Share App</footer>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvgiNNUfAJl3Kl_NlrfPS1nXyiMn23baE" async defer></script>
     <script src="./bundle.js" type="text/javascript"></script>

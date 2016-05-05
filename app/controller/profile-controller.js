@@ -66,5 +66,7 @@ module.exports = function(app){
       fileUpload.uploadFileToUrl(file, uploadUrl);
     };
 
+
   }]);
+
 };

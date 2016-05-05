@@ -32286,6 +32286,15 @@
 	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
 	    const self = this;
 	    self.users = ['user'];
+	    self.headers = [
+	      {
+	        name: "home"
+
+	      },
+	      {
+	        name: "dashboard"
+	      }
+	    ]
 	    self.submit = function(){
 	      if(self.users){
 	        self.users.push(self.users);
@@ -32441,7 +32450,9 @@
 	      fileUpload.uploadFileToUrl(file, uploadUrl);
 	    };
 
+
 	  }]);
+
 	};
 
 

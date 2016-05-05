@@ -1,9 +1,32 @@
+<div class="main-image">
+  <h1 class="main-title">Dashboard</h1>
+
+</div>
+
+<!-- <div class="d-boxes">
+  <div class="d-box1">1</div>
+    <div class="d-box2">2</div>
+      <div class="d-box3">3</div> -->
+        <!-- <div class="d-box">4</div>
+          <div class="d-box">5</div>
+            <div class="d-box">6</div> -->
+
+<!-- </div> -->
+
 <section data-ng-controller="UserController as userCtrl">
+
+
+
 <h1>Welcome {{userCtrl.users.username}}</h1>
 
 <section ng-controller="ProfileController as profileCtrl" ng-init="profileCtrl.getProfile()" class="who-profile">
     <div class="content-wrapper">
-  <h2>My Profile</h2>
+
+      <h1>Welcome {{profileCtyl.profiles.first_name}}</h1>
+      <div class="d-boxes">
+        <div class="d-box1">Your Requests</div>
+          <div class="d-box2">Search for a Ride</div>
+            <div class="d-box3"></div>
 
     <p>First Name: {{profileCtrl.profiles.first_name}}</p><br>
     <p>  Last Name: {{profileCtrl.profiles.last_name}}</p><br>
