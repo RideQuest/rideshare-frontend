@@ -1,7 +1,6 @@
 <!-- sign in form  -->
 <section class="sign"ng-controller="UserController as userctrl" >
-  <div><button id="login-button" ng-hide="userlogin" ng-click="userlogin = userlogin == true ? false : true;">Login</button></div>
-      <div class="login">
+  <div class="login">
     <div><div ng-show="userlogin" class="hideByDefault">
         <div class="login-triangle"></div>
       <h2 class="login-header">Log in</h2>
@@ -12,7 +11,7 @@
       </div></div>
     </form>
   </div>
-
+<div><button id="login-button" ng-hide="userlogin" ng-click="userlogin = userlogin == true ? false : true;">Login</button></div>
 <!-- sing up forms -->
     <div><button id="signup-button" ng-hide="newuser" ng-click="newuser = newuser == true ? false : true;">Sign Up Here</button></div>
 <div class="login">

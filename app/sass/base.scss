@@ -68,6 +68,14 @@
 .clearfix {
   *zoom: 1
 }
+
+#signup-button {
+  margin: 20em 2em
+}
+
+#login-button {
+  margin: 20em 2em
+}
 //
 // html {
 //   height: 100%;
@@ -90,18 +98,19 @@ ul {
   list-style-type: none
 }
 
-header {
-  background-color: white;
-  height: 35px;
-  line-height: 35px;
-  padding: 0 30px
-}
+// header {
+//   background-color: white;
+//   height: 35px;
+//   line-height: 35px;
+//   padding: 0 30px
+// }
+//
+// header a {
+//   text-decoration: none;
+//   color: inherit;
+//   font-size: 20px
+// }
 
-header a {
-  text-decoration: none;
-  color: inherit;
-  font-size: 20px
-}
 
 .demo-wrapper {
   background: url("../images/1.png");
