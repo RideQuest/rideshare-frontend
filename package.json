@@ -16,6 +16,7 @@
     "body-parser": "^1.15.0",
     "bower": "^1.7.9",
     "ejs": "^2.4.1",
+    "eslint": "^2.9.0",
     "express": "^4.13.4",
     "gulp-sass": "^2.3.1",
     "gulp-sourcemaps": "^2.0.0-alpha",
