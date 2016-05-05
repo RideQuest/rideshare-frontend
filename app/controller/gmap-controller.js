@@ -23,12 +23,38 @@ module.exports = function(app){
       });
     };
 
+    //getting coordinates from /routes/add/
+    this.getDriverRoutes = function(){
+      var tokenFromLocalStorage = $window.localStorage.token;
+      console.log('localStorage?? ' + $window.localStorage.token);
+      $http.get(mainRoute + 'routes/add/',{
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + tokenFromLocalStorage
+        }
+      })
+        .then((res)=>{
+          // $window.Gmap.markersOnOrigins()
+          console.dir('Response back : ' + JSON.stringify(res));
+          console.dir('Response back : ' + JSON.stringify(res.data));
+          var data = res.data.map((data)=>{
+            var obj = {};
+            obj.start_point = data.start_point;
+            return obj;
+          })[0].start_point.split(' ').splice(1);
+          var stringifiedCords = String(data).split(',');
+          var regex = /\(([^)]+)\)/;
+          var cords = regex.exec(stringifiedCords)[1].split(',');
+          console.dir('Starting Point? '+ stringifiedCords);
+          console.dir('Starting Point? '+ cords);
+        });
+    };
+
     //check if route is with / or without it
     this.postRoutes = function(coordinates){
       console.log('I am inside of postRoute : ' + coordinates);
       $http.post(mainRoute + 'users/', coordinates)
-        .then((err, res)=>{
-          if(err) return console.log('Errorrrr : ' + err);
+        .then((res)=>{
           console.log('Response back : ' + res);
         });
     };

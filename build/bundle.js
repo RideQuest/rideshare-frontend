@@ -88,7 +88,6 @@
 	  .when('/signin', {
 	    controller: 'UserController',
 	    templateUrl: './templates/signin.html'
-
 	  })
 	  .when('/home', {
 	    controller: 'UserController',
@@ -105,6 +104,10 @@
 	  .when('/profile', {
 	    controller: 'ProfileController',
 	    templateUrl: './views/home.html'
+	  })
+	  .when('/search', {
+	    controller: 'ProfileController',
+	    templateUrl: './templates/gmap-view.html'
 	  });
 	}]);
 
@@ -32058,12 +32061,38 @@
 	      });
 	    };
 
+	    //getting coordinates from /routes/add/
+	    this.getDriverRoutes = function(){
+	      var tokenFromLocalStorage = $window.localStorage.token;
+	      console.log('localStorage?? ' + $window.localStorage.token);
+	      $http.get(mainRoute + 'routes/add/',{
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
+	        .then((res)=>{
+	          // $window.Gmap.markersOnOrigins()
+	          console.dir('Response back : ' + JSON.stringify(res));
+	          console.dir('Response back : ' + JSON.stringify(res.data));
+	          var data = res.data.map((data)=>{
+	            var obj = {};
+	            obj.start_point = data.start_point;
+	            return obj;
+	          })[0].start_point.split(' ').splice(1);
+	          var stringifiedCords = String(data).split(',');
+	          var regex = /\(([^)]+)\)/;
+	          var cords = regex.exec(stringifiedCords)[1].split(',');
+	          console.dir('Starting Point? '+ stringifiedCords);
+	          console.dir('Starting Point? '+ cords);
+	        });
+	    };
+
 	    //check if route is with / or without it
 	    this.postRoutes = function(coordinates){
 	      console.log('I am inside of postRoute : ' + coordinates);
 	      $http.post(mainRoute + 'users/', coordinates)
-	        .then((err, res)=>{
-	          if(err) return console.log('Errorrrr : ' + err);
+	        .then((res)=>{
 	          console.log('Response back : ' + res);
 	        });
 	    };
@@ -32089,19 +32118,19 @@
 	    var token;
 	    var url = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com';
 	    var auth = {
-	      createUser(user, cb){
-	        console.log('grabbing user data : ' + user);
-	        cb || function(){};
-	        $http.post(url + '/users', user)
-	          .then((res)=>{
-	            token = $window.localStorage.token = res.data.token;
-	            cb(null, res);
-	            console.log('ThisIsToken: ' + token);
-	          },(err)=>{
-	            console.log('Error obj : ' + err);
-	            cb(err);
-	          });
-	      },
+	      // createUser(user, cb){
+	      //   console.log('grabbing user data : ' + user);
+	      //   cb || function(){};
+	      //   $http.post(url + '/users', user)
+	      //     .then((res)=>{
+	      //       token = $window.localStorage.token = res.data.token;
+	      //       cb(null, res);
+	      //       console.log('ThisIsToken: ' + token);
+	      //     },(err)=>{
+	      //       console.log('Error obj : ' + err);
+	      //       cb(err);
+	      //     });
+	      // },
 	      getToken(){
 	        return token || $window.localStorage.token;
 	      },
@@ -32169,7 +32198,7 @@
 	      replace: true,
 	      controller: 'mapController',
 	      templateUrl: '/templates/form-rider.html'
-	    }
+	    };
 	  });
 
 	  app.directive('mapDriver',function(){
@@ -32178,18 +32207,18 @@
 	      replace: true,
 	      controller: 'mapController',
 	      templateUrl: '/templates/form-driver.html'
-	    }
+	    };
 	  });
 
-	  app.directive('mapView',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/gmap-view.html'
-	    }
-	  });
-	}
+	  // app.directive('mapView',function(){
+	  //   return {
+	  //     restrict: 'E',
+	  //     replace: true,
+	  //     controller: 'mapController',
+	  //     templateUrl: '/templates/gmap-view.html'
+	  //   };
+	  // });
+	};
 
 
 /***/ },
@@ -32303,9 +32332,7 @@
 	    };
 
 	    self.createUser = function(user){
-	      $http.post(userRoute, user, {
-	        headers: AuthService.getToken()
-	      })
+	      $http.post(userRoute, user)
 	        .then(function(res){
 	          console.log('post is hit');
 	          self.users.push(res.data);
@@ -32339,12 +32366,12 @@
 
 	//auth routes
 
-	    self.signUp = function(user){
-	      AuthService.createUser(user, (err, res)=>{
-	        if(err) return console.log(err);
-	        console.log('hitting' + res);
-	      });
-	    };
+	    // self.signUp = function(user){
+	    //   AuthService.createUser(user, (err, res)=>{
+	    //     if(err) return console.log(err);
+	    //     console.log('hitting' + res);
+	    //   });
+	    // };
 
 	    self.logOut = function(user){
 	      AuthService.signOut((err, res)=>{
