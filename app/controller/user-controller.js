@@ -5,6 +5,7 @@ module.exports = function(app){
     const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
     const self = this;
     self.users = ['user'];
+
     self.submit = function(){
       if(self.users){
         self.users.push(self.users);
@@ -13,7 +14,14 @@ module.exports = function(app){
     };
 
     self.getUser = function(){
-      $http.get(userRoute)
+      var tokenFromLocalStorage = $window.localStorage.token;
+      console.log('localToken ' + $window.localStorage.token);
+      $http.get(userRoute, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + tokenFromLocalStorage
+        }
+      })
         .then((result)=>{
           self.users = result.data;
         }, (error)=>{

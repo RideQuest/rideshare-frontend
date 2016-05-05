@@ -9,6 +9,14 @@ module.exports = function (app) {
     };
   });
 
+  app.directive('newProfile', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/new-profile.html'
+
+    };
+  });
+
   app.directive('home', function(){
     return {
       restrict: 'E',

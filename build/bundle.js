@@ -45,11 +45,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+	__webpack_require__(10);
+	__webpack_require__(9);
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
-	__webpack_require__(10);
-	__webpack_require__(9);
 	__webpack_require__(13);
 	__webpack_require__(14);
 	__webpack_require__(7);
@@ -32236,6 +32236,14 @@
 	    };
 	  });
 
+	  app.directive('newProfile', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/new-profile.html'
+
+	    };
+	  });
+
 	  app.directive('home', function(){
 	    return {
 	      restrict: 'E',
@@ -32315,6 +32323,7 @@
 	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
 	    const self = this;
 	    self.users = ['user'];
+
 	    self.submit = function(){
 	      if(self.users){
 	        self.users.push(self.users);
@@ -32323,7 +32332,14 @@
 	    };
 
 	    self.getUser = function(){
-	      $http.get(userRoute)
+	      var tokenFromLocalStorage = $window.localStorage.token;
+	      console.log('localToken ' + $window.localStorage.token);
+	      $http.get(userRoute, {
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
 	        .then((result)=>{
 	          self.users = result.data;
 	        }, (error)=>{
@@ -32422,13 +32438,13 @@
 	        });
 
 	    };
-	    // this.createUser = function(profile){
-	    //   $http.post(profileRoute, user)
-	    //     .then((result)=>{
-	    //       console.log('post is hit');
-	    //       this.profiles.push(result.data);
-	    //     });
-	    //   };
+	    $scope.createProfile = function(profile){
+	      $http.post(profileRoute, user)
+	        .then((result)=>{
+	          console.log('post is hit');
+	          this.profiles.push(result.data);
+	        });
+	      };
 
 
 	    $scope.updateProfile = function(profile){
@@ -32468,7 +32484,9 @@
 	      fileUpload.uploadFileToUrl(file, uploadUrl);
 	    };
 
+
 	  }]);
+
 	};
 
 

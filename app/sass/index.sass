@@ -22,7 +22,7 @@ $gutter: 5em
   border-color: red
 
 body
-  background-color: $teitary-color
+  background-color: white
 // padding: $gutter
 
 
@@ -35,47 +35,151 @@ section
 header
   text-align: center
 
-
-.header-image
-  background-image: url(https://linziboyd.files.wordpress.com/2013/08/open-road.jpg)
-  background-size: cover
-  background-position: center
-  height: 600px
+footer
+  height: 8em
   width: 100%
+  background-color: rgba(74,68,85,0.7)
+
+
+// .header-image
+//   background-image: url(https://linziboyd.files.wordpress.com/2013/08/open-road.jpg)
+//   background-size: cover
+//   background-position: center
+//   height: 400px
+//   width: 100%
 
 .main-title
   color: white
   text-align: center
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  position: absolute
 
-// .top-bar
-//   background-color: rgba(74,68,85,0.7)
-//   height: 8%
-//   width: 100%
+
+
+.main-image
+  background-image: url(https://linziboyd.files.wordpress.com/2013/08/open-road.jpg)
+  background-size: cover
+  background-position: center
+  height: 300px
+  width: 100%
+  margin: 0 auto
+
+.main-title1
+  color: white
+  text-align: center
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  position: absolute
+
+
+
+.main-image1
+  background-image: url(https://linziboyd.files.wordpress.com/2013/08/open-road.jpg)
+  background-size: cover
+  background-position: center
+  height: 400px
+  width: 100%
+  margin: 0 auto
+
+.main-title2
+  color: white
+  text-align: center
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  position: absolute
+
+
+
+.main-image2
+  background-image: url(https://linziboyd.files.wordpress.com/2013/08/open-road.jpg)
+  background-size: cover
+  background-position: center
+  height: 400px
+  width: 100%
+  margin: 0 auto
+
+
+
+h3
+  margin-top: 200px
+
+.top-bar
+  background-color: $blue
+  height: 2em
+  width: 100%
+
 
 .navbar
-    padding: 2em
-    background-color: $blue
+  background-color: $blue
+
+
+.logo
+  float: left
+  padding: .7em
+  font-size: 1.3em
+  font-family: 'Satisfy', cursive
+  color: white
 
 
 a
   color: white
   font-family: sans-serif
-  padding: 2em
+  padding: 1em
 
+.profile-wrapper
+  background-color: inherit
+  border: black 1px solid
+  height: auto
+  width: 90%
+  padding: 2em
 
 .sign
-  text-align: center
-  background-color: rgba(74,68,85,0.7)
-  padding: 2em
-  width: 50%
+  display: flex
+  flex-direction: row
+  text-align: right
+  background-color: rgb(243,134,48)
+  // padding: 2em
+  width: 30%
   margin: 0 auto
-  border: black 2px solid
+  float: right
+  // border: black 2px solid
 
-.logo
-  height: 150px
-  width: 300px
-  background-image: url(https://github.com/RideQuest/rideshare-frontend/blob/layout_lisa/app/images/logo.svg)
-  background-size: contain
+.d-boxes
+  display: flex
+  flex-direction: row
+  padding: 5em
+  // background-color: red
+
+.d-box1
+  height: 8em
+  width: 8em
+  background-color: white
+  border: grey 1px solid
+  padding: 2em
+  margin-right: 4em
+  background-color: $pink
+
+.d-box2
+  height: 8em
+  width: 8em
+  background-color: white
+  border: grey 1px solid
+  padding: 2em
+  margin-right: 4em
+
+.d-box3
+  height: 8em
+  width: 8em
+  background-color: white
+  border: grey 1px solid
+  padding: 2em
+  margin-right: 4em
+
+
 
 .boxes
   display: flex
@@ -84,20 +188,18 @@ a
 .box1
   height: 250px
   width: 250px
-  background-image: url(https://raw.githubusercontent.com/RideQuest/rideshare-frontend/layout_lisa/app/images/rslogo.png)
-  background-size: cover
   padding: 5em
   margin-right: 2em
   text-align: center
+  background-color: $teitary-color
 
 .box2
   height: 250px
   width: 250px
-  background-image: url(https://ucsdcfm.files.wordpress.com/2011/03/driving-friends.jpg)
-  background-size: cover
   padding: 5em
   margin-right: 2em
   text-align: center
+  background-color: $teitary-color
 
 h1
   font-size: 2em

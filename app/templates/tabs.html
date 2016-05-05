@@ -3,13 +3,13 @@
   <a href ng-class="{ active:tabCtrl.isSet(1) }" ng-click="tabCtrl.setTab(1)">Home</a>
   <a href ng-class="{ active:tabCtrl.isSet(2) }" ng-click="tabCtrl.setTab(2)">Profile</a>
   <a href ng-class="{ active:tabCtrl.isSet(3) }" ng-click="tabCtrl.setTab(3)">DashBoard</a>
-  <a href ng-class="{ active:tabCtrl.isSet(4) }" ng-click="tabCtrl.setTab(4)">Contact</a>
+  <a href ng-class="{ active:tabCtrl.isSet(4) }" ng-click="tabCtrl.setTab(4)">New Profile</a>
   <a href ng-class="{ active:tabCtrl.isSet(5) }" ng-click="tabCtrl.setTab(5)">About Us</a>
   <span>{{tabCtrl.active}}</span>
 </nav>
-<!-- <home ng-show="tabCtrl.isSet(1)"></home> -->
+<home ng-show="tabCtrl.isSet(1)"></home>
 <user-profile ng-show="tabCtrl.isSet(2)"></user-profile>
 <dashboard-page ng-show="tabCtrl.isSet(3)"></dashboard-page>
-<custom-contact ng-show="tabCtrl.isSet(4)"></custom-contact>
+<new-profile ng-show="tabCtrl.isSet(4)"></new-profile>
 <about-us ng-show="tabCtrl.isSet(5)"></about-us>
 </section>

@@ -1,0 +1,21 @@
+
+<section ng-controller="ProfileController as profilectrl">
+<div><button id="newprofile-button" ng-hide="newprofile" ng-click="newprofile = newprofile == true ? false : true;">Sign Up Here</button></div>
+<div class="login">
+<div><div ng-show="newprofile" class="hideByDefault">
+  <div class="login-triangle"></div>
+<h2 class="login-header">Create A Profile</h2>
+  <form class="profile-form"  ng-submit="profilectrl.createProfile(newProfile)" >
+    <input ng-model="newProfile.first_name" type="text" placeholder="First Name" required="true">
+      <input ng-model="newProfile.last_name" type="text" placeholder="last Name" required="true">
+    <input ng-model="newProfile.email" type="email" placeholder="email <em>required</em>" required="true">
+
+    <input ng-model="newProfile.car_brand" type="text" placeholder="car type" required="false">
+    <input ng-model="newProfile.car_seat" type="text" placeholder="seats available" required="false">
+    <input ng-model="newProfile.about_me" type="text" placeholder="aboutme" required="false">
+    <input type="submit" value="Add Profile">
+  </div></div>
+</form>
+
+</div>
+</section>
