@@ -45,11 +45,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(10);
-	__webpack_require__(9);
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
+	__webpack_require__(10);
+	__webpack_require__(9);
 	__webpack_require__(13);
 	__webpack_require__(14);
 	__webpack_require__(7);
@@ -85,13 +85,20 @@
 
 	app.config(['$routeProvider', function(routeProvider){
 	  routeProvider
+
+	  //home
 	  .when('/signin', {
 	    controller: 'UserController',
 	    templateUrl: './templates/signin.html'
 	  })
-	  .when('/home', {
+	  // .when('/home', {
+	  //   controller: 'UserController',
+	  //   templateUrl: './views/home.html'
+	  // })
+
+	  .when('/dashboard', {
 	    controller: 'UserController',
-	    templateUrl: './views/home.html'
+	    templateUrl: './templates/signin.html'
 	  })
 	  .when('/', {
 	    controller: 'UserController',
@@ -103,7 +110,7 @@
 	  })
 	  .when('/profile', {
 	    controller: 'ProfileController',
-	    templateUrl: './views/home.html'
+	    templateUrl: './templates/user-profile.html'
 	  })
 	  .when('/search', {
 	    controller: 'ProfileController',
@@ -32309,6 +32316,14 @@
 	    };
 	  });
 
+	  app.directive('mainHeader', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: ' ./templates/header.html'
+
+	    };
+	  });
+
 	};
 
 
@@ -32420,37 +32435,47 @@
 
 	module.exports = function(app){
 
-	  app.controller('ProfileController', ['$http', '$scope', function($http, $scope) {
-	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/1/';
+	  app.controller('ProfileController', ['$http', '$window' , function($http, $window) {
+	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
 	    // const self= this;
-	    $scope.profiles = ['profile'];
-	    $scope.editingProfile = false;
-	    $scope.newProfile = {};
+	    this.profiles = ['profile'];
+	    this.editingProfile = false;
+	    this.newProfile = {};
 	    console.log('hit profile');
 
-	    $scope.getProfile = function(){
-	      $http.get(profileRoute)
-	        .then((result)=>{
-	          console.log();
-	          $scope.profiles = result.data;
-	        }, function(error){
-	          console.log(error);
-	        });
+	    this.getProfile = function(){
+	      var tokenFromLocalStorage = $window.localStorage.token;
+	      console.log('localStorage?? ' + $window.localStorage.token);
+	      $http.get(profileRoute + '3/' ,{
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
+	      .then((result)=>{
+	        console.log('Get Profile ' + result);
+	        this.profiles = result.data;
+	      }, function(error){
+	        console.log(error);
+	      });
 
 	    };
-	    $scope.createProfile = function(profile){
-	      $http.post(profileRoute, user)
-	        .then((result)=>{
-	          console.log('post is hit');
-	          this.profiles.push(result.data);
-	        });
-	      };
+
+	    // this.getProfile = function(){
+	    //   $http.get(profileRoute)
+	    // this.createProfile = function(profile){
+	    //   $http.post(profileRoute, user)
+	    //     .then((result)=>{
+	    //       console.log('post is hit');
+	    //       this.profiles.push(result.data);
+	    //     });
+	    //   };
 
 
-	    $scope.updateProfile = function(profile){
+	    this.updateProfile = function(profile){
 	      $http.put(profileRoute + profile.id)
 	        .then((result)=>{
-	          $scope.profiles = $scope.profiles.map((p)=>{
+	          this.profiles = this.profiles.map((p)=>{
 	            if(p.id === profile.id){
 	              return profile;
 	            } else {
@@ -32460,24 +32485,24 @@
 	        });
 	    };
 
-	    $scope.editButtonShow = function(){
-	      $scope.editingProfile = true;
+	    this.editButtonShow = function(){
+	      this.editingProfile = true;
 	    };
 
-	    $scope.submit = function(profile){
-	      if($scope.profiles){
-	        $scope.profiles.push(this.profiles);
-	        $scope.profiles = '';
+	    this.submit = function(profile){
+	      if(this.profiles){
+	        this.profiles.push(this.profiles);
+	        this.profiles = '';
 	      }
 
 	    };
 
 	  }]);
 
-	  app.controller('FileController', ['$scope', 'fileUpload', function($scope, fileUpload){
+	  app.controller('FileController', [ 'fileUpload', function( fileUpload){
 
-	    $scope.uploadFile = function(){
-	      var file = $scope.myFile;
+	    this.uploadFile = function(){
+	      var file = this.myFile;
 	      console.log('file is ' );
 	      console.dir(file);
 	      var uploadUrl = '/fileUpload';
