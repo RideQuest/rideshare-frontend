@@ -1,5 +1,7 @@
-<section class="contact-list">
+
+<section ng-cloak data-ng-controller="mapController as mapCtrl">
   <form data-ng-submit="mapCtrl.getDriverRoutes()">
-    <input type="submit" name="name" value="Search!">
+    <input type="text" placeholder=" Start Address">
+    <input type="submit" value="Search!">
   </form>
 </section>
