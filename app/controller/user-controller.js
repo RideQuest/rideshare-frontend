@@ -22,9 +22,7 @@ module.exports = function(app){
     };
 
     self.createUser = function(user){
-      $http.post(userRoute, user, {
-        headers: AuthService.getToken()
-      })
+      $http.post(userRoute, user)
         .then(function(res){
           console.log('post is hit');
           self.users.push(res.data);
@@ -58,12 +56,12 @@ module.exports = function(app){
 
 //auth routes
 
-    self.signUp = function(user){
-      AuthService.createUser(user, (err, res)=>{
-        if(err) return console.log(err);
-        console.log('hitting' + res);
-      });
-    };
+    // self.signUp = function(user){
+    //   AuthService.createUser(user, (err, res)=>{
+    //     if(err) return console.log(err);
+    //     console.log('hitting' + res);
+    //   });
+    // };
 
     self.logOut = function(user){
       AuthService.signOut((err, res)=>{
