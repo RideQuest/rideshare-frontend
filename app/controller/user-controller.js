@@ -5,15 +5,7 @@ module.exports = function(app){
     const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
     const self = this;
     self.users = ['user'];
-    self.headers = [
-      {
-        name: "home"
 
-      },
-      {
-        name: "dashboard"
-      }
-    ]
     self.submit = function(){
       if(self.users){
         self.users.push(self.users);
@@ -22,7 +14,14 @@ module.exports = function(app){
     };
 
     self.getUser = function(){
-      $http.get(userRoute)
+      var tokenFromLocalStorage = $window.localStorage.token;
+      console.log('localToken ' + $window.localStorage.token);
+      $http.get(userRoute, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + tokenFromLocalStorage
+        }
+      })
         .then((result)=>{
           self.users = result.data;
         }, (error)=>{
@@ -31,9 +30,7 @@ module.exports = function(app){
     };
 
     self.createUser = function(user){
-      $http.post(userRoute, user, {
-        headers: AuthService.getToken()
-      })
+      $http.post(userRoute, user)
         .then(function(res){
           console.log('post is hit');
           self.users.push(res.data);
@@ -67,12 +64,12 @@ module.exports = function(app){
 
 //auth routes
 
-    self.signUp = function(user){
-      AuthService.createUser(user, (err, res)=>{
-        if(err) return console.log(err);
-        console.log('hitting' + res);
-      });
-    };
+    // self.signUp = function(user){
+    //   AuthService.createUser(user, (err, res)=>{
+    //     if(err) return console.log(err);
+    //     console.log('hitting' + res);
+    //   });
+    // };
 
     self.logOut = function(user){
       AuthService.signOut((err, res)=>{

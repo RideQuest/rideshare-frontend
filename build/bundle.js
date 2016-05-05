@@ -45,11 +45,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+	__webpack_require__(10);
+	__webpack_require__(9);
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
-	__webpack_require__(10);
-	__webpack_require__(9);
 	__webpack_require__(13);
 	__webpack_require__(14);
 	__webpack_require__(7);
@@ -32207,6 +32207,14 @@
 	    };
 	  });
 
+	  app.directive('newProfile', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/new-profile.html'
+
+	    };
+	  });
+
 	  app.directive('home', function(){
 	    return {
 	      restrict: 'E',
@@ -32286,15 +32294,7 @@
 	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
 	    const self = this;
 	    self.users = ['user'];
-	    self.headers = [
-	      {
-	        name: "home"
 
-	      },
-	      {
-	        name: "dashboard"
-	      }
-	    ]
 	    self.submit = function(){
 	      if(self.users){
 	        self.users.push(self.users);
@@ -32303,7 +32303,14 @@
 	    };
 
 	    self.getUser = function(){
-	      $http.get(userRoute)
+	      var tokenFromLocalStorage = $window.localStorage.token;
+	      console.log('localToken ' + $window.localStorage.token);
+	      $http.get(userRoute, {
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
 	        .then((result)=>{
 	          self.users = result.data;
 	        }, (error)=>{
@@ -32312,9 +32319,7 @@
 	    };
 
 	    self.createUser = function(user){
-	      $http.post(userRoute, user, {
-	        headers: AuthService.getToken()
-	      })
+	      $http.post(userRoute, user)
 	        .then(function(res){
 	          console.log('post is hit');
 	          self.users.push(res.data);
@@ -32348,12 +32353,12 @@
 
 	//auth routes
 
-	    self.signUp = function(user){
-	      AuthService.createUser(user, (err, res)=>{
-	        if(err) return console.log(err);
-	        console.log('hitting' + res);
-	      });
-	    };
+	    // self.signUp = function(user){
+	    //   AuthService.createUser(user, (err, res)=>{
+	    //     if(err) return console.log(err);
+	    //     console.log('hitting' + res);
+	    //   });
+	    // };
 
 	    self.logOut = function(user){
 	      AuthService.signOut((err, res)=>{
@@ -32404,13 +32409,13 @@
 	        });
 
 	    };
-	    // this.createUser = function(profile){
-	    //   $http.post(profileRoute, user)
-	    //     .then((result)=>{
-	    //       console.log('post is hit');
-	    //       this.profiles.push(result.data);
-	    //     });
-	    //   };
+	    $scope.createProfile = function(profile){
+	      $http.post(profileRoute, user)
+	        .then((result)=>{
+	          console.log('post is hit');
+	          this.profiles.push(result.data);
+	        });
+	      };
 
 
 	    $scope.updateProfile = function(profile){

@@ -20,13 +20,13 @@ module.exports = function(app){
         });
 
     };
-    // this.createUser = function(profile){
-    //   $http.post(profileRoute, user)
-    //     .then((result)=>{
-    //       console.log('post is hit');
-    //       this.profiles.push(result.data);
-    //     });
-    //   };
+    $scope.createProfile = function(profile){
+      $http.post(profileRoute, user)
+        .then((result)=>{
+          console.log('post is hit');
+          this.profiles.push(result.data);
+        });
+      };
 
 
     $scope.updateProfile = function(profile){
