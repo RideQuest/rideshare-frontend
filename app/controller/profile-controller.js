@@ -2,8 +2,8 @@
 
 module.exports = function(app){
 
-  app.controller('ProfileController', ['$http', '$window' , function($http, $window) {
-    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
+  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
+    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/3/';
     // const self= this;
     this.profiles = ['profile'];
     this.editingProfile = false;
@@ -37,7 +37,20 @@ module.exports = function(app){
     //       this.profiles.push(result.data);
     //     });
     //   };
-
+    //***********************
+    //getting dashboard data
+    //***********************
+    this.dashboardView = function(){
+      $http.get(profileRoute, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic ' + $window.localStorage.token
+        }
+      }).then((res)=>{
+        console.log('Profile Result : ' + JSON.stringify(res));
+        $location.path('/dashboard');
+      });
+    };
 
     this.updateProfile = function(profile){
       $http.put(profileRoute + profile.id)

@@ -24,9 +24,9 @@ app.config(['$routeProvider', function(routeProvider){
   routeProvider
 
   //home
-  .when('/signin', {
+  .when('/', {
     controller: 'UserController',
-    templateUrl: './templates/signin.html'
+    templateUrl: './views/01_signup_in.html'
   })
   // .when('/home', {
   //   controller: 'UserController',
@@ -35,9 +35,9 @@ app.config(['$routeProvider', function(routeProvider){
 
   .when('/dashboard', {
     controller: 'UserController',
-    templateUrl: './templates/signin.html'
+    templateUrl: './templates/dashboard.html'
   })
-  .when('/', {
+  .when('/home', {
     controller: 'UserController',
     templateUrl: './views/home.html'
   })

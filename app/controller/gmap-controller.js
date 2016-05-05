@@ -15,7 +15,7 @@ module.exports = function(app){
     this.search = function(cb){
       cb = this.postRoutes;
       console.log('hitting here in search!');
-      $window.Gmap.getDirections(this.origin);
+      // $window.Gmap.getDirections(this.origin);
       $window.Gmap.convertAddressForData(this.origin, function(coordinates){
         this.startCoordinates = coordinates;
         console.log('startCoordinates : ' + JSON.stringify(this.startCoordinates));
