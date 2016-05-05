@@ -1,4 +1,12 @@
 <section data-ng-controller="UserController as userCtrl">
+  <header>
+
+    <div class="logo-container"<h1 class="title">logo</h1></div>
+    <div class="header-image">  <h1 class="main-title">Welcome to RideShare </h1></div>
+    <custom-nav></custom-nav>
+  </header>
+  <main>
+
 <h1>Welcome {{userCtrl.users.username}}</h1>
 
 <section ng-controller="ProfileController as profileCtrl" ng-init="profileCtrl.getProfile()" class="who-profile">
@@ -34,3 +42,10 @@ Car Seats:   <input ng-model="profile.car_seat" type="text">
 </section>
 
 </section>
+
+
+
+
+
+
+</main>

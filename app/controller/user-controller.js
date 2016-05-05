@@ -22,12 +22,11 @@ module.exports = function(app){
     };
 
     self.createUser = function(user){
-      $http.post(userRoute, user, {
-        headers: AuthService.getToken()
-      })
-        .then(function(res){
+      $http.post(userRoute, user)
+        .then((res)=>{
           console.log('post is hit');
           self.users.push(res.data);
+          console.log(res.data);
           self.newUser = null;
         });
     };

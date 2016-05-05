@@ -32089,19 +32089,19 @@
 	    var token;
 	    var url = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com';
 	    var auth = {
-	      createUser(user, cb){
-	        console.log('grabbing user data : ' + user);
-	        cb || function(){};
-	        $http.post(url + '/users', user)
-	          .then((res)=>{
-	            token = $window.localStorage.token = res.data.token;
-	            cb(null, res);
-	            console.log('ThisIsToken: ' + token);
-	          },(err)=>{
-	            console.log('Error obj : ' + err);
-	            cb(err);
-	          });
-	      },
+	      // createUser(user, cb){
+	      //   console.log('grabbing user data : ' + user);
+	      //   cb || function(){};
+	      //   $http.post(url + '/users', user)
+	      //     .then((res)=>{
+	      //       token = $window.localStorage.token = res.data.token;
+	      //       cb(null, res);
+	      //       console.log('ThisIsToken: ' + token);
+	      //     },(err)=>{
+	      //       console.log('Error obj : ' + err);
+	      //       cb(err);
+	      //     });
+	      // },
 	      getToken(){
 	        return token || $window.localStorage.token;
 	      },
@@ -32303,12 +32303,11 @@
 	    };
 
 	    self.createUser = function(user){
-	      $http.post(userRoute, user, {
-	        headers: AuthService.getToken()
-	      })
-	        .then(function(res){
+	      $http.post(userRoute, user)
+	        .then((res)=>{
 	          console.log('post is hit');
 	          self.users.push(res.data);
+	          console.log(res.data);
 	          self.newUser = null;
 	        });
 	    };
