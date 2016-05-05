@@ -25,7 +25,6 @@ app.config(['$routeProvider', function(routeProvider){
   .when('/signin', {
     controller: 'UserController',
     templateUrl: './templates/signin.html'
-
   })
   .when('/home', {
     controller: 'UserController',
@@ -42,5 +41,9 @@ app.config(['$routeProvider', function(routeProvider){
   .when('/profile', {
     controller: 'ProfileController',
     templateUrl: './views/home.html'
+  })
+  .when('/search', {
+    controller: 'ProfileController',
+    templateUrl: './templates/gmap-view.html'
   });
 }]);
