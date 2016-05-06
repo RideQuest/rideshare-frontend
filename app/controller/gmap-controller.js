@@ -1,8 +1,6 @@
 module.exports = function(app){
   app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
     var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
-    // var pikePlace = {lat: 47.608953, lng: -122.341099};
-    // var bellevueMall = {lat: 47.616591, lng: -122.198797};
     var tokenFromLocalStorage;
     var newArray;
     this.user = {};
@@ -12,7 +10,7 @@ module.exports = function(app){
     this.arrayOfCoordinates = [];
     this.origin = '';
     this.startCoordinates = {};
-    this.markerPoints = [{"lat":-122.38563537599,"lng":47.588996887206},{"lat":-122.39112854004,"lng":47.5883102417},{"lat":-122.38391876222,"lng":47.588653564453},{"lat":-122.39009857179,"lng":47.589855194093},{"lat":-122.38906860352,"lng":47.590713500977}];
+    this.markerPoints = [];
 
 
     this.initialize = function(){
@@ -30,7 +28,7 @@ module.exports = function(app){
       });
     };
 
-    //Search radius
+    //Searching available drivers within 1 mile radius (radius set on BE side)
     this.searchAvailWithinRadius = function(data, cb){
       cb = this.sendCoordinates;
       $window.Gmap.convertAddressForData(data, (coordinates)=>{
@@ -55,7 +53,6 @@ module.exports = function(app){
       // console.log('Catching split: ' + cordsLng);
       return newCordsObj;
     };
-
 
 
     //sending newly created coordinates object to BE server using query string on url
