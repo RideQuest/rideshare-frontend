@@ -32,6 +32,10 @@ module.exports = function(app){
       console.log('searching!!!');
       $location.path('/search');
     };
+
+    this.goToAboutMe = function(){
+      $location.path('/about');
+    };
     // this.getProfile = function(){
     //   $http.get(profileRoute)
     // this.createProfile = function(profile){
