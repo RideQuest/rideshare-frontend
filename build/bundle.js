@@ -32049,6 +32049,7 @@
 	    // var pikePlace = {lat: 47.608953, lng: -122.341099};
 	    // var bellevueMall = {lat: 47.616591, lng: -122.198797};
 	    var tokenFromLocalStorage;
+	    var newArray;
 	    this.user = {};
 	    this.queryRoute = {};
 	    this.driverRoute = {};
@@ -32056,7 +32057,8 @@
 	    this.arrayOfCoordinates = [];
 	    this.origin = '';
 	    this.startCoordinates = {};
-	    this.markerPoints = [{lat: 47.615635, lng: -122.203703},{lat: 47.565444, lng: -122.329953}];
+	    this.markerPoints = [{"lat":-122.38563537599,"lng":47.588996887206},{"lat":-122.39112854004,"lng":47.5883102417},{"lat":-122.38391876222,"lng":47.588653564453},{"lat":-122.39009857179,"lng":47.589855194093},{"lat":-122.38906860352,"lng":47.590713500977}];
+
 
 	    this.initialize = function(){
 	      $window.Gmap.initMap();
@@ -32107,6 +32109,7 @@
 	    //and getting back array of coordinates data in WKT format, and converting that into
 	    //regular json that gmap reads.
 	    this.sendCoordinates = function(data, cb){
+	      cb = $window.Gmap.markersOnOrigins;
 	      tokenFromLocalStorage = $window.localStorage.token;
 	      $http.get(mainRoute + 'query/?lat=' + data.lat + '&lng=' + data.lng, {
 	        headers: {
@@ -32114,18 +32117,18 @@
 	          'Authorization': 'Token ' + tokenFromLocalStorage
 	        }
 	      }).then((res)=>{
-	        var newArray = [];
+	        newArray = [];
 	        res.data.forEach((data)=>{
-	          console.log(data)
 	          var newObj = {};
 	          var transformedData = data.start_point.split(' ').splice(1);
 	          var stringifiedCords = String(transformedData).split(',');
 	          var regex = /\(([^)]+)\)/;
-	          newObj.lat = regex.exec(stringifiedCords)[1].split(',')[0];
-	          newObj.lng = regex.exec(stringifiedCords)[1].split(',')[1];
+	          newObj.lat = JSON.parse(regex.exec(stringifiedCords)[1].split(',')[0]);
+	          newObj.lng = JSON.parse(regex.exec(stringifiedCords)[1].split(',')[1]);
 	          newArray.push(newObj);
 	          console.log('New Array of Obj?? : ' + JSON.stringify(newArray));
 	        });
+	        cb(newArray);
 	      });
 	    };
 
