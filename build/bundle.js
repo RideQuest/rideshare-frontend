@@ -32088,7 +32088,7 @@
 
 	    //Changing WKT coordinates into regular coordinates object
 	    this.coordsIntoObj = function(originalCords){
-	      var newCordsObj = {lat: '',lng: ''};
+	      var newCordsObj = {};
 	      var regex = /\(([^)]+)\)/;
 	      var cords = regex.exec(originalCords);
 	      var cordsLat = String(cords).split(',')[2];
@@ -32101,9 +32101,7 @@
 	      return newCordsObj;
 	    };
 
-	    // this.WktIntoArrayJson = function(dataSetArray){
-	    //
-	    // };
+
 
 	    //sending newly created coordinates object to BE server using query string on url
 	    //and getting back array of coordinates data in WKT format, and converting that into
@@ -32123,8 +32121,8 @@
 	          var transformedData = data.start_point.split(' ').splice(1);
 	          var stringifiedCords = String(transformedData).split(',');
 	          var regex = /\(([^)]+)\)/;
-	          newObj.lat = JSON.parse(regex.exec(stringifiedCords)[1].split(',')[0]);
-	          newObj.lng = JSON.parse(regex.exec(stringifiedCords)[1].split(',')[1]);
+	          newObj.lat = JSON.parse(regex.exec(stringifiedCords)[1].split(',')[1]);
+	          newObj.lng = JSON.parse(regex.exec(stringifiedCords)[1].split(',')[0]);
 	          newArray.push(newObj);
 	          console.log('New Array of Obj?? : ' + JSON.stringify(newArray));
 	        });
@@ -32728,6 +32726,7 @@
 	  Gmap.markersOnOrigins = function(markerPoints){
 	    var marker;
 	    var markerImg = 'img/ride-marker.png';
+	    console.log('hitting marker fn ' + markerPoints + 'here')
 	    markerPoints.forEach((startingPoint)=>{
 	      marker = new google.maps.Marker({
 	        position: startingPoint,

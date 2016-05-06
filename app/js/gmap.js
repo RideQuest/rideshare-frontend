@@ -83,6 +83,7 @@
   Gmap.markersOnOrigins = function(markerPoints){
     var marker;
     var markerImg = 'img/ride-marker.png';
+    console.log('hitting marker fn ' + markerPoints + 'here')
     markerPoints.forEach((startingPoint)=>{
       marker = new google.maps.Marker({
         position: startingPoint,
