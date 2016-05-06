@@ -6,8 +6,6 @@ module.exports = function(app){
     var tokenFromLocalStorage;
     this.user = {};
     this.queryRoute = {};
-    this.lat = [];
-    this.long = [];
     this.driverRoute = {};
     this.riderRoute = {};
     this.arrayOfCoordinates = [];
@@ -33,12 +31,11 @@ module.exports = function(app){
     //Search radius
     this.searchAvailWithinRadius = function(data, cb){
       cb = this.sendCoordinates;
-
       $window.Gmap.convertAddressForData(data, (coordinates)=>{
         $window.Gmap.markerOnStartPoint(coordinates);
         var obj = this.coordsIntoObj(coordinates);
         console.log('Objecttttt : ' + JSON.stringify(obj));
-        cb(obj)
+        cb(obj);
       });
     };
 
@@ -57,9 +54,14 @@ module.exports = function(app){
       return newCordsObj;
     };
 
+    // this.WktIntoArrayJson = function(dataSetArray){
+    //
+    // };
+
     //sending newly created coordinates object to BE server using query string on url
-    this.sendCoordinates = function(data){
-      console.log('Object?? : ' + JSON.stringify(data));
+    //and getting back array of coordinates data in WKT format, and converting that into
+    //regular json that gmap reads.
+    this.sendCoordinates = function(data, cb){
       tokenFromLocalStorage = $window.localStorage.token;
       $http.get(mainRoute + 'query/?lat=' + data.lat + '&lng=' + data.lng, {
         headers: {
@@ -67,7 +69,18 @@ module.exports = function(app){
           'Authorization': 'Token ' + tokenFromLocalStorage
         }
       }).then((res)=>{
-        console.log('Back from awesome BE server! : ' + JSON.stringify(res));
+        var newArray = [];
+        res.data.forEach((data)=>{
+          console.log(data)
+          var newObj = {};
+          var transformedData = data.start_point.split(' ').splice(1);
+          var stringifiedCords = String(transformedData).split(',');
+          var regex = /\(([^)]+)\)/;
+          newObj.lat = regex.exec(stringifiedCords)[1].split(',')[0];
+          newObj.lng = regex.exec(stringifiedCords)[1].split(',')[1];
+          newArray.push(newObj);
+          console.log('New Array of Obj?? : ' + JSON.stringify(newArray));
+        });
       });
     };
 
