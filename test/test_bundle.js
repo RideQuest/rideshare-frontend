@@ -55,6 +55,7 @@
 	  });
 	  beforeEach(angular.mock.module('rideShareApp'))
 	  beforeEach(angular.mock.inject(function($controller){
+	    p
 
 	  }))
 
@@ -70,12 +71,10 @@
 	module.exports = function(app){
 
 	  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
-	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/3/';
-	    // const self= this;
+	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
 	    this.profiles = ['profile'];
 	    this.editingProfile = false;
 	    this.newProfile = {};
-	    console.log('hit profile');
 
 	    this.getProfile = function(){
 	      var tokenFromLocalStorage = $window.localStorage.token;
@@ -87,7 +86,6 @@
 	        }
 	      })
 	      .then((result)=>{
-	        console.log('Get Profile ' + result);
 	        this.profiles = result.data;
 	      }, function(error){
 	        console.log(error);
@@ -95,6 +93,14 @@
 
 	    };
 
+	    this.goToGmapView = function(){
+	      console.log('searching!!!');
+	      $location.path('/search');
+	    };
+
+	    this.goToAboutMe = function(){
+	      $location.path('/about');
+	    };
 	    // this.getProfile = function(){
 	    //   $http.get(profileRoute)
 	    // this.createProfile = function(profile){
