@@ -3,12 +3,10 @@
 module.exports = function(app){
 
   app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
-    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/3/';
-    // const self= this;
+    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
     this.profiles = ['profile'];
     this.editingProfile = false;
     this.newProfile = {};
-    console.log('hit profile');
 
     this.getProfile = function(){
       var tokenFromLocalStorage = $window.localStorage.token;
@@ -20,7 +18,6 @@ module.exports = function(app){
         }
       })
       .then((result)=>{
-        console.log('Get Profile ' + result);
         this.profiles = result.data;
       }, function(error){
         console.log(error);

@@ -10,7 +10,7 @@
     map = new google.maps.Map(document.getElementById('map'),{
       center: centerCord,
       scrollwheel: false,
-      zoom: 12
+      zoom: 13
     });
   };
 

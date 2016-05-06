@@ -32046,8 +32046,6 @@
 	module.exports = function(app){
 	  app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
 	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
-	    // var pikePlace = {lat: 47.608953, lng: -122.341099};
-	    // var bellevueMall = {lat: 47.616591, lng: -122.198797};
 	    var tokenFromLocalStorage;
 	    var newArray;
 	    this.user = {};
@@ -32057,7 +32055,7 @@
 	    this.arrayOfCoordinates = [];
 	    this.origin = '';
 	    this.startCoordinates = {};
-	    this.markerPoints = [{"lat":-122.38563537599,"lng":47.588996887206},{"lat":-122.39112854004,"lng":47.5883102417},{"lat":-122.38391876222,"lng":47.588653564453},{"lat":-122.39009857179,"lng":47.589855194093},{"lat":-122.38906860352,"lng":47.590713500977}];
+	    this.markerPoints = [];
 
 
 	    this.initialize = function(){
@@ -32075,7 +32073,7 @@
 	      });
 	    };
 
-	    //Search radius
+	    //Searching available drivers within 1 mile radius (radius set on BE side)
 	    this.searchAvailWithinRadius = function(data, cb){
 	      cb = this.sendCoordinates;
 	      $window.Gmap.convertAddressForData(data, (coordinates)=>{
@@ -32100,7 +32098,6 @@
 	      // console.log('Catching split: ' + cordsLng);
 	      return newCordsObj;
 	    };
-
 
 
 	    //sending newly created coordinates object to BE server using query string on url
@@ -32229,19 +32226,6 @@
 	    var token;
 	    var url = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com';
 	    var auth = {
-	      // createUser(user, cb){
-	      //   console.log('grabbing user data : ' + user);
-	      //   cb || function(){};
-	      //   $http.post(url + '/users', user)
-	      //     .then((res)=>{
-	      //       token = $window.localStorage.token = res.data.token;
-	      //       cb(null, res);
-	      //       console.log('ThisIsToken: ' + token);
-	      //     },(err)=>{
-	      //       console.log('Error obj : ' + err);
-	      //       cb(err);
-	      //     });
-	      // },
 	      getToken(){
 	        return token || $window.localStorage.token;
 	      },
@@ -32252,7 +32236,6 @@
 	      },
 
 	      signIn(user, cb){
-	        console.log('Auth signIn : ' + angular.toJson(user));
 	        cb || function(){};
 	        $http.post(url + '/auth-token/',{},{
 	          headers: {
@@ -32260,11 +32243,9 @@
 	            'Authorization': 'Basic ' + btoa(user.username + ':' + user.password)
 	          }
 	        }).then((res)=>{
-	          console.log('here' + res.body);
 	          token = $window.localStorage.token = res.data.token;
 	          cb(null, res);
 	        }, (err)=>{
-	          console.log(err);
 	          cb(err);
 	        });
 	      }
@@ -32537,12 +32518,10 @@
 	module.exports = function(app){
 
 	  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
-	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/3/';
-	    // const self= this;
+	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
 	    this.profiles = ['profile'];
 	    this.editingProfile = false;
 	    this.newProfile = {};
-	    console.log('hit profile');
 
 	    this.getProfile = function(){
 	      var tokenFromLocalStorage = $window.localStorage.token;
@@ -32554,7 +32533,6 @@
 	        }
 	      })
 	      .then((result)=>{
-	        console.log('Get Profile ' + result);
 	        this.profiles = result.data;
 	      }, function(error){
 	        console.log(error);
@@ -32653,7 +32631,7 @@
 	    map = new google.maps.Map(document.getElementById('map'),{
 	      center: centerCord,
 	      scrollwheel: false,
-	      zoom: 12
+	      zoom: 13
 	    });
 	  };
 
