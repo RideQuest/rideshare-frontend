@@ -73,6 +73,7 @@
   };
 
   Gmap.markersOnOrigins = function(markerPoints){
+
     var marker;
     var markerImg = 'img/ride-marker.png';
     markerPoints.forEach((startingPoint)=>{

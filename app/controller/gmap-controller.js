@@ -1,16 +1,16 @@
 module.exports = function(app){
   app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
     var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
-    var testRoute = 'http://172.16.0.188:8000/'
     var pikePlace = {lat: 47.608953, lng: -122.341099};
     var bellevueMall = {lat: 47.616591, lng: -122.198797};
+    var tokenFromLocalStorage;
     this.user = {};
     this.queryRoute = {};
     this.lat = [];
     this.long = [];
     this.driverRoute = {};
     this.riderRoute = {};
-
+    this.arrayOfCoordinates = [];
     this.origin = '';
     this.startCoordinates = {};
     this.markerPoints = [{lat: 47.615635, lng: -122.203703},{lat: 47.565444, lng: -122.329953}];
@@ -30,6 +30,48 @@ module.exports = function(app){
       });
     };
 
+    this.seachAvailWithinRadius = function(data){
+      $window.Gmap.convertAddressForData(data, (coordinates)=>{
+        console.log('data : ' + data);
+        console.log('coordinates : ' + coordinates);
+        var catchCords = this.coordsIntoObj(coordinates);
+        console.log('Catching inside fn : ' + JSON.stringify(catchCords));
+        $window.Gmap.markersOnOrigins(coordinates);
+
+      });
+    };
+
+    // this.extractCoordinates = function(arrayData, cb){
+    //   cb =
+    //   console.log('Extract Extract');
+    //
+    // };
+
+    this.coordsIntoObj = function(originalCords){
+      var newCordsObj = {};
+      var regex = /\(([^)]+)\)/;
+      var cords = regex.exec(originalCords);
+      var cordsLat = String(cords).split(',')[2];
+      var cordsLng = String(cords).split(',')[3];
+      newCordsObj.lat = cordsLat;
+      newCordsObj.lng = cordsLng;
+      console.log('Catching Lat: ' + cordsLat);
+      console.log('Catching Lng: ' + cordsLng);
+      // console.log('Catching split: ' + cordsLng);
+      return newCordsObj;
+    }
+
+    this.sendCoordinates = function(data){
+      tokenFromLocalStorage = $window.localStorage.token;
+      $http.get(mainRoute + 'query/?lat=' + lat + '&lng=' + lng, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + tokenFromLocalStorage
+        }
+      }).then((res)=>{
+
+      });
+    };
     //getting coordinates from /routes/add/
     this.getDriverRoutes = function(){
       var tokenFromLocalStorage = $window.localStorage.token;
@@ -41,7 +83,7 @@ module.exports = function(app){
         }
       })
         .then((res)=>{
-          // $window.Gmap.markersOnOrigins()
+          $window.Gmap.markersOnOrigins()
           console.dir('Response back : ' + JSON.stringify(res));
           console.dir('Response back : ' + JSON.stringify(res.data));
           var data = res.data.map((data)=>{
