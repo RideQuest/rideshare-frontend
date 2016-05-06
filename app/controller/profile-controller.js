@@ -28,6 +28,10 @@ module.exports = function(app){
 
     };
 
+    this.goToGmapView = function(){
+      console.log('searching!!!');
+      $location.path('/search');
+    };
     // this.getProfile = function(){
     //   $http.get(profileRoute)
     // this.createProfile = function(profile){

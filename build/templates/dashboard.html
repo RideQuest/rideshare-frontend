@@ -1,13 +1,17 @@
 <section>
+  <div class="top-bar">
+    <div class="logo">Ride Share</div>
+  </div>
+
   <div class="main-image">
     <h1 class="main-title">Dashboard</h1>
   </div>
-
-  <div class="dashboard clearfix">
+  <custom-nav></custom-nav>
+  <div ng-controller="ProfileController as profilectrl" class="dashboard clearfix">
      <div class="col1 clearfix">
        <div class="big notes-thumb" >
          <span class="icon-font" aria-hidden="true"></span>
-         <p>Search For A Ride</p>
+         <p ng-click="profilectrl.goToGmapView()">Search For A Ride</p>
        </div>
        <div class="small lock-thumb">
           <a href="<new-profile></new-profile"></a><p>Create New Profile </p>
@@ -23,7 +27,7 @@
        <div class="big calculator-thumb" ><span class="icon-font" aria-hidden="true" "&#xe017;"></span><p> Create </p></div>
      </div>
      <div class="col2 clearfix">
-       <div class="big organizer-thumb" ><span class="icon-font" aria-hidden="true"></span><p>Search for Passengers</p></div>
+       <div class="big organizer-thumb"><span class="icon-font" aria-hidden="true"></span><p>Search for Passengers</p></div>
        <div class="big news-thumb" ><span class="icon-font" aria-hidden="true"></span><p>My Profile</p></div>
        <div class="small calendar-thumb" ><span class="icon-font" aria-hidden="true"></span><p>About</p></div>
        <div class="small last paint-thumb" ><span class="icon-font" aria-hidden="true"></span><p> Make Money </p></div>

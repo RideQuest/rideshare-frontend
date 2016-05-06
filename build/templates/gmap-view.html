@@ -1,4 +1,8 @@
 <section ng-cloak data-ng-controller="mapController as mapCtrl">
+  <div class="top-bar">
+    <div class="logo">Ride Share</div>
+  </div>
+  <custom-nav></custom-nav>
   <map-rider></map-rider>
   <map-driver></map-driver>
   <div ng-init="mapCtrl.initialize()" id="map" style="width: 100%; height: 40em;"></div>
