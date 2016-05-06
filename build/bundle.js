@@ -45,16 +45,16 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(13);
-	__webpack_require__(14);
-	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
-	__webpack_require__(7);
-	__webpack_require__(15);
+	__webpack_require__(13);
+	__webpack_require__(14);
 	__webpack_require__(8);
-	__webpack_require__(10);
-	module.exports = __webpack_require__(9);
+	__webpack_require__(7);
+	__webpack_require__(6);
+	__webpack_require__(9);
+	__webpack_require__(15);
+	module.exports = __webpack_require__(10);
 
 
 /***/ },
@@ -69,17 +69,17 @@
 	var app = angular.module('rideShareApp', ['ngRoute']);
 
 	//controller
-	__webpack_require__(6)(app);
 
+
+	__webpack_require__(6)(app);
 	__webpack_require__(7)(app);
 	__webpack_require__(8)(app);
+
 	__webpack_require__(9)(app);
 	__webpack_require__(10)(app);
 
 	__webpack_require__(11)(app);
 	__webpack_require__(12)(app);
-
-
 
 	//angular router
 
@@ -32043,6 +32043,212 @@
 /* 6 */
 /***/ function(module, exports) {
 
+	'use strict';
+
+	module.exports = function(app){
+	  app.controller('UserController', ['$http','AuthService', '$location', function($http, AuthService, $location) {
+	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
+	    const self = this;
+	    self.users = ['user'];
+
+	    self.submit = function(){
+	      if(self.users){
+	        self.users.push(self.users);
+	        self.users = '';
+	      }
+	    };
+
+	    self.getUser = function(){
+	      var tokenFromLocalStorage = $window.localStorage.token;
+	      console.log('localToken ' + $window.localStorage.token);
+	      $http.get(userRoute, {
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
+	        .then((result)=>{
+	          self.users = result.data;
+	        }, (error)=>{
+	          return error;
+	        });
+	    };
+
+	    self.createUser = function(user){
+	      $http.post(userRoute, user)
+	        .then(function(res){
+	          console.log('post is hit');
+	          self.users.push(res.data);
+	          self.newUser = null;
+	        });
+	    };
+
+	    self.updateUser = function(user){
+	      $http.put(userRoute + user.id, {
+	        headers: AuthService.getToken()
+	      })
+	      .then((result)=>{
+	        self.users = self.users.map((u)=>{
+	          if(u.id === user.id){
+	            return user;
+	          }else {
+	            return u;
+	          }
+	        });
+	      });
+	    };
+
+	    self.removeUser = function(user){
+	      $http.delete(userRoute + user.id, {
+	        headers: AuthService.getToken()
+	      })
+	      .then((result)=>{
+	        self.users = self.users.filter((u)=> u.id !=u.id);
+	      });
+	    };
+
+	//auth routes
+
+	    // self.signUp = function(user){
+	    //   AuthService.createUser(user, (err, res)=>{
+	    //     if(err) return console.log(err);
+	    //     console.log('hitting' + res);
+	    //   });
+	    // };
+
+	    self.logOut = function(user){
+	      AuthService.signOut((err, res)=>{
+	        if(err) return console.log(err);
+	        console.log('hitting' + res);
+	        $location.path('/signin')
+	      });
+	    };
+
+
+	    self.logIn = function(user){
+	      // console.dir(angular.toJson(user));
+	      AuthService.signIn(user, (err, res)=>{
+	        if(err) return console.log(err);
+	        console.log('Log in res.body : ' + angular.toJson(res.body));
+	        console.log('Log in res : ' + angular.toJson(res));
+	        $location.path('/dashboard');
+	      });
+	    };
+	  }]);
+
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function(app){
+
+	  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
+	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
+	    this.profiles = ['profile'];
+	    this.editingProfile = false;
+	    this.newProfile = {};
+
+	    this.getProfile = function(){
+	      var tokenFromLocalStorage = $window.localStorage.token;
+	      console.log('localStorage?? ' + $window.localStorage.token);
+	      $http.get(profileRoute + '3/' ,{
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
+	      .then((result)=>{
+	        this.profiles = result.data;
+	      }, function(error){
+	        console.log(error);
+	      });
+
+	    };
+
+	    this.goToGmapView = function(){
+	      console.log('searching!!!');
+	      $location.path('/search');
+	    };
+
+	    this.goToAboutMe = function(){
+	      $location.path('/about');
+	    };
+	    // this.getProfile = function(){
+	    //   $http.get(profileRoute)
+	    // this.createProfile = function(profile){
+	    //   $http.post(profileRoute, user)
+	    //     .then((result)=>{
+	    //       console.log('post is hit');
+	    //       this.profiles.push(result.data);
+	    //     });
+	    //   };
+	    //***********************
+	    //getting dashboard data
+	    //***********************
+	    this.dashboardView = function(){
+	      $http.get(profileRoute, {
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Basic ' + $window.localStorage.token
+	        }
+	      }).then((res)=>{
+	        console.log('Profile Result : ' + JSON.stringify(res));
+	        $location.path('/dashboard');
+	      });
+	    };
+
+	    this.updateProfile = function(profile){
+	      $http.put(profileRoute + profile.id)
+	        .then((result)=>{
+	          this.profiles = this.profiles.map((p)=>{
+	            if(p.id === profile.id){
+	              return profile;
+	            } else {
+	              return p;
+	            }
+	          });
+	        });
+	    };
+
+	    this.editButtonShow = function(){
+	      this.editingProfile = true;
+	    };
+
+	    this.submit = function(profile){
+	      if(this.profiles){
+	        this.profiles.push(this.profiles);
+	        this.profiles = '';
+	      }
+
+	    };
+
+	  }]);
+
+	  app.controller('FileController', [ 'fileUpload', function( fileUpload){
+
+	    this.uploadFile = function(){
+	      var file = this.myFile;
+	      console.log('file is ' );
+	      console.dir(file);
+	      var uploadUrl = '/fileUpload';
+	      fileUpload.uploadFileToUrl(file, uploadUrl);
+	    };
+
+
+	  }]);
+
+	};
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
 	module.exports = function(app){
 	  app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
 	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
@@ -32216,7 +32422,7 @@
 
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32256,7 +32462,7 @@
 
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32280,7 +32486,7 @@
 
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -32322,7 +32528,7 @@
 
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32405,212 +32611,6 @@
 	      templateUrl: ' ./templates/header.html'
 	    };
 	  });
-
-	};
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(app){
-	  app.controller('UserController', ['$http','AuthService', '$location', function($http, AuthService, $location) {
-	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	    const self = this;
-	    self.users = ['user'];
-
-	    self.submit = function(){
-	      if(self.users){
-	        self.users.push(self.users);
-	        self.users = '';
-	      }
-	    };
-
-	    self.getUser = function(){
-	      var tokenFromLocalStorage = $window.localStorage.token;
-	      console.log('localToken ' + $window.localStorage.token);
-	      $http.get(userRoute, {
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Token ' + tokenFromLocalStorage
-	        }
-	      })
-	        .then((result)=>{
-	          self.users = result.data;
-	        }, (error)=>{
-	          return error;
-	        });
-	    };
-
-	    self.createUser = function(user){
-	      $http.post(userRoute, user)
-	        .then(function(res){
-	          console.log('post is hit');
-	          self.users.push(res.data);
-	          self.newUser = null;
-	        });
-	    };
-
-	    self.updateUser = function(user){
-	      $http.put(userRoute + user.id, {
-	        headers: AuthService.getToken()
-	      })
-	      .then((result)=>{
-	        self.users = self.users.map((u)=>{
-	          if(u.id === user.id){
-	            return user;
-	          }else {
-	            return u;
-	          }
-	        });
-	      });
-	    };
-
-	    self.removeUser = function(user){
-	      $http.delete(userRoute + user.id, {
-	        headers: AuthService.getToken()
-	      })
-	      .then((result)=>{
-	        self.users = self.users.filter((u)=> u.id !=u.id);
-	      });
-	    };
-
-	//auth routes
-
-	    // self.signUp = function(user){
-	    //   AuthService.createUser(user, (err, res)=>{
-	    //     if(err) return console.log(err);
-	    //     console.log('hitting' + res);
-	    //   });
-	    // };
-
-	    self.logOut = function(user){
-	      AuthService.signOut((err, res)=>{
-	        if(err) return console.log(err);
-	        console.log('hitting' + res);
-	        $location.path('/signin')
-	      });
-	    };
-
-
-	    self.logIn = function(user){
-	      // console.dir(angular.toJson(user));
-	      AuthService.signIn(user, (err, res)=>{
-	        if(err) return console.log(err);
-	        console.log('Log in res.body : ' + angular.toJson(res.body));
-	        console.log('Log in res : ' + angular.toJson(res));
-	        $location.path('/dashboard');
-	      });
-	    };
-	  }]);
-
-	};
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(app){
-
-	  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
-	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
-	    this.profiles = ['profile'];
-	    this.editingProfile = false;
-	    this.newProfile = {};
-
-	    this.getProfile = function(){
-	      var tokenFromLocalStorage = $window.localStorage.token;
-	      console.log('localStorage?? ' + $window.localStorage.token);
-	      $http.get(profileRoute + '3/' ,{
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Token ' + tokenFromLocalStorage
-	        }
-	      })
-	      .then((result)=>{
-	        this.profiles = result.data;
-	      }, function(error){
-	        console.log(error);
-	      });
-
-	    };
-
-	    this.goToGmapView = function(){
-	      console.log('searching!!!');
-	      $location.path('/search');
-	    };
-
-	    this.goToAboutMe = function(){
-	      $location.path('/about');
-	    };
-	    // this.getProfile = function(){
-	    //   $http.get(profileRoute)
-	    // this.createProfile = function(profile){
-	    //   $http.post(profileRoute, user)
-	    //     .then((result)=>{
-	    //       console.log('post is hit');
-	    //       this.profiles.push(result.data);
-	    //     });
-	    //   };
-	    //***********************
-	    //getting dashboard data
-	    //***********************
-	    this.dashboardView = function(){
-	      $http.get(profileRoute, {
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Basic ' + $window.localStorage.token
-	        }
-	      }).then((res)=>{
-	        console.log('Profile Result : ' + JSON.stringify(res));
-	        $location.path('/dashboard');
-	      });
-	    };
-
-	    this.updateProfile = function(profile){
-	      $http.put(profileRoute + profile.id)
-	        .then((result)=>{
-	          this.profiles = this.profiles.map((p)=>{
-	            if(p.id === profile.id){
-	              return profile;
-	            } else {
-	              return p;
-	            }
-	          });
-	        });
-	    };
-
-	    this.editButtonShow = function(){
-	      this.editingProfile = true;
-	    };
-
-	    this.submit = function(profile){
-	      if(this.profiles){
-	        this.profiles.push(this.profiles);
-	        this.profiles = '';
-	      }
-
-	    };
-
-	  }]);
-
-	  app.controller('FileController', [ 'fileUpload', function( fileUpload){
-
-	    this.uploadFile = function(){
-	      var file = this.myFile;
-	      console.log('file is ' );
-	      console.dir(file);
-	      var uploadUrl = '/fileUpload';
-	      fileUpload.uploadFileToUrl(file, uploadUrl);
-	    };
-
-
-	  }]);
 
 	};
 
