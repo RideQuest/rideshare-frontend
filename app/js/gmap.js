@@ -71,9 +71,16 @@
       }
     });
   };
+  Gmap.markerOnStartPoint = function(cords){
+    var marker = new google.maps.Marker({
+      position: cords,
+      map: map,
+      clickable: true,
+      animation: google.maps.Animation.DROP
+    });
+  }
 
   Gmap.markersOnOrigins = function(markerPoints){
-
     var marker;
     var markerImg = 'img/ride-marker.png';
     markerPoints.forEach((startingPoint)=>{
@@ -85,7 +92,6 @@
         icon: markerImg
       });
     });
-
   };
 
   module.Gmap = Gmap;

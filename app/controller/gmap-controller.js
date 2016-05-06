@@ -31,11 +31,14 @@ module.exports = function(app){
     };
 
     //Search radius
-    this.searchAvailWithinRadius = function(data){
+    this.searchAvailWithinRadius = function(data, cb){
+      cb = this.sendCoordinates;
+
       $window.Gmap.convertAddressForData(data, (coordinates)=>{
-        $window.Gmap.markersOnOrigins(coordinates);
+        $window.Gmap.markerOnStartPoint(coordinates);
         var obj = this.coordsIntoObj(coordinates);
-        console.log('Objecttttt : ' + obj);
+        console.log('Objecttttt : ' + JSON.stringify(obj));
+        cb(obj)
       });
     };
 
@@ -64,7 +67,7 @@ module.exports = function(app){
           'Authorization': 'Token ' + tokenFromLocalStorage
         }
       }).then((res)=>{
-        console.log('Back from awesome BE server! : ' + res);
+        console.log('Back from awesome BE server! : ' + JSON.stringify(res));
       });
     };
 

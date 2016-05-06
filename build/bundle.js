@@ -45,11 +45,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(10);
-	__webpack_require__(9);
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
+	__webpack_require__(10);
+	__webpack_require__(9);
 	__webpack_require__(13);
 	__webpack_require__(14);
 	__webpack_require__(7);
@@ -32076,11 +32076,14 @@
 	    };
 
 	    //Search radius
-	    this.searchAvailWithinRadius = function(data){
+	    this.searchAvailWithinRadius = function(data, cb){
+	      cb = this.sendCoordinates;
+
 	      $window.Gmap.convertAddressForData(data, (coordinates)=>{
-	        $window.Gmap.markersOnOrigins(coordinates);
+	        $window.Gmap.markerOnStartPoint(coordinates);
 	        var obj = this.coordsIntoObj(coordinates);
-	        console.log('Objecttttt : ' + obj);
+	        console.log('Objecttttt : ' + JSON.stringify(obj));
+	        cb(obj)
 	      });
 	    };
 
@@ -32109,7 +32112,7 @@
 	          'Authorization': 'Token ' + tokenFromLocalStorage
 	        }
 	      }).then((res)=>{
-	        console.log('Back from awesome BE server! : ' + res);
+	        console.log('Back from awesome BE server! : ' + JSON.stringify(res));
 	      });
 	    };
 
@@ -32697,9 +32700,16 @@
 	      }
 	    });
 	  };
+	  Gmap.markerOnStartPoint = function(cords){
+	    var marker = new google.maps.Marker({
+	      position: cords,
+	      map: map,
+	      clickable: true,
+	      animation: google.maps.Animation.DROP
+	    });
+	  }
 
 	  Gmap.markersOnOrigins = function(markerPoints){
-
 	    var marker;
 	    var markerImg = 'img/ride-marker.png';
 	    markerPoints.forEach((startingPoint)=>{
@@ -32711,7 +32721,6 @@
 	        icon: markerImg
 	      });
 	    });
-
 	  };
 
 	  module.Gmap = Gmap;
