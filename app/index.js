@@ -41,9 +41,9 @@ app.config(['$routeProvider', function(routeProvider){
     controller: 'UserController',
     templateUrl: './views/home.html'
   })
-  .when('/signup', {
-    controller: 'UserController',
-    template: './templates/dashboard.html'
+  .when('/about', {
+    controller: 'ProfileController',
+    templateUrl: './templates/about-us.html'
   })
   .when('/profile', {
     controller: 'ProfileController',

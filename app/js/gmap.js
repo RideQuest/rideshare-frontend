@@ -10,7 +10,7 @@
     map = new google.maps.Map(document.getElementById('map'),{
       center: centerCord,
       scrollwheel: false,
-      zoom: 12
+      zoom: 13
     });
   };
 
@@ -71,10 +71,19 @@
       }
     });
   };
+  Gmap.markerOnStartPoint = function(cords){
+    var marker = new google.maps.Marker({
+      position: cords,
+      map: map,
+      clickable: true,
+      animation: google.maps.Animation.DROP
+    });
+  }
 
   Gmap.markersOnOrigins = function(markerPoints){
     var marker;
     var markerImg = 'img/ride-marker.png';
+    console.log('hitting marker fn ' + markerPoints + 'here')
     markerPoints.forEach((startingPoint)=>{
       marker = new google.maps.Marker({
         position: startingPoint,
@@ -84,7 +93,6 @@
         icon: markerImg
       });
     });
-
   };
 
   module.Gmap = Gmap;
