@@ -20,7 +20,10 @@
     "express": "^4.13.4",
     "gulp-sass": "^2.3.1",
     "gulp-sourcemaps": "^2.0.0-alpha",
+    "jasmine-core": "^2.4.1",
     "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-jasmine": "^1.0.2",
     "request": "^2.72.0"
   },
   "devDependencies": {

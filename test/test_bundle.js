@@ -45,78 +45,121 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(13);
-	__webpack_require__(14);
-	__webpack_require__(6);
-	__webpack_require__(12);
-	__webpack_require__(11);
-	__webpack_require__(7);
-	__webpack_require__(15);
-	__webpack_require__(8);
-	__webpack_require__(10);
-	module.exports = __webpack_require__(9);
+	const angular = __webpack_require__(2);
+	__webpack_require__(4);
+
+	describe('should test something'), ()=> {
+	  var profileController;
+	  it('should test', ()=>{
+	    expect(true).toBe(true);
+	  });
+	  beforeEach(angular.mock.module('rideShareApp'))
+	  beforeEach(angular.mock.inject(function($controller){
+
+	  }))
+
+	}
 
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
-	var angular = __webpack_require__(2);
-	__webpack_require__(4);
+	module.exports = function(app){
 
-	var app = angular.module('rideShareApp', ['ngRoute']);
+	  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
+	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/3/';
+	    // const self= this;
+	    this.profiles = ['profile'];
+	    this.editingProfile = false;
+	    this.newProfile = {};
+	    console.log('hit profile');
 
-	//controller
-	__webpack_require__(6)(app);
+	    this.getProfile = function(){
+	      var tokenFromLocalStorage = $window.localStorage.token;
+	      console.log('localStorage?? ' + $window.localStorage.token);
+	      $http.get(profileRoute + '3/' ,{
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
+	      .then((result)=>{
+	        console.log('Get Profile ' + result);
+	        this.profiles = result.data;
+	      }, function(error){
+	        console.log(error);
+	      });
 
-	__webpack_require__(7)(app);
-	__webpack_require__(8)(app);
-	__webpack_require__(9)(app);
-	__webpack_require__(10)(app);
+	    };
 
-	__webpack_require__(11)(app);
-	__webpack_require__(12)(app);
+	    // this.getProfile = function(){
+	    //   $http.get(profileRoute)
+	    // this.createProfile = function(profile){
+	    //   $http.post(profileRoute, user)
+	    //     .then((result)=>{
+	    //       console.log('post is hit');
+	    //       this.profiles.push(result.data);
+	    //     });
+	    //   };
+	    //***********************
+	    //getting dashboard data
+	    //***********************
+	    this.dashboardView = function(){
+	      $http.get(profileRoute, {
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Basic ' + $window.localStorage.token
+	        }
+	      }).then((res)=>{
+	        console.log('Profile Result : ' + JSON.stringify(res));
+	        $location.path('/dashboard');
+	      });
+	    };
+
+	    this.updateProfile = function(profile){
+	      $http.put(profileRoute + profile.id)
+	        .then((result)=>{
+	          this.profiles = this.profiles.map((p)=>{
+	            if(p.id === profile.id){
+	              return profile;
+	            } else {
+	              return p;
+	            }
+	          });
+	        });
+	    };
+
+	    this.editButtonShow = function(){
+	      this.editingProfile = true;
+	    };
+
+	    this.submit = function(profile){
+	      if(this.profiles){
+	        this.profiles.push(this.profiles);
+	        this.profiles = '';
+	      }
+
+	    };
+
+	  }]);
+
+	  app.controller('FileController', [ 'fileUpload', function( fileUpload){
+
+	    this.uploadFile = function(){
+	      var file = this.myFile;
+	      console.log('file is ' );
+	      console.dir(file);
+	      var uploadUrl = '/fileUpload';
+	      fileUpload.uploadFileToUrl(file, uploadUrl);
+	    };
 
 
+	  }]);
 
-	//angular router
-
-	app.config(['$routeProvider', function(routeProvider){
-	  routeProvider
-
-	  //home
-	  .when('/', {
-	    controller: 'UserController',
-	    templateUrl: './views/01_signup_in.html'
-	  })
-	  // .when('/home', {
-	  //   controller: 'UserController',
-	  //   templateUrl: './views/home.html'
-	  // })
-
-	  .when('/dashboard', {
-	    controller: 'UserController',
-	    templateUrl: './templates/dashboard.html'
-	  })
-	  .when('/home', {
-	    controller: 'UserController',
-	    templateUrl: './views/home.html'
-	  })
-	  .when('/about', {
-	    controller: 'ProfileController',
-	    templateUrl: './templates/about-us.html'
-	  })
-	  .when('/profile', {
-	    controller: 'ProfileController',
-	    templateUrl: './templates/user-profile.html'
-	  })
-	  .when('/search', {
-	    controller: 'ProfileController',
-	    templateUrl: './templates/gmap-view.html'
-	  });
-	}]);
+	};
 
 
 /***/ },
@@ -31002,14 +31045,6 @@
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(5);
-	module.exports = 'ngRoute';
-
-
-/***/ },
-/* 5 */
 /***/ function(module, exports) {
 
 	/**
@@ -31017,224 +31052,1584 @@
 	 * (c) 2010-2016 Google, Inc. http://angularjs.org
 	 * License: MIT
 	 */
-	(function(window, angular) {'use strict';
+	(function(window, angular) {
+
+	'use strict';
 
 	/**
-	 * @ngdoc module
-	 * @name ngRoute
+	 * @ngdoc object
+	 * @name angular.mock
 	 * @description
 	 *
-	 * # ngRoute
-	 *
-	 * The `ngRoute` module provides routing and deeplinking services and directives for angular apps.
-	 *
-	 * ## Example
-	 * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
-	 *
-	 *
-	 * <div doc-module-components="ngRoute"></div>
+	 * Namespace from 'angular-mocks.js' which contains testing related code.
 	 */
-	 /* global -ngRouteModule */
-	var ngRouteModule = angular.module('ngRoute', ['ng']).
-	                        provider('$route', $RouteProvider),
-	    $routeMinErr = angular.$$minErr('ngRoute');
+	angular.mock = {};
+
+	/**
+	 * ! This is a private undocumented service !
+	 *
+	 * @name $browser
+	 *
+	 * @description
+	 * This service is a mock implementation of {@link ng.$browser}. It provides fake
+	 * implementation for commonly used browser apis that are hard to test, e.g. setTimeout, xhr,
+	 * cookies, etc...
+	 *
+	 * The api of this service is the same as that of the real {@link ng.$browser $browser}, except
+	 * that there are several helper methods available which can be used in tests.
+	 */
+	angular.mock.$BrowserProvider = function() {
+	  this.$get = function() {
+	    return new angular.mock.$Browser();
+	  };
+	};
+
+	angular.mock.$Browser = function() {
+	  var self = this;
+
+	  this.isMock = true;
+	  self.$$url = "http://server/";
+	  self.$$lastUrl = self.$$url; // used by url polling fn
+	  self.pollFns = [];
+
+	  // TODO(vojta): remove this temporary api
+	  self.$$completeOutstandingRequest = angular.noop;
+	  self.$$incOutstandingRequestCount = angular.noop;
+
+
+	  // register url polling fn
+
+	  self.onUrlChange = function(listener) {
+	    self.pollFns.push(
+	      function() {
+	        if (self.$$lastUrl !== self.$$url || self.$$state !== self.$$lastState) {
+	          self.$$lastUrl = self.$$url;
+	          self.$$lastState = self.$$state;
+	          listener(self.$$url, self.$$state);
+	        }
+	      }
+	    );
+
+	    return listener;
+	  };
+
+	  self.$$applicationDestroyed = angular.noop;
+	  self.$$checkUrlChange = angular.noop;
+
+	  self.deferredFns = [];
+	  self.deferredNextId = 0;
+
+	  self.defer = function(fn, delay) {
+	    delay = delay || 0;
+	    self.deferredFns.push({time:(self.defer.now + delay), fn:fn, id: self.deferredNextId});
+	    self.deferredFns.sort(function(a, b) { return a.time - b.time;});
+	    return self.deferredNextId++;
+	  };
+
+
+	  /**
+	   * @name $browser#defer.now
+	   *
+	   * @description
+	   * Current milliseconds mock time.
+	   */
+	  self.defer.now = 0;
+
+
+	  self.defer.cancel = function(deferId) {
+	    var fnIndex;
+
+	    angular.forEach(self.deferredFns, function(fn, index) {
+	      if (fn.id === deferId) fnIndex = index;
+	    });
+
+	    if (angular.isDefined(fnIndex)) {
+	      self.deferredFns.splice(fnIndex, 1);
+	      return true;
+	    }
+
+	    return false;
+	  };
+
+
+	  /**
+	   * @name $browser#defer.flush
+	   *
+	   * @description
+	   * Flushes all pending requests and executes the defer callbacks.
+	   *
+	   * @param {number=} number of milliseconds to flush. See {@link #defer.now}
+	   */
+	  self.defer.flush = function(delay) {
+	    if (angular.isDefined(delay)) {
+	      self.defer.now += delay;
+	    } else {
+	      if (self.deferredFns.length) {
+	        self.defer.now = self.deferredFns[self.deferredFns.length - 1].time;
+	      } else {
+	        throw new Error('No deferred tasks to be flushed');
+	      }
+	    }
+
+	    while (self.deferredFns.length && self.deferredFns[0].time <= self.defer.now) {
+	      self.deferredFns.shift().fn();
+	    }
+	  };
+
+	  self.$$baseHref = '/';
+	  self.baseHref = function() {
+	    return this.$$baseHref;
+	  };
+	};
+	angular.mock.$Browser.prototype = {
+
+	  /**
+	   * @name $browser#poll
+	   *
+	   * @description
+	   * run all fns in pollFns
+	   */
+	  poll: function poll() {
+	    angular.forEach(this.pollFns, function(pollFn) {
+	      pollFn();
+	    });
+	  },
+
+	  url: function(url, replace, state) {
+	    if (angular.isUndefined(state)) {
+	      state = null;
+	    }
+	    if (url) {
+	      this.$$url = url;
+	      // Native pushState serializes & copies the object; simulate it.
+	      this.$$state = angular.copy(state);
+	      return this;
+	    }
+
+	    return this.$$url;
+	  },
+
+	  state: function() {
+	    return this.$$state;
+	  },
+
+	  notifyWhenNoOutstandingRequests: function(fn) {
+	    fn();
+	  }
+	};
+
 
 	/**
 	 * @ngdoc provider
-	 * @name $routeProvider
+	 * @name $exceptionHandlerProvider
 	 *
 	 * @description
-	 *
-	 * Used for configuring routes.
-	 *
-	 * ## Example
-	 * See {@link ngRoute.$route#example $route} for an example of configuring and using `ngRoute`.
-	 *
-	 * ## Dependencies
-	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
+	 * Configures the mock implementation of {@link ng.$exceptionHandler} to rethrow or to log errors
+	 * passed to the `$exceptionHandler`.
 	 */
-	function $RouteProvider() {
-	  function inherit(parent, extra) {
-	    return angular.extend(Object.create(parent), extra);
-	  }
 
-	  var routes = {};
+	/**
+	 * @ngdoc service
+	 * @name $exceptionHandler
+	 *
+	 * @description
+	 * Mock implementation of {@link ng.$exceptionHandler} that rethrows or logs errors passed
+	 * to it. See {@link ngMock.$exceptionHandlerProvider $exceptionHandlerProvider} for configuration
+	 * information.
+	 *
+	 *
+	 * ```js
+	 *   describe('$exceptionHandlerProvider', function() {
+	 *
+	 *     it('should capture log messages and exceptions', function() {
+	 *
+	 *       module(function($exceptionHandlerProvider) {
+	 *         $exceptionHandlerProvider.mode('log');
+	 *       });
+	 *
+	 *       inject(function($log, $exceptionHandler, $timeout) {
+	 *         $timeout(function() { $log.log(1); });
+	 *         $timeout(function() { $log.log(2); throw 'banana peel'; });
+	 *         $timeout(function() { $log.log(3); });
+	 *         expect($exceptionHandler.errors).toEqual([]);
+	 *         expect($log.assertEmpty());
+	 *         $timeout.flush();
+	 *         expect($exceptionHandler.errors).toEqual(['banana peel']);
+	 *         expect($log.log.logs).toEqual([[1], [2], [3]]);
+	 *       });
+	 *     });
+	 *   });
+	 * ```
+	 */
+
+	angular.mock.$ExceptionHandlerProvider = function() {
+	  var handler;
 
 	  /**
 	   * @ngdoc method
-	   * @name $routeProvider#when
-	   *
-	   * @param {string} path Route path (matched against `$location.path`). If `$location.path`
-	   *    contains redundant trailing slash or is missing one, the route will still match and the
-	   *    `$location.path` will be updated to add or drop the trailing slash to exactly match the
-	   *    route definition.
-	   *
-	   *    * `path` can contain named groups starting with a colon: e.g. `:name`. All characters up
-	   *        to the next slash are matched and stored in `$routeParams` under the given `name`
-	   *        when the route matches.
-	   *    * `path` can contain named groups starting with a colon and ending with a star:
-	   *        e.g.`:name*`. All characters are eagerly stored in `$routeParams` under the given `name`
-	   *        when the route matches.
-	   *    * `path` can contain optional named groups with a question mark: e.g.`:name?`.
-	   *
-	   *    For example, routes like `/color/:color/largecode/:largecode*\/edit` will match
-	   *    `/color/brown/largecode/code/with/slashes/edit` and extract:
-	   *
-	   *    * `color: brown`
-	   *    * `largecode: code/with/slashes`.
-	   *
-	   *
-	   * @param {Object} route Mapping information to be assigned to `$route.current` on route
-	   *    match.
-	   *
-	   *    Object properties:
-	   *
-	   *    - `controller` – `{(string|function()=}` – Controller fn that should be associated with
-	   *      newly created scope or the name of a {@link angular.Module#controller registered
-	   *      controller} if passed as a string.
-	   *    - `controllerAs` – `{string=}` – An identifier name for a reference to the controller.
-	   *      If present, the controller will be published to scope under the `controllerAs` name.
-	   *    - `template` – `{string=|function()=}` – html template as a string or a function that
-	   *      returns an html template as a string which should be used by {@link
-	   *      ngRoute.directive:ngView ngView} or {@link ng.directive:ngInclude ngInclude} directives.
-	   *      This property takes precedence over `templateUrl`.
-	   *
-	   *      If `template` is a function, it will be called with the following parameters:
-	   *
-	   *      - `{Array.<Object>}` - route parameters extracted from the current
-	   *        `$location.path()` by applying the current route
-	   *
-	   *    - `templateUrl` – `{string=|function()=}` – path or function that returns a path to an html
-	   *      template that should be used by {@link ngRoute.directive:ngView ngView}.
-	   *
-	   *      If `templateUrl` is a function, it will be called with the following parameters:
-	   *
-	   *      - `{Array.<Object>}` - route parameters extracted from the current
-	   *        `$location.path()` by applying the current route
-	   *
-	   *    - `resolve` - `{Object.<string, function>=}` - An optional map of dependencies which should
-	   *      be injected into the controller. If any of these dependencies are promises, the router
-	   *      will wait for them all to be resolved or one to be rejected before the controller is
-	   *      instantiated.
-	   *      If all the promises are resolved successfully, the values of the resolved promises are
-	   *      injected and {@link ngRoute.$route#$routeChangeSuccess $routeChangeSuccess} event is
-	   *      fired. If any of the promises are rejected the
-	   *      {@link ngRoute.$route#$routeChangeError $routeChangeError} event is fired.
-	   *      For easier access to the resolved dependencies from the template, the `resolve` map will
-	   *      be available on the scope of the route, under `$resolve` (by default) or a custom name
-	   *      specified by the `resolveAs` property (see below). This can be particularly useful, when
-	   *      working with {@link angular.Module#component components} as route templates.<br />
-	   *      <div class="alert alert-warning">
-	   *        **Note:** If your scope already contains a property with this name, it will be hidden
-	   *        or overwritten. Make sure, you specify an appropriate name for this property, that
-	   *        does not collide with other properties on the scope.
-	   *      </div>
-	   *      The map object is:
-	   *
-	   *      - `key` – `{string}`: a name of a dependency to be injected into the controller.
-	   *      - `factory` - `{string|function}`: If `string` then it is an alias for a service.
-	   *        Otherwise if function, then it is {@link auto.$injector#invoke injected}
-	   *        and the return value is treated as the dependency. If the result is a promise, it is
-	   *        resolved before its value is injected into the controller. Be aware that
-	   *        `ngRoute.$routeParams` will still refer to the previous route within these resolve
-	   *        functions.  Use `$route.current.params` to access the new route parameters, instead.
-	   *
-	   *    - `resolveAs` - `{string=}` - The name under which the `resolve` map will be available on
-	   *      the scope of the route. If omitted, defaults to `$resolve`.
-	   *
-	   *    - `redirectTo` – `{(string|function())=}` – value to update
-	   *      {@link ng.$location $location} path with and trigger route redirection.
-	   *
-	   *      If `redirectTo` is a function, it will be called with the following parameters:
-	   *
-	   *      - `{Object.<string>}` - route parameters extracted from the current
-	   *        `$location.path()` by applying the current route templateUrl.
-	   *      - `{string}` - current `$location.path()`
-	   *      - `{Object}` - current `$location.search()`
-	   *
-	   *      The custom `redirectTo` function is expected to return a string which will be used
-	   *      to update `$location.path()` and `$location.search()`.
-	   *
-	   *    - `[reloadOnSearch=true]` - `{boolean=}` - reload route when only `$location.search()`
-	   *      or `$location.hash()` changes.
-	   *
-	   *      If the option is set to `false` and url in the browser changes, then
-	   *      `$routeUpdate` event is broadcasted on the root scope.
-	   *
-	   *    - `[caseInsensitiveMatch=false]` - `{boolean=}` - match routes without being case sensitive
-	   *
-	   *      If the option is set to `true`, then the particular route can be matched without being
-	   *      case sensitive
-	   *
-	   * @returns {Object} self
+	   * @name $exceptionHandlerProvider#mode
 	   *
 	   * @description
-	   * Adds a new route definition to the `$route` service.
+	   * Sets the logging mode.
+	   *
+	   * @param {string} mode Mode of operation, defaults to `rethrow`.
+	   *
+	   *   - `log`: Sometimes it is desirable to test that an error is thrown, for this case the `log`
+	   *            mode stores an array of errors in `$exceptionHandler.errors`, to allow later
+	   *            assertion of them. See {@link ngMock.$log#assertEmpty assertEmpty()} and
+	   *            {@link ngMock.$log#reset reset()}
+	   *   - `rethrow`: If any errors are passed to the handler in tests, it typically means that there
+	   *                is a bug in the application or test, so this mock will make these tests fail.
+	   *                For any implementations that expect exceptions to be thrown, the `rethrow` mode
+	   *                will also maintain a log of thrown errors.
 	   */
-	  this.when = function(path, route) {
-	    //copy original route object to preserve params inherited from proto chain
-	    var routeCopy = angular.copy(route);
-	    if (angular.isUndefined(routeCopy.reloadOnSearch)) {
-	      routeCopy.reloadOnSearch = true;
-	    }
-	    if (angular.isUndefined(routeCopy.caseInsensitiveMatch)) {
-	      routeCopy.caseInsensitiveMatch = this.caseInsensitiveMatch;
-	    }
-	    routes[path] = angular.extend(
-	      routeCopy,
-	      path && pathRegExp(path, routeCopy)
-	    );
+	  this.mode = function(mode) {
 
-	    // create redirection for trailing slashes
-	    if (path) {
-	      var redirectPath = (path[path.length - 1] == '/')
-	            ? path.substr(0, path.length - 1)
-	            : path + '/';
+	    switch (mode) {
+	      case 'log':
+	      case 'rethrow':
+	        var errors = [];
+	        handler = function(e) {
+	          if (arguments.length == 1) {
+	            errors.push(e);
+	          } else {
+	            errors.push([].slice.call(arguments, 0));
+	          }
+	          if (mode === "rethrow") {
+	            throw e;
+	          }
+	        };
+	        handler.errors = errors;
+	        break;
+	      default:
+	        throw new Error("Unknown mode '" + mode + "', only 'log'/'rethrow' modes are allowed!");
+	    }
+	  };
 
-	      routes[redirectPath] = angular.extend(
-	        {redirectTo: path},
-	        pathRegExp(redirectPath, routeCopy)
-	      );
+	  this.$get = function() {
+	    return handler;
+	  };
+
+	  this.mode('rethrow');
+	};
+
+
+	/**
+	 * @ngdoc service
+	 * @name $log
+	 *
+	 * @description
+	 * Mock implementation of {@link ng.$log} that gathers all logged messages in arrays
+	 * (one array per logging level). These arrays are exposed as `logs` property of each of the
+	 * level-specific log function, e.g. for level `error` the array is exposed as `$log.error.logs`.
+	 *
+	 */
+	angular.mock.$LogProvider = function() {
+	  var debug = true;
+
+	  function concat(array1, array2, index) {
+	    return array1.concat(Array.prototype.slice.call(array2, index));
+	  }
+
+	  this.debugEnabled = function(flag) {
+	    if (angular.isDefined(flag)) {
+	      debug = flag;
+	      return this;
+	    } else {
+	      return debug;
+	    }
+	  };
+
+	  this.$get = function() {
+	    var $log = {
+	      log: function() { $log.log.logs.push(concat([], arguments, 0)); },
+	      warn: function() { $log.warn.logs.push(concat([], arguments, 0)); },
+	      info: function() { $log.info.logs.push(concat([], arguments, 0)); },
+	      error: function() { $log.error.logs.push(concat([], arguments, 0)); },
+	      debug: function() {
+	        if (debug) {
+	          $log.debug.logs.push(concat([], arguments, 0));
+	        }
+	      }
+	    };
+
+	    /**
+	     * @ngdoc method
+	     * @name $log#reset
+	     *
+	     * @description
+	     * Reset all of the logging arrays to empty.
+	     */
+	    $log.reset = function() {
+	      /**
+	       * @ngdoc property
+	       * @name $log#log.logs
+	       *
+	       * @description
+	       * Array of messages logged using {@link ng.$log#log `log()`}.
+	       *
+	       * @example
+	       * ```js
+	       * $log.log('Some Log');
+	       * var first = $log.log.logs.unshift();
+	       * ```
+	       */
+	      $log.log.logs = [];
+	      /**
+	       * @ngdoc property
+	       * @name $log#info.logs
+	       *
+	       * @description
+	       * Array of messages logged using {@link ng.$log#info `info()`}.
+	       *
+	       * @example
+	       * ```js
+	       * $log.info('Some Info');
+	       * var first = $log.info.logs.unshift();
+	       * ```
+	       */
+	      $log.info.logs = [];
+	      /**
+	       * @ngdoc property
+	       * @name $log#warn.logs
+	       *
+	       * @description
+	       * Array of messages logged using {@link ng.$log#warn `warn()`}.
+	       *
+	       * @example
+	       * ```js
+	       * $log.warn('Some Warning');
+	       * var first = $log.warn.logs.unshift();
+	       * ```
+	       */
+	      $log.warn.logs = [];
+	      /**
+	       * @ngdoc property
+	       * @name $log#error.logs
+	       *
+	       * @description
+	       * Array of messages logged using {@link ng.$log#error `error()`}.
+	       *
+	       * @example
+	       * ```js
+	       * $log.error('Some Error');
+	       * var first = $log.error.logs.unshift();
+	       * ```
+	       */
+	      $log.error.logs = [];
+	        /**
+	       * @ngdoc property
+	       * @name $log#debug.logs
+	       *
+	       * @description
+	       * Array of messages logged using {@link ng.$log#debug `debug()`}.
+	       *
+	       * @example
+	       * ```js
+	       * $log.debug('Some Error');
+	       * var first = $log.debug.logs.unshift();
+	       * ```
+	       */
+	      $log.debug.logs = [];
+	    };
+
+	    /**
+	     * @ngdoc method
+	     * @name $log#assertEmpty
+	     *
+	     * @description
+	     * Assert that all of the logging methods have no logged messages. If any messages are present,
+	     * an exception is thrown.
+	     */
+	    $log.assertEmpty = function() {
+	      var errors = [];
+	      angular.forEach(['error', 'warn', 'info', 'log', 'debug'], function(logLevel) {
+	        angular.forEach($log[logLevel].logs, function(log) {
+	          angular.forEach(log, function(logItem) {
+	            errors.push('MOCK $log (' + logLevel + '): ' + String(logItem) + '\n' +
+	                        (logItem.stack || ''));
+	          });
+	        });
+	      });
+	      if (errors.length) {
+	        errors.unshift("Expected $log to be empty! Either a message was logged unexpectedly, or " +
+	          "an expected log message was not checked and removed:");
+	        errors.push('');
+	        throw new Error(errors.join('\n---------\n'));
+	      }
+	    };
+
+	    $log.reset();
+	    return $log;
+	  };
+	};
+
+
+	/**
+	 * @ngdoc service
+	 * @name $interval
+	 *
+	 * @description
+	 * Mock implementation of the $interval service.
+	 *
+	 * Use {@link ngMock.$interval#flush `$interval.flush(millis)`} to
+	 * move forward by `millis` milliseconds and trigger any functions scheduled to run in that
+	 * time.
+	 *
+	 * @param {function()} fn A function that should be called repeatedly.
+	 * @param {number} delay Number of milliseconds between each function call.
+	 * @param {number=} [count=0] Number of times to repeat. If not set, or 0, will repeat
+	 *   indefinitely.
+	 * @param {boolean=} [invokeApply=true] If set to `false` skips model dirty checking, otherwise
+	 *   will invoke `fn` within the {@link ng.$rootScope.Scope#$apply $apply} block.
+	 * @param {...*=} Pass additional parameters to the executed function.
+	 * @returns {promise} A promise which will be notified on each iteration.
+	 */
+	angular.mock.$IntervalProvider = function() {
+	  this.$get = ['$browser', '$rootScope', '$q', '$$q',
+	       function($browser,   $rootScope,   $q,   $$q) {
+	    var repeatFns = [],
+	        nextRepeatId = 0,
+	        now = 0;
+
+	    var $interval = function(fn, delay, count, invokeApply) {
+	      var hasParams = arguments.length > 4,
+	          args = hasParams ? Array.prototype.slice.call(arguments, 4) : [],
+	          iteration = 0,
+	          skipApply = (angular.isDefined(invokeApply) && !invokeApply),
+	          deferred = (skipApply ? $$q : $q).defer(),
+	          promise = deferred.promise;
+
+	      count = (angular.isDefined(count)) ? count : 0;
+	      promise.then(null, null, (!hasParams) ? fn : function() {
+	        fn.apply(null, args);
+	      });
+
+	      promise.$$intervalId = nextRepeatId;
+
+	      function tick() {
+	        deferred.notify(iteration++);
+
+	        if (count > 0 && iteration >= count) {
+	          var fnIndex;
+	          deferred.resolve(iteration);
+
+	          angular.forEach(repeatFns, function(fn, index) {
+	            if (fn.id === promise.$$intervalId) fnIndex = index;
+	          });
+
+	          if (angular.isDefined(fnIndex)) {
+	            repeatFns.splice(fnIndex, 1);
+	          }
+	        }
+
+	        if (skipApply) {
+	          $browser.defer.flush();
+	        } else {
+	          $rootScope.$apply();
+	        }
+	      }
+
+	      repeatFns.push({
+	        nextTime:(now + delay),
+	        delay: delay,
+	        fn: tick,
+	        id: nextRepeatId,
+	        deferred: deferred
+	      });
+	      repeatFns.sort(function(a, b) { return a.nextTime - b.nextTime;});
+
+	      nextRepeatId++;
+	      return promise;
+	    };
+	    /**
+	     * @ngdoc method
+	     * @name $interval#cancel
+	     *
+	     * @description
+	     * Cancels a task associated with the `promise`.
+	     *
+	     * @param {promise} promise A promise from calling the `$interval` function.
+	     * @returns {boolean} Returns `true` if the task was successfully cancelled.
+	     */
+	    $interval.cancel = function(promise) {
+	      if (!promise) return false;
+	      var fnIndex;
+
+	      angular.forEach(repeatFns, function(fn, index) {
+	        if (fn.id === promise.$$intervalId) fnIndex = index;
+	      });
+
+	      if (angular.isDefined(fnIndex)) {
+	        repeatFns[fnIndex].deferred.reject('canceled');
+	        repeatFns.splice(fnIndex, 1);
+	        return true;
+	      }
+
+	      return false;
+	    };
+
+	    /**
+	     * @ngdoc method
+	     * @name $interval#flush
+	     * @description
+	     *
+	     * Runs interval tasks scheduled to be run in the next `millis` milliseconds.
+	     *
+	     * @param {number=} millis maximum timeout amount to flush up until.
+	     *
+	     * @return {number} The amount of time moved forward.
+	     */
+	    $interval.flush = function(millis) {
+	      now += millis;
+	      while (repeatFns.length && repeatFns[0].nextTime <= now) {
+	        var task = repeatFns[0];
+	        task.fn();
+	        task.nextTime += task.delay;
+	        repeatFns.sort(function(a, b) { return a.nextTime - b.nextTime;});
+	      }
+	      return millis;
+	    };
+
+	    return $interval;
+	  }];
+	};
+
+
+	/* jshint -W101 */
+	/* The R_ISO8061_STR regex is never going to fit into the 100 char limit!
+	 * This directive should go inside the anonymous function but a bug in JSHint means that it would
+	 * not be enacted early enough to prevent the warning.
+	 */
+	var R_ISO8061_STR = /^(-?\d{4})-?(\d\d)-?(\d\d)(?:T(\d\d)(?:\:?(\d\d)(?:\:?(\d\d)(?:\.(\d{3}))?)?)?(Z|([+-])(\d\d):?(\d\d)))?$/;
+
+	function jsonStringToDate(string) {
+	  var match;
+	  if (match = string.match(R_ISO8061_STR)) {
+	    var date = new Date(0),
+	        tzHour = 0,
+	        tzMin  = 0;
+	    if (match[9]) {
+	      tzHour = toInt(match[9] + match[10]);
+	      tzMin = toInt(match[9] + match[11]);
+	    }
+	    date.setUTCFullYear(toInt(match[1]), toInt(match[2]) - 1, toInt(match[3]));
+	    date.setUTCHours(toInt(match[4] || 0) - tzHour,
+	                     toInt(match[5] || 0) - tzMin,
+	                     toInt(match[6] || 0),
+	                     toInt(match[7] || 0));
+	    return date;
+	  }
+	  return string;
+	}
+
+	function toInt(str) {
+	  return parseInt(str, 10);
+	}
+
+	function padNumberInMock(num, digits, trim) {
+	  var neg = '';
+	  if (num < 0) {
+	    neg =  '-';
+	    num = -num;
+	  }
+	  num = '' + num;
+	  while (num.length < digits) num = '0' + num;
+	  if (trim) {
+	    num = num.substr(num.length - digits);
+	  }
+	  return neg + num;
+	}
+
+
+	/**
+	 * @ngdoc type
+	 * @name angular.mock.TzDate
+	 * @description
+	 *
+	 * *NOTE*: this is not an injectable instance, just a globally available mock class of `Date`.
+	 *
+	 * Mock of the Date type which has its timezone specified via constructor arg.
+	 *
+	 * The main purpose is to create Date-like instances with timezone fixed to the specified timezone
+	 * offset, so that we can test code that depends on local timezone settings without dependency on
+	 * the time zone settings of the machine where the code is running.
+	 *
+	 * @param {number} offset Offset of the *desired* timezone in hours (fractions will be honored)
+	 * @param {(number|string)} timestamp Timestamp representing the desired time in *UTC*
+	 *
+	 * @example
+	 * !!!! WARNING !!!!!
+	 * This is not a complete Date object so only methods that were implemented can be called safely.
+	 * To make matters worse, TzDate instances inherit stuff from Date via a prototype.
+	 *
+	 * We do our best to intercept calls to "unimplemented" methods, but since the list of methods is
+	 * incomplete we might be missing some non-standard methods. This can result in errors like:
+	 * "Date.prototype.foo called on incompatible Object".
+	 *
+	 * ```js
+	 * var newYearInBratislava = new TzDate(-1, '2009-12-31T23:00:00Z');
+	 * newYearInBratislava.getTimezoneOffset() => -60;
+	 * newYearInBratislava.getFullYear() => 2010;
+	 * newYearInBratislava.getMonth() => 0;
+	 * newYearInBratislava.getDate() => 1;
+	 * newYearInBratislava.getHours() => 0;
+	 * newYearInBratislava.getMinutes() => 0;
+	 * newYearInBratislava.getSeconds() => 0;
+	 * ```
+	 *
+	 */
+	angular.mock.TzDate = function(offset, timestamp) {
+	  var self = new Date(0);
+	  if (angular.isString(timestamp)) {
+	    var tsStr = timestamp;
+
+	    self.origDate = jsonStringToDate(timestamp);
+
+	    timestamp = self.origDate.getTime();
+	    if (isNaN(timestamp)) {
+	      throw {
+	        name: "Illegal Argument",
+	        message: "Arg '" + tsStr + "' passed into TzDate constructor is not a valid date string"
+	      };
+	    }
+	  } else {
+	    self.origDate = new Date(timestamp);
+	  }
+
+	  var localOffset = new Date(timestamp).getTimezoneOffset();
+	  self.offsetDiff = localOffset * 60 * 1000 - offset * 1000 * 60 * 60;
+	  self.date = new Date(timestamp + self.offsetDiff);
+
+	  self.getTime = function() {
+	    return self.date.getTime() - self.offsetDiff;
+	  };
+
+	  self.toLocaleDateString = function() {
+	    return self.date.toLocaleDateString();
+	  };
+
+	  self.getFullYear = function() {
+	    return self.date.getFullYear();
+	  };
+
+	  self.getMonth = function() {
+	    return self.date.getMonth();
+	  };
+
+	  self.getDate = function() {
+	    return self.date.getDate();
+	  };
+
+	  self.getHours = function() {
+	    return self.date.getHours();
+	  };
+
+	  self.getMinutes = function() {
+	    return self.date.getMinutes();
+	  };
+
+	  self.getSeconds = function() {
+	    return self.date.getSeconds();
+	  };
+
+	  self.getMilliseconds = function() {
+	    return self.date.getMilliseconds();
+	  };
+
+	  self.getTimezoneOffset = function() {
+	    return offset * 60;
+	  };
+
+	  self.getUTCFullYear = function() {
+	    return self.origDate.getUTCFullYear();
+	  };
+
+	  self.getUTCMonth = function() {
+	    return self.origDate.getUTCMonth();
+	  };
+
+	  self.getUTCDate = function() {
+	    return self.origDate.getUTCDate();
+	  };
+
+	  self.getUTCHours = function() {
+	    return self.origDate.getUTCHours();
+	  };
+
+	  self.getUTCMinutes = function() {
+	    return self.origDate.getUTCMinutes();
+	  };
+
+	  self.getUTCSeconds = function() {
+	    return self.origDate.getUTCSeconds();
+	  };
+
+	  self.getUTCMilliseconds = function() {
+	    return self.origDate.getUTCMilliseconds();
+	  };
+
+	  self.getDay = function() {
+	    return self.date.getDay();
+	  };
+
+	  // provide this method only on browsers that already have it
+	  if (self.toISOString) {
+	    self.toISOString = function() {
+	      return padNumberInMock(self.origDate.getUTCFullYear(), 4) + '-' +
+	            padNumberInMock(self.origDate.getUTCMonth() + 1, 2) + '-' +
+	            padNumberInMock(self.origDate.getUTCDate(), 2) + 'T' +
+	            padNumberInMock(self.origDate.getUTCHours(), 2) + ':' +
+	            padNumberInMock(self.origDate.getUTCMinutes(), 2) + ':' +
+	            padNumberInMock(self.origDate.getUTCSeconds(), 2) + '.' +
+	            padNumberInMock(self.origDate.getUTCMilliseconds(), 3) + 'Z';
+	    };
+	  }
+
+	  //hide all methods not implemented in this mock that the Date prototype exposes
+	  var unimplementedMethods = ['getUTCDay',
+	      'getYear', 'setDate', 'setFullYear', 'setHours', 'setMilliseconds',
+	      'setMinutes', 'setMonth', 'setSeconds', 'setTime', 'setUTCDate', 'setUTCFullYear',
+	      'setUTCHours', 'setUTCMilliseconds', 'setUTCMinutes', 'setUTCMonth', 'setUTCSeconds',
+	      'setYear', 'toDateString', 'toGMTString', 'toJSON', 'toLocaleFormat', 'toLocaleString',
+	      'toLocaleTimeString', 'toSource', 'toString', 'toTimeString', 'toUTCString', 'valueOf'];
+
+	  angular.forEach(unimplementedMethods, function(methodName) {
+	    self[methodName] = function() {
+	      throw new Error("Method '" + methodName + "' is not implemented in the TzDate mock");
+	    };
+	  });
+
+	  return self;
+	};
+
+	//make "tzDateInstance instanceof Date" return true
+	angular.mock.TzDate.prototype = Date.prototype;
+	/* jshint +W101 */
+
+
+	/**
+	 * @ngdoc service
+	 * @name $animate
+	 *
+	 * @description
+	 * Mock implementation of the {@link ng.$animate `$animate`} service. Exposes two additional methods
+	 * for testing animations.
+	 */
+	angular.mock.animate = angular.module('ngAnimateMock', ['ng'])
+
+	  .config(['$provide', function($provide) {
+
+	    $provide.factory('$$forceReflow', function() {
+	      function reflowFn() {
+	        reflowFn.totalReflows++;
+	      }
+	      reflowFn.totalReflows = 0;
+	      return reflowFn;
+	    });
+
+	    $provide.factory('$$animateAsyncRun', function() {
+	      var queue = [];
+	      var queueFn = function() {
+	        return function(fn) {
+	          queue.push(fn);
+	        };
+	      };
+	      queueFn.flush = function() {
+	        if (queue.length === 0) return false;
+
+	        for (var i = 0; i < queue.length; i++) {
+	          queue[i]();
+	        }
+	        queue = [];
+
+	        return true;
+	      };
+	      return queueFn;
+	    });
+
+	    $provide.decorator('$$animateJs', ['$delegate', function($delegate) {
+	      var runners = [];
+
+	      var animateJsConstructor = function() {
+	        var animator = $delegate.apply($delegate, arguments);
+	        // If no javascript animation is found, animator is undefined
+	        if (animator) {
+	          runners.push(animator);
+	        }
+	        return animator;
+	      };
+
+	      animateJsConstructor.$closeAndFlush = function() {
+	        runners.forEach(function(runner) {
+	          runner.end();
+	        });
+	        runners = [];
+	      };
+
+	      return animateJsConstructor;
+	    }]);
+
+	    $provide.decorator('$animateCss', ['$delegate', function($delegate) {
+	      var runners = [];
+
+	      var animateCssConstructor = function(element, options) {
+	        var animator = $delegate(element, options);
+	        runners.push(animator);
+	        return animator;
+	      };
+
+	      animateCssConstructor.$closeAndFlush = function() {
+	        runners.forEach(function(runner) {
+	          runner.end();
+	        });
+	        runners = [];
+	      };
+
+	      return animateCssConstructor;
+	    }]);
+
+	    $provide.decorator('$animate', ['$delegate', '$timeout', '$browser', '$$rAF', '$animateCss', '$$animateJs',
+	                                    '$$forceReflow', '$$animateAsyncRun', '$rootScope',
+	                            function($delegate,   $timeout,   $browser,   $$rAF,   $animateCss,   $$animateJs,
+	                                     $$forceReflow,   $$animateAsyncRun,  $rootScope) {
+	      var animate = {
+	        queue: [],
+	        cancel: $delegate.cancel,
+	        on: $delegate.on,
+	        off: $delegate.off,
+	        pin: $delegate.pin,
+	        get reflows() {
+	          return $$forceReflow.totalReflows;
+	        },
+	        enabled: $delegate.enabled,
+	        /**
+	         * @ngdoc method
+	         * @name $animate#closeAndFlush
+	         * @description
+	         *
+	         * This method will close all pending animations (both {@link ngAnimate#javascript-based-animations Javascript}
+	         * and {@link ngAnimate.$animateCss CSS}) and it will also flush any remaining animation frames and/or callbacks.
+	         */
+	        closeAndFlush: function() {
+	          // we allow the flush command to swallow the errors
+	          // because depending on whether CSS or JS animations are
+	          // used, there may not be a RAF flush. The primary flush
+	          // at the end of this function must throw an exception
+	          // because it will track if there were pending animations
+	          this.flush(true);
+	          $animateCss.$closeAndFlush();
+	          $$animateJs.$closeAndFlush();
+	          this.flush();
+	        },
+	        /**
+	         * @ngdoc method
+	         * @name $animate#flush
+	         * @description
+	         *
+	         * This method is used to flush the pending callbacks and animation frames to either start
+	         * an animation or conclude an animation. Note that this will not actually close an
+	         * actively running animation (see {@link ngMock.$animate#closeAndFlush `closeAndFlush()`} for that).
+	         */
+	        flush: function(hideErrors) {
+	          $rootScope.$digest();
+
+	          var doNextRun, somethingFlushed = false;
+	          do {
+	            doNextRun = false;
+
+	            if ($$rAF.queue.length) {
+	              $$rAF.flush();
+	              doNextRun = somethingFlushed = true;
+	            }
+
+	            if ($$animateAsyncRun.flush()) {
+	              doNextRun = somethingFlushed = true;
+	            }
+	          } while (doNextRun);
+
+	          if (!somethingFlushed && !hideErrors) {
+	            throw new Error('No pending animations ready to be closed or flushed');
+	          }
+
+	          $rootScope.$digest();
+	        }
+	      };
+
+	      angular.forEach(
+	        ['animate','enter','leave','move','addClass','removeClass','setClass'], function(method) {
+	        animate[method] = function() {
+	          animate.queue.push({
+	            event: method,
+	            element: arguments[0],
+	            options: arguments[arguments.length - 1],
+	            args: arguments
+	          });
+	          return $delegate[method].apply($delegate, arguments);
+	        };
+	      });
+
+	      return animate;
+	    }]);
+
+	  }]);
+
+
+	/**
+	 * @ngdoc function
+	 * @name angular.mock.dump
+	 * @description
+	 *
+	 * *NOTE*: this is not an injectable instance, just a globally available function.
+	 *
+	 * Method for serializing common angular objects (scope, elements, etc..) into strings, useful for
+	 * debugging.
+	 *
+	 * This method is also available on window, where it can be used to display objects on debug
+	 * console.
+	 *
+	 * @param {*} object - any object to turn into string.
+	 * @return {string} a serialized string of the argument
+	 */
+	angular.mock.dump = function(object) {
+	  return serialize(object);
+
+	  function serialize(object) {
+	    var out;
+
+	    if (angular.isElement(object)) {
+	      object = angular.element(object);
+	      out = angular.element('<div></div>');
+	      angular.forEach(object, function(element) {
+	        out.append(angular.element(element).clone());
+	      });
+	      out = out.html();
+	    } else if (angular.isArray(object)) {
+	      out = [];
+	      angular.forEach(object, function(o) {
+	        out.push(serialize(o));
+	      });
+	      out = '[ ' + out.join(', ') + ' ]';
+	    } else if (angular.isObject(object)) {
+	      if (angular.isFunction(object.$eval) && angular.isFunction(object.$apply)) {
+	        out = serializeScope(object);
+	      } else if (object instanceof Error) {
+	        out = object.stack || ('' + object.name + ': ' + object.message);
+	      } else {
+	        // TODO(i): this prevents methods being logged,
+	        // we should have a better way to serialize objects
+	        out = angular.toJson(object, true);
+	      }
+	    } else {
+	      out = String(object);
 	    }
 
-	    return this;
+	    return out;
+	  }
+
+	  function serializeScope(scope, offset) {
+	    offset = offset ||  '  ';
+	    var log = [offset + 'Scope(' + scope.$id + '): {'];
+	    for (var key in scope) {
+	      if (Object.prototype.hasOwnProperty.call(scope, key) && !key.match(/^(\$|this)/)) {
+	        log.push('  ' + key + ': ' + angular.toJson(scope[key]));
+	      }
+	    }
+	    var child = scope.$$childHead;
+	    while (child) {
+	      log.push(serializeScope(child, offset + '  '));
+	      child = child.$$nextSibling;
+	    }
+	    log.push('}');
+	    return log.join('\n' + offset);
+	  }
+	};
+
+	/**
+	 * @ngdoc service
+	 * @name $httpBackend
+	 * @description
+	 * Fake HTTP backend implementation suitable for unit testing applications that use the
+	 * {@link ng.$http $http service}.
+	 *
+	 * *Note*: For fake HTTP backend implementation suitable for end-to-end testing or backend-less
+	 * development please see {@link ngMockE2E.$httpBackend e2e $httpBackend mock}.
+	 *
+	 * During unit testing, we want our unit tests to run quickly and have no external dependencies so
+	 * we don’t want to send [XHR](https://developer.mozilla.org/en/xmlhttprequest) or
+	 * [JSONP](http://en.wikipedia.org/wiki/JSONP) requests to a real server. All we really need is
+	 * to verify whether a certain request has been sent or not, or alternatively just let the
+	 * application make requests, respond with pre-trained responses and assert that the end result is
+	 * what we expect it to be.
+	 *
+	 * This mock implementation can be used to respond with static or dynamic responses via the
+	 * `expect` and `when` apis and their shortcuts (`expectGET`, `whenPOST`, etc).
+	 *
+	 * When an Angular application needs some data from a server, it calls the $http service, which
+	 * sends the request to a real server using $httpBackend service. With dependency injection, it is
+	 * easy to inject $httpBackend mock (which has the same API as $httpBackend) and use it to verify
+	 * the requests and respond with some testing data without sending a request to a real server.
+	 *
+	 * There are two ways to specify what test data should be returned as http responses by the mock
+	 * backend when the code under test makes http requests:
+	 *
+	 * - `$httpBackend.expect` - specifies a request expectation
+	 * - `$httpBackend.when` - specifies a backend definition
+	 *
+	 *
+	 * ## Request Expectations vs Backend Definitions
+	 *
+	 * Request expectations provide a way to make assertions about requests made by the application and
+	 * to define responses for those requests. The test will fail if the expected requests are not made
+	 * or they are made in the wrong order.
+	 *
+	 * Backend definitions allow you to define a fake backend for your application which doesn't assert
+	 * if a particular request was made or not, it just returns a trained response if a request is made.
+	 * The test will pass whether or not the request gets made during testing.
+	 *
+	 *
+	 * <table class="table">
+	 *   <tr><th width="220px"></th><th>Request expectations</th><th>Backend definitions</th></tr>
+	 *   <tr>
+	 *     <th>Syntax</th>
+	 *     <td>.expect(...).respond(...)</td>
+	 *     <td>.when(...).respond(...)</td>
+	 *   </tr>
+	 *   <tr>
+	 *     <th>Typical usage</th>
+	 *     <td>strict unit tests</td>
+	 *     <td>loose (black-box) unit testing</td>
+	 *   </tr>
+	 *   <tr>
+	 *     <th>Fulfills multiple requests</th>
+	 *     <td>NO</td>
+	 *     <td>YES</td>
+	 *   </tr>
+	 *   <tr>
+	 *     <th>Order of requests matters</th>
+	 *     <td>YES</td>
+	 *     <td>NO</td>
+	 *   </tr>
+	 *   <tr>
+	 *     <th>Request required</th>
+	 *     <td>YES</td>
+	 *     <td>NO</td>
+	 *   </tr>
+	 *   <tr>
+	 *     <th>Response required</th>
+	 *     <td>optional (see below)</td>
+	 *     <td>YES</td>
+	 *   </tr>
+	 * </table>
+	 *
+	 * In cases where both backend definitions and request expectations are specified during unit
+	 * testing, the request expectations are evaluated first.
+	 *
+	 * If a request expectation has no response specified, the algorithm will search your backend
+	 * definitions for an appropriate response.
+	 *
+	 * If a request didn't match any expectation or if the expectation doesn't have the response
+	 * defined, the backend definitions are evaluated in sequential order to see if any of them match
+	 * the request. The response from the first matched definition is returned.
+	 *
+	 *
+	 * ## Flushing HTTP requests
+	 *
+	 * The $httpBackend used in production always responds to requests asynchronously. If we preserved
+	 * this behavior in unit testing, we'd have to create async unit tests, which are hard to write,
+	 * to follow and to maintain. But neither can the testing mock respond synchronously; that would
+	 * change the execution of the code under test. For this reason, the mock $httpBackend has a
+	 * `flush()` method, which allows the test to explicitly flush pending requests. This preserves
+	 * the async api of the backend, while allowing the test to execute synchronously.
+	 *
+	 *
+	 * ## Unit testing with mock $httpBackend
+	 * The following code shows how to setup and use the mock backend when unit testing a controller.
+	 * First we create the controller under test:
+	 *
+	  ```js
+	  // The module code
+	  angular
+	    .module('MyApp', [])
+	    .controller('MyController', MyController);
+
+	  // The controller code
+	  function MyController($scope, $http) {
+	    var authToken;
+
+	    $http.get('/auth.py').then(function(response) {
+	      authToken = response.headers('A-Token');
+	      $scope.user = response.data;
+	    });
+
+	    $scope.saveMessage = function(message) {
+	      var headers = { 'Authorization': authToken };
+	      $scope.status = 'Saving...';
+
+	      $http.post('/add-msg.py', message, { headers: headers } ).then(function(response) {
+	        $scope.status = '';
+	      }).catch(function() {
+	        $scope.status = 'Failed...';
+	      });
+	    };
+	  }
+	  ```
+	 *
+	 * Now we setup the mock backend and create the test specs:
+	 *
+	  ```js
+	    // testing controller
+	    describe('MyController', function() {
+	       var $httpBackend, $rootScope, createController, authRequestHandler;
+
+	       // Set up the module
+	       beforeEach(module('MyApp'));
+
+	       beforeEach(inject(function($injector) {
+	         // Set up the mock http service responses
+	         $httpBackend = $injector.get('$httpBackend');
+	         // backend definition common for all tests
+	         authRequestHandler = $httpBackend.when('GET', '/auth.py')
+	                                .respond({userId: 'userX'}, {'A-Token': 'xxx'});
+
+	         // Get hold of a scope (i.e. the root scope)
+	         $rootScope = $injector.get('$rootScope');
+	         // The $controller service is used to create instances of controllers
+	         var $controller = $injector.get('$controller');
+
+	         createController = function() {
+	           return $controller('MyController', {'$scope' : $rootScope });
+	         };
+	       }));
+
+
+	       afterEach(function() {
+	         $httpBackend.verifyNoOutstandingExpectation();
+	         $httpBackend.verifyNoOutstandingRequest();
+	       });
+
+
+	       it('should fetch authentication token', function() {
+	         $httpBackend.expectGET('/auth.py');
+	         var controller = createController();
+	         $httpBackend.flush();
+	       });
+
+
+	       it('should fail authentication', function() {
+
+	         // Notice how you can change the response even after it was set
+	         authRequestHandler.respond(401, '');
+
+	         $httpBackend.expectGET('/auth.py');
+	         var controller = createController();
+	         $httpBackend.flush();
+	         expect($rootScope.status).toBe('Failed...');
+	       });
+
+
+	       it('should send msg to server', function() {
+	         var controller = createController();
+	         $httpBackend.flush();
+
+	         // now you don’t care about the authentication, but
+	         // the controller will still send the request and
+	         // $httpBackend will respond without you having to
+	         // specify the expectation and response for this request
+
+	         $httpBackend.expectPOST('/add-msg.py', 'message content').respond(201, '');
+	         $rootScope.saveMessage('message content');
+	         expect($rootScope.status).toBe('Saving...');
+	         $httpBackend.flush();
+	         expect($rootScope.status).toBe('');
+	       });
+
+
+	       it('should send auth header', function() {
+	         var controller = createController();
+	         $httpBackend.flush();
+
+	         $httpBackend.expectPOST('/add-msg.py', undefined, function(headers) {
+	           // check if the header was sent, if it wasn't the expectation won't
+	           // match the request and the test will fail
+	           return headers['Authorization'] == 'xxx';
+	         }).respond(201, '');
+
+	         $rootScope.saveMessage('whatever');
+	         $httpBackend.flush();
+	       });
+	    });
+	  ```
+	 *
+	 * ## Dynamic responses
+	 *
+	 * You define a response to a request by chaining a call to `respond()` onto a definition or expectation.
+	 * If you provide a **callback** as the first parameter to `respond(callback)` then you can dynamically generate
+	 * a response based on the properties of the request.
+	 *
+	 * The `callback` function should be of the form `function(method, url, data, headers, params)`.
+	 *
+	 * ### Query parameters
+	 *
+	 * By default, query parameters on request URLs are parsed into the `params` object. So a request URL
+	 * of `/list?q=searchstr&orderby=-name` would set `params` to be `{q: 'searchstr', orderby: '-name'}`.
+	 *
+	 * ### Regex parameter matching
+	 *
+	 * If an expectation or definition uses a **regex** to match the URL, you can provide an array of **keys** via a
+	 * `params` argument. The index of each **key** in the array will match the index of a **group** in the
+	 * **regex**.
+	 *
+	 * The `params` object in the **callback** will now have properties with these keys, which hold the value of the
+	 * corresponding **group** in the **regex**.
+	 *
+	 * This also applies to the `when` and `expect` shortcut methods.
+	 *
+	 *
+	 * ```js
+	 *   $httpBackend.expect('GET', /\/user\/(.+)/, undefined, undefined, ['id'])
+	 *     .respond(function(method, url, data, headers, params) {
+	 *       // for requested url of '/user/1234' params is {id: '1234'}
+	 *     });
+	 *
+	 *   $httpBackend.whenPATCH(/\/user\/(.+)\/article\/(.+)/, undefined, undefined, ['user', 'article'])
+	 *     .respond(function(method, url, data, headers, params) {
+	 *       // for url of '/user/1234/article/567' params is {user: '1234', article: '567'}
+	 *     });
+	 * ```
+	 *
+	 * ## Matching route requests
+	 *
+	 * For extra convenience, `whenRoute` and `expectRoute` shortcuts are available. These methods offer colon
+	 * delimited matching of the url path, ignoring the query string. This allows declarations
+	 * similar to how application routes are configured with `$routeProvider`. Because these methods convert
+	 * the definition url to regex, declaration order is important. Combined with query parameter parsing,
+	 * the following is possible:
+	 *
+	  ```js
+	    $httpBackend.whenRoute('GET', '/users/:id')
+	      .respond(function(method, url, data, headers, params) {
+	        return [200, MockUserList[Number(params.id)]];
+	      });
+
+	    $httpBackend.whenRoute('GET', '/users')
+	      .respond(function(method, url, data, headers, params) {
+	        var userList = angular.copy(MockUserList),
+	          defaultSort = 'lastName',
+	          count, pages, isPrevious, isNext;
+
+	        // paged api response '/v1/users?page=2'
+	        params.page = Number(params.page) || 1;
+
+	        // query for last names '/v1/users?q=Archer'
+	        if (params.q) {
+	          userList = $filter('filter')({lastName: params.q});
+	        }
+
+	        pages = Math.ceil(userList.length / pagingLength);
+	        isPrevious = params.page > 1;
+	        isNext = params.page < pages;
+
+	        return [200, {
+	          count:    userList.length,
+	          previous: isPrevious,
+	          next:     isNext,
+	          // sort field -> '/v1/users?sortBy=firstName'
+	          results:  $filter('orderBy')(userList, params.sortBy || defaultSort)
+	                      .splice((params.page - 1) * pagingLength, pagingLength)
+	        }];
+	      });
+	  ```
+	 */
+	angular.mock.$HttpBackendProvider = function() {
+	  this.$get = ['$rootScope', '$timeout', createHttpBackendMock];
+	};
+
+	/**
+	 * General factory function for $httpBackend mock.
+	 * Returns instance for unit testing (when no arguments specified):
+	 *   - passing through is disabled
+	 *   - auto flushing is disabled
+	 *
+	 * Returns instance for e2e testing (when `$delegate` and `$browser` specified):
+	 *   - passing through (delegating request to real backend) is enabled
+	 *   - auto flushing is enabled
+	 *
+	 * @param {Object=} $delegate Real $httpBackend instance (allow passing through if specified)
+	 * @param {Object=} $browser Auto-flushing enabled if specified
+	 * @return {Object} Instance of $httpBackend mock
+	 */
+	function createHttpBackendMock($rootScope, $timeout, $delegate, $browser) {
+	  var definitions = [],
+	      expectations = [],
+	      responses = [],
+	      responsesPush = angular.bind(responses, responses.push),
+	      copy = angular.copy;
+
+	  function createResponse(status, data, headers, statusText) {
+	    if (angular.isFunction(status)) return status;
+
+	    return function() {
+	      return angular.isNumber(status)
+	          ? [status, data, headers, statusText]
+	          : [200, status, data, headers];
+	    };
+	  }
+
+	  // TODO(vojta): change params to: method, url, data, headers, callback
+	  function $httpBackend(method, url, data, callback, headers, timeout, withCredentials, responseType, eventHandlers, uploadEventHandlers) {
+
+	    var xhr = new MockXhr(),
+	        expectation = expectations[0],
+	        wasExpected = false;
+
+	    xhr.$$events = eventHandlers;
+	    xhr.upload.$$events = uploadEventHandlers;
+
+	    function prettyPrint(data) {
+	      return (angular.isString(data) || angular.isFunction(data) || data instanceof RegExp)
+	          ? data
+	          : angular.toJson(data);
+	    }
+
+	    function wrapResponse(wrapped) {
+	      if (!$browser && timeout) {
+	        timeout.then ? timeout.then(handleTimeout) : $timeout(handleTimeout, timeout);
+	      }
+
+	      return handleResponse;
+
+	      function handleResponse() {
+	        var response = wrapped.response(method, url, data, headers, wrapped.params(url));
+	        xhr.$$respHeaders = response[2];
+	        callback(copy(response[0]), copy(response[1]), xhr.getAllResponseHeaders(),
+	                 copy(response[3] || ''));
+	      }
+
+	      function handleTimeout() {
+	        for (var i = 0, ii = responses.length; i < ii; i++) {
+	          if (responses[i] === handleResponse) {
+	            responses.splice(i, 1);
+	            callback(-1, undefined, '');
+	            break;
+	          }
+	        }
+	      }
+	    }
+
+	    if (expectation && expectation.match(method, url)) {
+	      if (!expectation.matchData(data)) {
+	        throw new Error('Expected ' + expectation + ' with different data\n' +
+	            'EXPECTED: ' + prettyPrint(expectation.data) + '\nGOT:      ' + data);
+	      }
+
+	      if (!expectation.matchHeaders(headers)) {
+	        throw new Error('Expected ' + expectation + ' with different headers\n' +
+	                        'EXPECTED: ' + prettyPrint(expectation.headers) + '\nGOT:      ' +
+	                        prettyPrint(headers));
+	      }
+
+	      expectations.shift();
+
+	      if (expectation.response) {
+	        responses.push(wrapResponse(expectation));
+	        return;
+	      }
+	      wasExpected = true;
+	    }
+
+	    var i = -1, definition;
+	    while ((definition = definitions[++i])) {
+	      if (definition.match(method, url, data, headers || {})) {
+	        if (definition.response) {
+	          // if $browser specified, we do auto flush all requests
+	          ($browser ? $browser.defer : responsesPush)(wrapResponse(definition));
+	        } else if (definition.passThrough) {
+	          $delegate(method, url, data, callback, headers, timeout, withCredentials, responseType);
+	        } else throw new Error('No response defined !');
+	        return;
+	      }
+	    }
+	    throw wasExpected ?
+	        new Error('No response defined !') :
+	        new Error('Unexpected request: ' + method + ' ' + url + '\n' +
+	                  (expectation ? 'Expected ' + expectation : 'No more request expected'));
+	  }
+
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#when
+	   * @description
+	   * Creates a new backend definition.
+	   *
+	   * @param {string} method HTTP method.
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
+	   *   data string and returns true if the data is as expected.
+	   * @param {(Object|function(Object))=} headers HTTP headers or function that receives http header
+	   *   object and returns true if the headers match the current definition.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   *   request is handled. You can save this object for later use and invoke `respond` again in
+	   *   order to change how a matched request is handled.
+	   *
+	   *  - respond –
+	   *      ```js
+	   *      {function([status,] data[, headers, statusText])
+	   *      | function(function(method, url, data, headers, params)}
+	   *      ```
+	   *    – The respond method takes a set of static data to be returned or a function that can
+	   *    return an array containing response status (number), response data (Array|Object|string),
+	   *    response headers (Object), and the text for the status (string). The respond method returns
+	   *    the `requestHandler` object for possible overrides.
+	   */
+	  $httpBackend.when = function(method, url, data, headers, keys) {
+	    var definition = new MockHttpExpectation(method, url, data, headers, keys),
+	        chain = {
+	          respond: function(status, data, headers, statusText) {
+	            definition.passThrough = undefined;
+	            definition.response = createResponse(status, data, headers, statusText);
+	            return chain;
+	          }
+	        };
+
+	    if ($browser) {
+	      chain.passThrough = function() {
+	        definition.response = undefined;
+	        definition.passThrough = true;
+	        return chain;
+	      };
+	    }
+
+	    definitions.push(definition);
+	    return chain;
 	  };
 
 	  /**
-	   * @ngdoc property
-	   * @name $routeProvider#caseInsensitiveMatch
+	   * @ngdoc method
+	   * @name $httpBackend#whenGET
 	   * @description
+	   * Creates a new backend definition for GET requests. For more info see `when()`.
 	   *
-	   * A boolean property indicating if routes defined
-	   * using this provider should be matched using a case insensitive
-	   * algorithm. Defaults to `false`.
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(Object|function(Object))=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled.
 	   */
-	  this.caseInsensitiveMatch = false;
 
-	   /**
-	    * @param path {string} path
-	    * @param opts {Object} options
-	    * @return {?Object}
-	    *
-	    * @description
-	    * Normalizes the given path, returning a regular expression
-	    * and the original path.
-	    *
-	    * Inspired by pathRexp in visionmedia/express/lib/utils.js.
-	    */
-	  function pathRegExp(path, opts) {
-	    var insensitive = opts.caseInsensitiveMatch,
-	        ret = {
-	          originalPath: path,
-	          regexp: path
-	        },
-	        keys = ret.keys = [];
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#whenHEAD
+	   * @description
+	   * Creates a new backend definition for HEAD requests. For more info see `when()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(Object|function(Object))=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled.
+	   */
 
-	    path = path
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#whenDELETE
+	   * @description
+	   * Creates a new backend definition for DELETE requests. For more info see `when()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(Object|function(Object))=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled.
+	   */
+
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#whenPOST
+	   * @description
+	   * Creates a new backend definition for POST requests. For more info see `when()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
+	   *   data string and returns true if the data is as expected.
+	   * @param {(Object|function(Object))=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled.
+	   */
+
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#whenPUT
+	   * @description
+	   * Creates a new backend definition for PUT requests.  For more info see `when()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(string|RegExp|function(string))=} data HTTP request body or function that receives
+	   *   data string and returns true if the data is as expected.
+	   * @param {(Object|function(Object))=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled.
+	   */
+
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#whenJSONP
+	   * @description
+	   * Creates a new backend definition for JSONP requests. For more info see `when()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled.
+	   */
+	  createShortMethods('when');
+
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#whenRoute
+	   * @description
+	   * Creates a new backend definition that compares only with the requested route.
+	   *
+	   * @param {string} method HTTP method.
+	   * @param {string} url HTTP url string that supports colon param matching.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled. See #when for more info.
+	   */
+	  $httpBackend.whenRoute = function(method, url) {
+	    var pathObj = parseRoute(url);
+	    return $httpBackend.when(method, pathObj.regexp, undefined, undefined, pathObj.keys);
+	  };
+
+	  function parseRoute(url) {
+	    var ret = {
+	      regexp: url
+	    },
+	    keys = ret.keys = [];
+
+	    if (!url || !angular.isString(url)) return ret;
+
+	    url = url
 	      .replace(/([().])/g, '\\$1')
-	      .replace(/(\/)?:(\w+)(\*\?|[\?\*])?/g, function(_, slash, key, option) {
-	        var optional = (option === '?' || option === '*?') ? '?' : null;
-	        var star = (option === '*' || option === '*?') ? '*' : null;
+	      .replace(/(\/)?:(\w+)([\?\*])?/g, function(_, slash, key, option) {
+	        var optional = option === '?' ? option : null;
+	        var star = option === '*' ? option : null;
 	        keys.push({ name: key, optional: !!optional });
 	        slash = slash || '';
 	        return ''
@@ -31248,1539 +32643,1416 @@
 	      })
 	      .replace(/([\/$\*])/g, '\\$1');
 
-	    ret.regexp = new RegExp('^' + path + '$', insensitive ? 'i' : '');
+	    ret.regexp = new RegExp('^' + url, 'i');
 	    return ret;
 	  }
 
 	  /**
 	   * @ngdoc method
-	   * @name $routeProvider#otherwise
-	   *
+	   * @name $httpBackend#expect
 	   * @description
-	   * Sets route definition that will be used on route change when no other route definition
-	   * is matched.
+	   * Creates a new request expectation.
 	   *
-	   * @param {Object|string} params Mapping information to be assigned to `$route.current`.
-	   * If called with a string, the value maps to `redirectTo`.
-	   * @returns {Object} self
+	   * @param {string} method HTTP method.
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(string|RegExp|function(string)|Object)=} data HTTP request body or function that
+	   *  receives data string and returns true if the data is as expected, or Object if request body
+	   *  is in JSON format.
+	   * @param {(Object|function(Object))=} headers HTTP headers or function that receives http header
+	   *   object and returns true if the headers match the current expectation.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   *  request is handled. You can save this object for later use and invoke `respond` again in
+	   *  order to change how a matched request is handled.
+	   *
+	   *  - respond –
+	   *    ```
+	   *    { function([status,] data[, headers, statusText])
+	   *    | function(function(method, url, data, headers, params)}
+	   *    ```
+	   *    – The respond method takes a set of static data to be returned or a function that can
+	   *    return an array containing response status (number), response data (Array|Object|string),
+	   *    response headers (Object), and the text for the status (string). The respond method returns
+	   *    the `requestHandler` object for possible overrides.
 	   */
-	  this.otherwise = function(params) {
-	    if (typeof params === 'string') {
-	      params = {redirectTo: params};
-	    }
-	    this.when(null, params);
-	    return this;
-	  };
-
-
-	  this.$get = ['$rootScope',
-	               '$location',
-	               '$routeParams',
-	               '$q',
-	               '$injector',
-	               '$templateRequest',
-	               '$sce',
-	      function($rootScope, $location, $routeParams, $q, $injector, $templateRequest, $sce) {
-
-	    /**
-	     * @ngdoc service
-	     * @name $route
-	     * @requires $location
-	     * @requires $routeParams
-	     *
-	     * @property {Object} current Reference to the current route definition.
-	     * The route definition contains:
-	     *
-	     *   - `controller`: The controller constructor as defined in the route definition.
-	     *   - `locals`: A map of locals which is used by {@link ng.$controller $controller} service for
-	     *     controller instantiation. The `locals` contain
-	     *     the resolved values of the `resolve` map. Additionally the `locals` also contain:
-	     *
-	     *     - `$scope` - The current route scope.
-	     *     - `$template` - The current route template HTML.
-	     *
-	     *     The `locals` will be assigned to the route scope's `$resolve` property. You can override
-	     *     the property name, using `resolveAs` in the route definition. See
-	     *     {@link ngRoute.$routeProvider $routeProvider} for more info.
-	     *
-	     * @property {Object} routes Object with all route configuration Objects as its properties.
-	     *
-	     * @description
-	     * `$route` is used for deep-linking URLs to controllers and views (HTML partials).
-	     * It watches `$location.url()` and tries to map the path to an existing route definition.
-	     *
-	     * Requires the {@link ngRoute `ngRoute`} module to be installed.
-	     *
-	     * You can define routes through {@link ngRoute.$routeProvider $routeProvider}'s API.
-	     *
-	     * The `$route` service is typically used in conjunction with the
-	     * {@link ngRoute.directive:ngView `ngView`} directive and the
-	     * {@link ngRoute.$routeParams `$routeParams`} service.
-	     *
-	     * @example
-	     * This example shows how changing the URL hash causes the `$route` to match a route against the
-	     * URL, and the `ngView` pulls in the partial.
-	     *
-	     * <example name="$route-service" module="ngRouteExample"
-	     *          deps="angular-route.js" fixBase="true">
-	     *   <file name="index.html">
-	     *     <div ng-controller="MainController">
-	     *       Choose:
-	     *       <a href="Book/Moby">Moby</a> |
-	     *       <a href="Book/Moby/ch/1">Moby: Ch1</a> |
-	     *       <a href="Book/Gatsby">Gatsby</a> |
-	     *       <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
-	     *       <a href="Book/Scarlet">Scarlet Letter</a><br/>
-	     *
-	     *       <div ng-view></div>
-	     *
-	     *       <hr />
-	     *
-	     *       <pre>$location.path() = {{$location.path()}}</pre>
-	     *       <pre>$route.current.templateUrl = {{$route.current.templateUrl}}</pre>
-	     *       <pre>$route.current.params = {{$route.current.params}}</pre>
-	     *       <pre>$route.current.scope.name = {{$route.current.scope.name}}</pre>
-	     *       <pre>$routeParams = {{$routeParams}}</pre>
-	     *     </div>
-	     *   </file>
-	     *
-	     *   <file name="book.html">
-	     *     controller: {{name}}<br />
-	     *     Book Id: {{params.bookId}}<br />
-	     *   </file>
-	     *
-	     *   <file name="chapter.html">
-	     *     controller: {{name}}<br />
-	     *     Book Id: {{params.bookId}}<br />
-	     *     Chapter Id: {{params.chapterId}}
-	     *   </file>
-	     *
-	     *   <file name="script.js">
-	     *     angular.module('ngRouteExample', ['ngRoute'])
-	     *
-	     *      .controller('MainController', function($scope, $route, $routeParams, $location) {
-	     *          $scope.$route = $route;
-	     *          $scope.$location = $location;
-	     *          $scope.$routeParams = $routeParams;
-	     *      })
-	     *
-	     *      .controller('BookController', function($scope, $routeParams) {
-	     *          $scope.name = "BookController";
-	     *          $scope.params = $routeParams;
-	     *      })
-	     *
-	     *      .controller('ChapterController', function($scope, $routeParams) {
-	     *          $scope.name = "ChapterController";
-	     *          $scope.params = $routeParams;
-	     *      })
-	     *
-	     *     .config(function($routeProvider, $locationProvider) {
-	     *       $routeProvider
-	     *        .when('/Book/:bookId', {
-	     *         templateUrl: 'book.html',
-	     *         controller: 'BookController',
-	     *         resolve: {
-	     *           // I will cause a 1 second delay
-	     *           delay: function($q, $timeout) {
-	     *             var delay = $q.defer();
-	     *             $timeout(delay.resolve, 1000);
-	     *             return delay.promise;
-	     *           }
-	     *         }
-	     *       })
-	     *       .when('/Book/:bookId/ch/:chapterId', {
-	     *         templateUrl: 'chapter.html',
-	     *         controller: 'ChapterController'
-	     *       });
-	     *
-	     *       // configure html5 to get links working on jsfiddle
-	     *       $locationProvider.html5Mode(true);
-	     *     });
-	     *
-	     *   </file>
-	     *
-	     *   <file name="protractor.js" type="protractor">
-	     *     it('should load and compile correct template', function() {
-	     *       element(by.linkText('Moby: Ch1')).click();
-	     *       var content = element(by.css('[ng-view]')).getText();
-	     *       expect(content).toMatch(/controller\: ChapterController/);
-	     *       expect(content).toMatch(/Book Id\: Moby/);
-	     *       expect(content).toMatch(/Chapter Id\: 1/);
-	     *
-	     *       element(by.partialLinkText('Scarlet')).click();
-	     *
-	     *       content = element(by.css('[ng-view]')).getText();
-	     *       expect(content).toMatch(/controller\: BookController/);
-	     *       expect(content).toMatch(/Book Id\: Scarlet/);
-	     *     });
-	     *   </file>
-	     * </example>
-	     */
-
-	    /**
-	     * @ngdoc event
-	     * @name $route#$routeChangeStart
-	     * @eventType broadcast on root scope
-	     * @description
-	     * Broadcasted before a route change. At this  point the route services starts
-	     * resolving all of the dependencies needed for the route change to occur.
-	     * Typically this involves fetching the view template as well as any dependencies
-	     * defined in `resolve` route property. Once  all of the dependencies are resolved
-	     * `$routeChangeSuccess` is fired.
-	     *
-	     * The route change (and the `$location` change that triggered it) can be prevented
-	     * by calling `preventDefault` method of the event. See {@link ng.$rootScope.Scope#$on}
-	     * for more details about event object.
-	     *
-	     * @param {Object} angularEvent Synthetic event object.
-	     * @param {Route} next Future route information.
-	     * @param {Route} current Current route information.
-	     */
-
-	    /**
-	     * @ngdoc event
-	     * @name $route#$routeChangeSuccess
-	     * @eventType broadcast on root scope
-	     * @description
-	     * Broadcasted after a route change has happened successfully.
-	     * The `resolve` dependencies are now available in the `current.locals` property.
-	     *
-	     * {@link ngRoute.directive:ngView ngView} listens for the directive
-	     * to instantiate the controller and render the view.
-	     *
-	     * @param {Object} angularEvent Synthetic event object.
-	     * @param {Route} current Current route information.
-	     * @param {Route|Undefined} previous Previous route information, or undefined if current is
-	     * first route entered.
-	     */
-
-	    /**
-	     * @ngdoc event
-	     * @name $route#$routeChangeError
-	     * @eventType broadcast on root scope
-	     * @description
-	     * Broadcasted if any of the resolve promises are rejected.
-	     *
-	     * @param {Object} angularEvent Synthetic event object
-	     * @param {Route} current Current route information.
-	     * @param {Route} previous Previous route information.
-	     * @param {Route} rejection Rejection of the promise. Usually the error of the failed promise.
-	     */
-
-	    /**
-	     * @ngdoc event
-	     * @name $route#$routeUpdate
-	     * @eventType broadcast on root scope
-	     * @description
-	     * The `reloadOnSearch` property has been set to false, and we are reusing the same
-	     * instance of the Controller.
-	     *
-	     * @param {Object} angularEvent Synthetic event object
-	     * @param {Route} current Current/previous route information.
-	     */
-
-	    var forceReload = false,
-	        preparedRoute,
-	        preparedRouteIsUpdateOnly,
-	        $route = {
-	          routes: routes,
-
-	          /**
-	           * @ngdoc method
-	           * @name $route#reload
-	           *
-	           * @description
-	           * Causes `$route` service to reload the current route even if
-	           * {@link ng.$location $location} hasn't changed.
-	           *
-	           * As a result of that, {@link ngRoute.directive:ngView ngView}
-	           * creates new scope and reinstantiates the controller.
-	           */
-	          reload: function() {
-	            forceReload = true;
-
-	            var fakeLocationEvent = {
-	              defaultPrevented: false,
-	              preventDefault: function fakePreventDefault() {
-	                this.defaultPrevented = true;
-	                forceReload = false;
-	              }
-	            };
-
-	            $rootScope.$evalAsync(function() {
-	              prepareRoute(fakeLocationEvent);
-	              if (!fakeLocationEvent.defaultPrevented) commitRoute();
-	            });
-	          },
-
-	          /**
-	           * @ngdoc method
-	           * @name $route#updateParams
-	           *
-	           * @description
-	           * Causes `$route` service to update the current URL, replacing
-	           * current route parameters with those specified in `newParams`.
-	           * Provided property names that match the route's path segment
-	           * definitions will be interpolated into the location's path, while
-	           * remaining properties will be treated as query params.
-	           *
-	           * @param {!Object<string, string>} newParams mapping of URL parameter names to values
-	           */
-	          updateParams: function(newParams) {
-	            if (this.current && this.current.$$route) {
-	              newParams = angular.extend({}, this.current.params, newParams);
-	              $location.path(interpolate(this.current.$$route.originalPath, newParams));
-	              // interpolate modifies newParams, only query params are left
-	              $location.search(newParams);
-	            } else {
-	              throw $routeMinErr('norout', 'Tried updating route when with no current route');
-	            }
+	  $httpBackend.expect = function(method, url, data, headers, keys) {
+	    var expectation = new MockHttpExpectation(method, url, data, headers, keys),
+	        chain = {
+	          respond: function(status, data, headers, statusText) {
+	            expectation.response = createResponse(status, data, headers, statusText);
+	            return chain;
 	          }
 	        };
 
-	    $rootScope.$on('$locationChangeStart', prepareRoute);
-	    $rootScope.$on('$locationChangeSuccess', commitRoute);
+	    expectations.push(expectation);
+	    return chain;
+	  };
 
-	    return $route;
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#expectGET
+	   * @description
+	   * Creates a new request expectation for GET requests. For more info see `expect()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {Object=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled. See #expect for more info.
+	   */
 
-	    /////////////////////////////////////////////////////
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#expectHEAD
+	   * @description
+	   * Creates a new request expectation for HEAD requests. For more info see `expect()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {Object=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   *   request is handled. You can save this object for later use and invoke `respond` again in
+	   *   order to change how a matched request is handled.
+	   */
 
-	    /**
-	     * @param on {string} current url
-	     * @param route {Object} route regexp to match the url against
-	     * @return {?Object}
-	     *
-	     * @description
-	     * Check if the route matches the current url.
-	     *
-	     * Inspired by match in
-	     * visionmedia/express/lib/router/router.js.
-	     */
-	    function switchRouteMatcher(on, route) {
-	      var keys = route.keys,
-	          params = {};
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#expectDELETE
+	   * @description
+	   * Creates a new request expectation for DELETE requests. For more info see `expect()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {Object=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   *   request is handled. You can save this object for later use and invoke `respond` again in
+	   *   order to change how a matched request is handled.
+	   */
 
-	      if (!route.regexp) return null;
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#expectPOST
+	   * @description
+	   * Creates a new request expectation for POST requests. For more info see `expect()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(string|RegExp|function(string)|Object)=} data HTTP request body or function that
+	   *  receives data string and returns true if the data is as expected, or Object if request body
+	   *  is in JSON format.
+	   * @param {Object=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   *   request is handled. You can save this object for later use and invoke `respond` again in
+	   *   order to change how a matched request is handled.
+	   */
 
-	      var m = route.regexp.exec(on);
-	      if (!m) return null;
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#expectPUT
+	   * @description
+	   * Creates a new request expectation for PUT requests. For more info see `expect()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(string|RegExp|function(string)|Object)=} data HTTP request body or function that
+	   *  receives data string and returns true if the data is as expected, or Object if request body
+	   *  is in JSON format.
+	   * @param {Object=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   *   request is handled. You can save this object for later use and invoke `respond` again in
+	   *   order to change how a matched request is handled.
+	   */
 
-	      for (var i = 1, len = m.length; i < len; ++i) {
-	        var key = keys[i - 1];
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#expectPATCH
+	   * @description
+	   * Creates a new request expectation for PATCH requests. For more info see `expect()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(string|RegExp|function(string)|Object)=} data HTTP request body or function that
+	   *  receives data string and returns true if the data is as expected, or Object if request body
+	   *  is in JSON format.
+	   * @param {Object=} headers HTTP headers.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   *   request is handled. You can save this object for later use and invoke `respond` again in
+	   *   order to change how a matched request is handled.
+	   */
 
-	        var val = m[i];
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#expectJSONP
+	   * @description
+	   * Creates a new request expectation for JSONP requests. For more info see `expect()`.
+	   *
+	   * @param {string|RegExp|function(string)} url HTTP url or function that receives an url
+	   *   and returns true if the url matches the current definition.
+	   * @param {(Array)=} keys Array of keys to assign to regex matches in request url described above.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   *   request is handled. You can save this object for later use and invoke `respond` again in
+	   *   order to change how a matched request is handled.
+	   */
+	  createShortMethods('expect');
 
-	        if (key && val) {
-	          params[key.name] = val;
-	        }
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#expectRoute
+	   * @description
+	   * Creates a new request expectation that compares only with the requested route.
+	   *
+	   * @param {string} method HTTP method.
+	   * @param {string} url HTTP url string that supports colon param matching.
+	   * @returns {requestHandler} Returns an object with `respond` method that controls how a matched
+	   * request is handled. You can save this object for later use and invoke `respond` again in
+	   * order to change how a matched request is handled. See #expect for more info.
+	   */
+	  $httpBackend.expectRoute = function(method, url) {
+	    var pathObj = parseRoute(url);
+	    return $httpBackend.expect(method, pathObj.regexp, undefined, undefined, pathObj.keys);
+	  };
+
+
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#flush
+	   * @description
+	   * Flushes all pending requests using the trained responses.
+	   *
+	   * @param {number=} count Number of responses to flush (in the order they arrived). If undefined,
+	   *   all pending requests will be flushed. If there are no pending requests when the flush method
+	   *   is called an exception is thrown (as this typically a sign of programming error).
+	   */
+	  $httpBackend.flush = function(count, digest) {
+	    if (digest !== false) $rootScope.$digest();
+	    if (!responses.length) throw new Error('No pending request to flush !');
+
+	    if (angular.isDefined(count) && count !== null) {
+	      while (count--) {
+	        if (!responses.length) throw new Error('No more pending request to flush !');
+	        responses.shift()();
 	      }
-	      return params;
-	    }
-
-	    function prepareRoute($locationEvent) {
-	      var lastRoute = $route.current;
-
-	      preparedRoute = parseRoute();
-	      preparedRouteIsUpdateOnly = preparedRoute && lastRoute && preparedRoute.$$route === lastRoute.$$route
-	          && angular.equals(preparedRoute.pathParams, lastRoute.pathParams)
-	          && !preparedRoute.reloadOnSearch && !forceReload;
-
-	      if (!preparedRouteIsUpdateOnly && (lastRoute || preparedRoute)) {
-	        if ($rootScope.$broadcast('$routeChangeStart', preparedRoute, lastRoute).defaultPrevented) {
-	          if ($locationEvent) {
-	            $locationEvent.preventDefault();
-	          }
-	        }
+	    } else {
+	      while (responses.length) {
+	        responses.shift()();
 	      }
 	    }
+	    $httpBackend.verifyNoOutstandingExpectation(digest);
+	  };
 
-	    function commitRoute() {
-	      var lastRoute = $route.current;
-	      var nextRoute = preparedRoute;
 
-	      if (preparedRouteIsUpdateOnly) {
-	        lastRoute.params = nextRoute.params;
-	        angular.copy(lastRoute.params, $routeParams);
-	        $rootScope.$broadcast('$routeUpdate', lastRoute);
-	      } else if (nextRoute || lastRoute) {
-	        forceReload = false;
-	        $route.current = nextRoute;
-	        if (nextRoute) {
-	          if (nextRoute.redirectTo) {
-	            if (angular.isString(nextRoute.redirectTo)) {
-	              $location.path(interpolate(nextRoute.redirectTo, nextRoute.params)).search(nextRoute.params)
-	                       .replace();
-	            } else {
-	              $location.url(nextRoute.redirectTo(nextRoute.pathParams, $location.path(), $location.search()))
-	                       .replace();
-	            }
-	          }
-	        }
-
-	        $q.when(nextRoute).
-	          then(function() {
-	            if (nextRoute) {
-	              var locals = angular.extend({}, nextRoute.resolve),
-	                  template, templateUrl;
-
-	              angular.forEach(locals, function(value, key) {
-	                locals[key] = angular.isString(value) ?
-	                    $injector.get(value) : $injector.invoke(value, null, null, key);
-	              });
-
-	              if (angular.isDefined(template = nextRoute.template)) {
-	                if (angular.isFunction(template)) {
-	                  template = template(nextRoute.params);
-	                }
-	              } else if (angular.isDefined(templateUrl = nextRoute.templateUrl)) {
-	                if (angular.isFunction(templateUrl)) {
-	                  templateUrl = templateUrl(nextRoute.params);
-	                }
-	                if (angular.isDefined(templateUrl)) {
-	                  nextRoute.loadedTemplateUrl = $sce.valueOf(templateUrl);
-	                  template = $templateRequest(templateUrl);
-	                }
-	              }
-	              if (angular.isDefined(template)) {
-	                locals['$template'] = template;
-	              }
-	              return $q.all(locals);
-	            }
-	          }).
-	          then(function(locals) {
-	            // after route change
-	            if (nextRoute == $route.current) {
-	              if (nextRoute) {
-	                nextRoute.locals = locals;
-	                angular.copy(nextRoute.params, $routeParams);
-	              }
-	              $rootScope.$broadcast('$routeChangeSuccess', nextRoute, lastRoute);
-	            }
-	          }, function(error) {
-	            if (nextRoute == $route.current) {
-	              $rootScope.$broadcast('$routeChangeError', nextRoute, lastRoute, error);
-	            }
-	          });
-	      }
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#verifyNoOutstandingExpectation
+	   * @description
+	   * Verifies that all of the requests defined via the `expect` api were made. If any of the
+	   * requests were not made, verifyNoOutstandingExpectation throws an exception.
+	   *
+	   * Typically, you would call this method following each test case that asserts requests using an
+	   * "afterEach" clause.
+	   *
+	   * ```js
+	   *   afterEach($httpBackend.verifyNoOutstandingExpectation);
+	   * ```
+	   */
+	  $httpBackend.verifyNoOutstandingExpectation = function(digest) {
+	    if (digest !== false) $rootScope.$digest();
+	    if (expectations.length) {
+	      throw new Error('Unsatisfied requests: ' + expectations.join(', '));
 	    }
+	  };
 
 
-	    /**
-	     * @returns {Object} the current active route, by matching it against the URL
-	     */
-	    function parseRoute() {
-	      // Match a route
-	      var params, match;
-	      angular.forEach(routes, function(route, path) {
-	        if (!match && (params = switchRouteMatcher($location.path(), route))) {
-	          match = inherit(route, {
-	            params: angular.extend({}, $location.search(), params),
-	            pathParams: params});
-	          match.$$route = route;
-	        }
-	      });
-	      // No route matched; fallback to "otherwise" route
-	      return match || routes[null] && inherit(routes[null], {params: {}, pathParams:{}});
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#verifyNoOutstandingRequest
+	   * @description
+	   * Verifies that there are no outstanding requests that need to be flushed.
+	   *
+	   * Typically, you would call this method following each test case that asserts requests using an
+	   * "afterEach" clause.
+	   *
+	   * ```js
+	   *   afterEach($httpBackend.verifyNoOutstandingRequest);
+	   * ```
+	   */
+	  $httpBackend.verifyNoOutstandingRequest = function() {
+	    if (responses.length) {
+	      throw new Error('Unflushed requests: ' + responses.length);
 	    }
+	  };
 
-	    /**
-	     * @returns {string} interpolation of the redirect path with the parameters
-	     */
-	    function interpolate(string, params) {
-	      var result = [];
-	      angular.forEach((string || '').split(':'), function(segment, i) {
-	        if (i === 0) {
-	          result.push(segment);
-	        } else {
-	          var segmentMatch = segment.match(/(\w+)(?:[?*])?(.*)/);
-	          var key = segmentMatch[1];
-	          result.push(params[key]);
-	          result.push(segmentMatch[2] || '');
-	          delete params[key];
-	        }
-	      });
-	      return result.join('');
-	    }
-	  }];
+
+	  /**
+	   * @ngdoc method
+	   * @name $httpBackend#resetExpectations
+	   * @description
+	   * Resets all request expectations, but preserves all backend definitions. Typically, you would
+	   * call resetExpectations during a multiple-phase test when you want to reuse the same instance of
+	   * $httpBackend mock.
+	   */
+	  $httpBackend.resetExpectations = function() {
+	    expectations.length = 0;
+	    responses.length = 0;
+	  };
+
+	  return $httpBackend;
+
+
+	  function createShortMethods(prefix) {
+	    angular.forEach(['GET', 'DELETE', 'JSONP', 'HEAD'], function(method) {
+	     $httpBackend[prefix + method] = function(url, headers, keys) {
+	       return $httpBackend[prefix](method, url, undefined, headers, keys);
+	     };
+	    });
+
+	    angular.forEach(['PUT', 'POST', 'PATCH'], function(method) {
+	      $httpBackend[prefix + method] = function(url, data, headers, keys) {
+	        return $httpBackend[prefix](method, url, data, headers, keys);
+	      };
+	    });
+	  }
 	}
 
-	ngRouteModule.provider('$routeParams', $RouteParamsProvider);
+	function MockHttpExpectation(method, url, data, headers, keys) {
+
+	  this.data = data;
+	  this.headers = headers;
+
+	  this.match = function(m, u, d, h) {
+	    if (method != m) return false;
+	    if (!this.matchUrl(u)) return false;
+	    if (angular.isDefined(d) && !this.matchData(d)) return false;
+	    if (angular.isDefined(h) && !this.matchHeaders(h)) return false;
+	    return true;
+	  };
+
+	  this.matchUrl = function(u) {
+	    if (!url) return true;
+	    if (angular.isFunction(url.test)) return url.test(u);
+	    if (angular.isFunction(url)) return url(u);
+	    return url == u;
+	  };
+
+	  this.matchHeaders = function(h) {
+	    if (angular.isUndefined(headers)) return true;
+	    if (angular.isFunction(headers)) return headers(h);
+	    return angular.equals(headers, h);
+	  };
+
+	  this.matchData = function(d) {
+	    if (angular.isUndefined(data)) return true;
+	    if (data && angular.isFunction(data.test)) return data.test(d);
+	    if (data && angular.isFunction(data)) return data(d);
+	    if (data && !angular.isString(data)) {
+	      return angular.equals(angular.fromJson(angular.toJson(data)), angular.fromJson(d));
+	    }
+	    return data == d;
+	  };
+
+	  this.toString = function() {
+	    return method + ' ' + url;
+	  };
+
+	  this.params = function(u) {
+	    return angular.extend(parseQuery(), pathParams());
+
+	    function pathParams() {
+	      var keyObj = {};
+	      if (!url || !angular.isFunction(url.test) || !keys || keys.length === 0) return keyObj;
+
+	      var m = url.exec(u);
+	      if (!m) return keyObj;
+	      for (var i = 1, len = m.length; i < len; ++i) {
+	        var key = keys[i - 1];
+	        var val = m[i];
+	        if (key && val) {
+	          keyObj[key.name || key] = val;
+	        }
+	      }
+
+	      return keyObj;
+	    }
+
+	    function parseQuery() {
+	      var obj = {}, key_value, key,
+	          queryStr = u.indexOf('?') > -1
+	          ? u.substring(u.indexOf('?') + 1)
+	          : "";
+
+	      angular.forEach(queryStr.split('&'), function(keyValue) {
+	        if (keyValue) {
+	          key_value = keyValue.replace(/\+/g,'%20').split('=');
+	          key = tryDecodeURIComponent(key_value[0]);
+	          if (angular.isDefined(key)) {
+	            var val = angular.isDefined(key_value[1]) ? tryDecodeURIComponent(key_value[1]) : true;
+	            if (!hasOwnProperty.call(obj, key)) {
+	              obj[key] = val;
+	            } else if (angular.isArray(obj[key])) {
+	              obj[key].push(val);
+	            } else {
+	              obj[key] = [obj[key],val];
+	            }
+	          }
+	        }
+	      });
+	      return obj;
+	    }
+	    function tryDecodeURIComponent(value) {
+	      try {
+	        return decodeURIComponent(value);
+	      } catch (e) {
+	        // Ignore any invalid uri component
+	      }
+	    }
+	  };
+	}
+
+	function createMockXhr() {
+	  return new MockXhr();
+	}
+
+	function MockXhr() {
+
+	  // hack for testing $http, $httpBackend
+	  MockXhr.$$lastInstance = this;
+
+	  this.open = function(method, url, async) {
+	    this.$$method = method;
+	    this.$$url = url;
+	    this.$$async = async;
+	    this.$$reqHeaders = {};
+	    this.$$respHeaders = {};
+	  };
+
+	  this.send = function(data) {
+	    this.$$data = data;
+	  };
+
+	  this.setRequestHeader = function(key, value) {
+	    this.$$reqHeaders[key] = value;
+	  };
+
+	  this.getResponseHeader = function(name) {
+	    // the lookup must be case insensitive,
+	    // that's why we try two quick lookups first and full scan last
+	    var header = this.$$respHeaders[name];
+	    if (header) return header;
+
+	    name = angular.lowercase(name);
+	    header = this.$$respHeaders[name];
+	    if (header) return header;
+
+	    header = undefined;
+	    angular.forEach(this.$$respHeaders, function(headerVal, headerName) {
+	      if (!header && angular.lowercase(headerName) == name) header = headerVal;
+	    });
+	    return header;
+	  };
+
+	  this.getAllResponseHeaders = function() {
+	    var lines = [];
+
+	    angular.forEach(this.$$respHeaders, function(value, key) {
+	      lines.push(key + ': ' + value);
+	    });
+	    return lines.join('\n');
+	  };
+
+	  this.abort = angular.noop;
+
+	  // This section simulates the events on a real XHR object (and the upload object)
+	  // When we are testing $httpBackend (inside the angular project) we make partial use of this
+	  // but store the events directly ourselves on `$$events`, instead of going through the `addEventListener`
+	  this.$$events = {};
+	  this.addEventListener = function(name, listener) {
+	    if (angular.isUndefined(this.$$events[name])) this.$$events[name] = [];
+	    this.$$events[name].push(listener);
+	  };
+
+	  this.upload = {
+	    $$events: {},
+	    addEventListener: this.addEventListener
+	  };
+	}
 
 
 	/**
 	 * @ngdoc service
-	 * @name $routeParams
-	 * @requires $route
-	 *
+	 * @name $timeout
 	 * @description
-	 * The `$routeParams` service allows you to retrieve the current set of route parameters.
 	 *
-	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
+	 * This service is just a simple decorator for {@link ng.$timeout $timeout} service
+	 * that adds a "flush" and "verifyNoPendingTasks" methods.
+	 */
+
+	angular.mock.$TimeoutDecorator = ['$delegate', '$browser', function($delegate, $browser) {
+
+	  /**
+	   * @ngdoc method
+	   * @name $timeout#flush
+	   * @description
+	   *
+	   * Flushes the queue of pending tasks.
+	   *
+	   * @param {number=} delay maximum timeout amount to flush up until
+	   */
+	  $delegate.flush = function(delay) {
+	    $browser.defer.flush(delay);
+	  };
+
+	  /**
+	   * @ngdoc method
+	   * @name $timeout#verifyNoPendingTasks
+	   * @description
+	   *
+	   * Verifies that there are no pending tasks that need to be flushed.
+	   */
+	  $delegate.verifyNoPendingTasks = function() {
+	    if ($browser.deferredFns.length) {
+	      throw new Error('Deferred tasks to flush (' + $browser.deferredFns.length + '): ' +
+	          formatPendingTasksAsString($browser.deferredFns));
+	    }
+	  };
+
+	  function formatPendingTasksAsString(tasks) {
+	    var result = [];
+	    angular.forEach(tasks, function(task) {
+	      result.push('{id: ' + task.id + ', ' + 'time: ' + task.time + '}');
+	    });
+
+	    return result.join(', ');
+	  }
+
+	  return $delegate;
+	}];
+
+	angular.mock.$RAFDecorator = ['$delegate', function($delegate) {
+	  var rafFn = function(fn) {
+	    var index = rafFn.queue.length;
+	    rafFn.queue.push(fn);
+	    return function() {
+	      rafFn.queue.splice(index, 1);
+	    };
+	  };
+
+	  rafFn.queue = [];
+	  rafFn.supported = $delegate.supported;
+
+	  rafFn.flush = function() {
+	    if (rafFn.queue.length === 0) {
+	      throw new Error('No rAF callbacks present');
+	    }
+
+	    var length = rafFn.queue.length;
+	    for (var i = 0; i < length; i++) {
+	      rafFn.queue[i]();
+	    }
+
+	    rafFn.queue = rafFn.queue.slice(i);
+	  };
+
+	  return rafFn;
+	}];
+
+	/**
 	 *
-	 * The route parameters are a combination of {@link ng.$location `$location`}'s
-	 * {@link ng.$location#search `search()`} and {@link ng.$location#path `path()`}.
-	 * The `path` parameters are extracted when the {@link ngRoute.$route `$route`} path is matched.
+	 */
+	var originalRootElement;
+	angular.mock.$RootElementProvider = function() {
+	  this.$get = ['$injector', function($injector) {
+	    originalRootElement = angular.element('<div ng-app></div>').data('$injector', $injector);
+	    return originalRootElement;
+	  }];
+	};
+
+	/**
+	 * @ngdoc service
+	 * @name $controller
+	 * @description
+	 * A decorator for {@link ng.$controller} with additional `bindings` parameter, useful when testing
+	 * controllers of directives that use {@link $compile#-bindtocontroller- `bindToController`}.
 	 *
-	 * In case of parameter name collision, `path` params take precedence over `search` params.
 	 *
-	 * The service guarantees that the identity of the `$routeParams` object will remain unchanged
-	 * (but its properties will likely change) even when a route change occurs.
+	 * ## Example
 	 *
-	 * Note that the `$routeParams` are only updated *after* a route change completes successfully.
-	 * This means that you cannot rely on `$routeParams` being correct in route resolve functions.
-	 * Instead you can use `$route.current.params` to access the new route's parameters.
-	 *
-	 * @example
 	 * ```js
-	 *  // Given:
-	 *  // URL: http://server.com/index.html#/Chapter/1/Section/2?search=moby
-	 *  // Route: /Chapter/:chapterId/Section/:sectionId
-	 *  //
-	 *  // Then
-	 *  $routeParams ==> {chapterId:'1', sectionId:'2', search:'moby'}
+	 *
+	 * // Directive definition ...
+	 *
+	 * myMod.directive('myDirective', {
+	 *   controller: 'MyDirectiveController',
+	 *   bindToController: {
+	 *     name: '@'
+	 *   }
+	 * });
+	 *
+	 *
+	 * // Controller definition ...
+	 *
+	 * myMod.controller('MyDirectiveController', ['$log', function($log) {
+	 *   $log.info(this.name);
+	 * }]);
+	 *
+	 *
+	 * // In a test ...
+	 *
+	 * describe('myDirectiveController', function() {
+	 *   it('should write the bound name to the log', inject(function($controller, $log) {
+	 *     var ctrl = $controller('MyDirectiveController', { /* no locals &#42;/ }, { name: 'Clark Kent' });
+	 *     expect(ctrl.name).toEqual('Clark Kent');
+	 *     expect($log.info.logs).toEqual(['Clark Kent']);
+	 *   }));
+	 * });
+	 *
 	 * ```
+	 *
+	 * @param {Function|string} constructor If called with a function then it's considered to be the
+	 *    controller constructor function. Otherwise it's considered to be a string which is used
+	 *    to retrieve the controller constructor using the following steps:
+	 *
+	 *    * check if a controller with given name is registered via `$controllerProvider`
+	 *    * check if evaluating the string on the current scope returns a constructor
+	 *    * if $controllerProvider#allowGlobals, check `window[constructor]` on the global
+	 *      `window` object (not recommended)
+	 *
+	 *    The string can use the `controller as property` syntax, where the controller instance is published
+	 *    as the specified property on the `scope`; the `scope` must be injected into `locals` param for this
+	 *    to work correctly.
+	 *
+	 * @param {Object} locals Injection locals for Controller.
+	 * @param {Object=} bindings Properties to add to the controller before invoking the constructor. This is used
+	 *                           to simulate the `bindToController` feature and simplify certain kinds of tests.
+	 * @return {Object} Instance of given controller.
 	 */
-	function $RouteParamsProvider() {
-	  this.$get = function() { return {}; };
-	}
-
-	ngRouteModule.directive('ngView', ngViewFactory);
-	ngRouteModule.directive('ngView', ngViewFillContentFactory);
-
-
-	/**
-	 * @ngdoc directive
-	 * @name ngView
-	 * @restrict ECA
-	 *
-	 * @description
-	 * # Overview
-	 * `ngView` is a directive that complements the {@link ngRoute.$route $route} service by
-	 * including the rendered template of the current route into the main layout (`index.html`) file.
-	 * Every time the current route changes, the included view changes with it according to the
-	 * configuration of the `$route` service.
-	 *
-	 * Requires the {@link ngRoute `ngRoute`} module to be installed.
-	 *
-	 * @animations
-	 * | Animation                        | Occurs                              |
-	 * |----------------------------------|-------------------------------------|
-	 * | {@link ng.$animate#enter enter}  | when the new element is inserted to the DOM |
-	 * | {@link ng.$animate#leave leave}  | when the old element is removed from to the DOM  |
-	 *
-	 * The enter and leave animation occur concurrently.
-	 *
-	 * @knownIssue If `ngView` is contained in an asynchronously loaded template (e.g. in another
-	 *             directive's templateUrl or in a template loaded using `ngInclude`), then you need to
-	 *             make sure that `$route` is instantiated in time to capture the initial
-	 *             `$locationChangeStart` event and load the appropriate view. One way to achieve this
-	 *             is to have it as a dependency in a `.run` block:
-	 *             `myModule.run(['$route', function() {}]);`
-	 *
-	 * @scope
-	 * @priority 400
-	 * @param {string=} onload Expression to evaluate whenever the view updates.
-	 *
-	 * @param {string=} autoscroll Whether `ngView` should call {@link ng.$anchorScroll
-	 *                  $anchorScroll} to scroll the viewport after the view is updated.
-	 *
-	 *                  - If the attribute is not set, disable scrolling.
-	 *                  - If the attribute is set without value, enable scrolling.
-	 *                  - Otherwise enable scrolling only if the `autoscroll` attribute value evaluated
-	 *                    as an expression yields a truthy value.
-	 * @example
-	    <example name="ngView-directive" module="ngViewExample"
-	             deps="angular-route.js;angular-animate.js"
-	             animations="true" fixBase="true">
-	      <file name="index.html">
-	        <div ng-controller="MainCtrl as main">
-	          Choose:
-	          <a href="Book/Moby">Moby</a> |
-	          <a href="Book/Moby/ch/1">Moby: Ch1</a> |
-	          <a href="Book/Gatsby">Gatsby</a> |
-	          <a href="Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
-	          <a href="Book/Scarlet">Scarlet Letter</a><br/>
-
-	          <div class="view-animate-container">
-	            <div ng-view class="view-animate"></div>
-	          </div>
-	          <hr />
-
-	          <pre>$location.path() = {{main.$location.path()}}</pre>
-	          <pre>$route.current.templateUrl = {{main.$route.current.templateUrl}}</pre>
-	          <pre>$route.current.params = {{main.$route.current.params}}</pre>
-	          <pre>$routeParams = {{main.$routeParams}}</pre>
-	        </div>
-	      </file>
-
-	      <file name="book.html">
-	        <div>
-	          controller: {{book.name}}<br />
-	          Book Id: {{book.params.bookId}}<br />
-	        </div>
-	      </file>
-
-	      <file name="chapter.html">
-	        <div>
-	          controller: {{chapter.name}}<br />
-	          Book Id: {{chapter.params.bookId}}<br />
-	          Chapter Id: {{chapter.params.chapterId}}
-	        </div>
-	      </file>
-
-	      <file name="animations.css">
-	        .view-animate-container {
-	          position:relative;
-	          height:100px!important;
-	          background:white;
-	          border:1px solid black;
-	          height:40px;
-	          overflow:hidden;
-	        }
-
-	        .view-animate {
-	          padding:10px;
-	        }
-
-	        .view-animate.ng-enter, .view-animate.ng-leave {
-	          transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-
-	          display:block;
-	          width:100%;
-	          border-left:1px solid black;
-
-	          position:absolute;
-	          top:0;
-	          left:0;
-	          right:0;
-	          bottom:0;
-	          padding:10px;
-	        }
-
-	        .view-animate.ng-enter {
-	          left:100%;
-	        }
-	        .view-animate.ng-enter.ng-enter-active {
-	          left:0;
-	        }
-	        .view-animate.ng-leave.ng-leave-active {
-	          left:-100%;
-	        }
-	      </file>
-
-	      <file name="script.js">
-	        angular.module('ngViewExample', ['ngRoute', 'ngAnimate'])
-	          .config(['$routeProvider', '$locationProvider',
-	            function($routeProvider, $locationProvider) {
-	              $routeProvider
-	                .when('/Book/:bookId', {
-	                  templateUrl: 'book.html',
-	                  controller: 'BookCtrl',
-	                  controllerAs: 'book'
-	                })
-	                .when('/Book/:bookId/ch/:chapterId', {
-	                  templateUrl: 'chapter.html',
-	                  controller: 'ChapterCtrl',
-	                  controllerAs: 'chapter'
-	                });
-
-	              $locationProvider.html5Mode(true);
-	          }])
-	          .controller('MainCtrl', ['$route', '$routeParams', '$location',
-	            function($route, $routeParams, $location) {
-	              this.$route = $route;
-	              this.$location = $location;
-	              this.$routeParams = $routeParams;
-	          }])
-	          .controller('BookCtrl', ['$routeParams', function($routeParams) {
-	            this.name = "BookCtrl";
-	            this.params = $routeParams;
-	          }])
-	          .controller('ChapterCtrl', ['$routeParams', function($routeParams) {
-	            this.name = "ChapterCtrl";
-	            this.params = $routeParams;
-	          }]);
-
-	      </file>
-
-	      <file name="protractor.js" type="protractor">
-	        it('should load and compile correct template', function() {
-	          element(by.linkText('Moby: Ch1')).click();
-	          var content = element(by.css('[ng-view]')).getText();
-	          expect(content).toMatch(/controller\: ChapterCtrl/);
-	          expect(content).toMatch(/Book Id\: Moby/);
-	          expect(content).toMatch(/Chapter Id\: 1/);
-
-	          element(by.partialLinkText('Scarlet')).click();
-
-	          content = element(by.css('[ng-view]')).getText();
-	          expect(content).toMatch(/controller\: BookCtrl/);
-	          expect(content).toMatch(/Book Id\: Scarlet/);
-	        });
-	      </file>
-	    </example>
-	 */
-
-
-	/**
-	 * @ngdoc event
-	 * @name ngView#$viewContentLoaded
-	 * @eventType emit on the current ngView scope
-	 * @description
-	 * Emitted every time the ngView content is reloaded.
-	 */
-	ngViewFactory.$inject = ['$route', '$anchorScroll', '$animate'];
-	function ngViewFactory($route, $anchorScroll, $animate) {
-	  return {
-	    restrict: 'ECA',
-	    terminal: true,
-	    priority: 400,
-	    transclude: 'element',
-	    link: function(scope, $element, attr, ctrl, $transclude) {
-	        var currentScope,
-	            currentElement,
-	            previousLeaveAnimation,
-	            autoScrollExp = attr.autoscroll,
-	            onloadExp = attr.onload || '';
-
-	        scope.$on('$routeChangeSuccess', update);
-	        update();
-
-	        function cleanupLastView() {
-	          if (previousLeaveAnimation) {
-	            $animate.cancel(previousLeaveAnimation);
-	            previousLeaveAnimation = null;
-	          }
-
-	          if (currentScope) {
-	            currentScope.$destroy();
-	            currentScope = null;
-	          }
-	          if (currentElement) {
-	            previousLeaveAnimation = $animate.leave(currentElement);
-	            previousLeaveAnimation.then(function() {
-	              previousLeaveAnimation = null;
-	            });
-	            currentElement = null;
-	          }
-	        }
-
-	        function update() {
-	          var locals = $route.current && $route.current.locals,
-	              template = locals && locals.$template;
-
-	          if (angular.isDefined(template)) {
-	            var newScope = scope.$new();
-	            var current = $route.current;
-
-	            // Note: This will also link all children of ng-view that were contained in the original
-	            // html. If that content contains controllers, ... they could pollute/change the scope.
-	            // However, using ng-view on an element with additional content does not make sense...
-	            // Note: We can't remove them in the cloneAttchFn of $transclude as that
-	            // function is called before linking the content, which would apply child
-	            // directives to non existing elements.
-	            var clone = $transclude(newScope, function(clone) {
-	              $animate.enter(clone, null, currentElement || $element).then(function onNgViewEnter() {
-	                if (angular.isDefined(autoScrollExp)
-	                  && (!autoScrollExp || scope.$eval(autoScrollExp))) {
-	                  $anchorScroll();
-	                }
-	              });
-	              cleanupLastView();
-	            });
-
-	            currentElement = clone;
-	            currentScope = current.scope = newScope;
-	            currentScope.$emit('$viewContentLoaded');
-	            currentScope.$eval(onloadExp);
-	          } else {
-	            cleanupLastView();
-	          }
-	        }
+	angular.mock.$ControllerDecorator = ['$delegate', function($delegate) {
+	  return function(expression, locals, later, ident) {
+	    if (later && typeof later === 'object') {
+	      var create = $delegate(expression, locals, true, ident);
+	      angular.extend(create.instance, later);
+	      return create();
 	    }
+	    return $delegate(expression, locals, later, ident);
 	  };
-	}
+	}];
 
-	// This directive is called during the $transclude call of the first `ngView` directive.
-	// It will replace and compile the content of the element with the loaded template.
-	// We need this directive so that the element content is already filled when
-	// the link function of another directive on the same element as ngView
-	// is called.
-	ngViewFillContentFactory.$inject = ['$compile', '$controller', '$route'];
-	function ngViewFillContentFactory($compile, $controller, $route) {
-	  return {
-	    restrict: 'ECA',
-	    priority: -400,
-	    link: function(scope, $element) {
-	      var current = $route.current,
-	          locals = current.locals;
-
-	      $element.html(locals.$template);
-
-	      var link = $compile($element.contents());
-
-	      if (current.controller) {
-	        locals.$scope = scope;
-	        var controller = $controller(current.controller, locals);
-	        if (current.controllerAs) {
-	          scope[current.controllerAs] = controller;
-	        }
-	        $element.data('$ngControllerController', controller);
-	        $element.children().data('$ngControllerController', controller);
+	/**
+	 * @ngdoc service
+	 * @name $componentController
+	 * @description
+	 * A service that can be used to create instances of component controllers.
+	 * <div class="alert alert-info">
+	 * Be aware that the controller will be instantiated and attached to the scope as specified in
+	 * the component definition object. If you do not provide a `$scope` object in the `locals` param
+	 * then the helper will create a new isolated scope as a child of `$rootScope`.
+	 * </div>
+	 * @param {string} componentName the name of the component whose controller we want to instantiate
+	 * @param {Object} locals Injection locals for Controller.
+	 * @param {Object=} bindings Properties to add to the controller before invoking the constructor. This is used
+	 *                           to simulate the `bindToController` feature and simplify certain kinds of tests.
+	 * @param {string=} ident Override the property name to use when attaching the controller to the scope.
+	 * @return {Object} Instance of requested controller.
+	 */
+	angular.mock.$ComponentControllerProvider = ['$compileProvider', function($compileProvider) {
+	  this.$get = ['$controller','$injector', '$rootScope', function($controller, $injector, $rootScope) {
+	    return function $componentController(componentName, locals, bindings, ident) {
+	      // get all directives associated to the component name
+	      var directives = $injector.get(componentName + 'Directive');
+	      // look for those directives that are components
+	      var candidateDirectives = directives.filter(function(directiveInfo) {
+	        // components have controller, controllerAs and restrict:'E'
+	        return directiveInfo.controller && directiveInfo.controllerAs && directiveInfo.restrict === 'E';
+	      });
+	      // check if valid directives found
+	      if (candidateDirectives.length === 0) {
+	        throw new Error('No component found');
 	      }
-	      scope[current.resolveAs || '$resolve'] = locals;
+	      if (candidateDirectives.length > 1) {
+	        throw new Error('Too many components found');
+	      }
+	      // get the info of the component
+	      var directiveInfo = candidateDirectives[0];
+	      // create a scope if needed
+	      locals = locals || {};
+	      locals.$scope = locals.$scope || $rootScope.$new(true);
+	      return $controller(directiveInfo.controller, locals, bindings, ident || directiveInfo.controllerAs);
+	    };
+	  }];
+	}];
 
-	      link(scope);
+
+	/**
+	 * @ngdoc module
+	 * @name ngMock
+	 * @packageName angular-mocks
+	 * @description
+	 *
+	 * # ngMock
+	 *
+	 * The `ngMock` module provides support to inject and mock Angular services into unit tests.
+	 * In addition, ngMock also extends various core ng services such that they can be
+	 * inspected and controlled in a synchronous manner within test code.
+	 *
+	 *
+	 * <div doc-module-components="ngMock"></div>
+	 *
+	 */
+	angular.module('ngMock', ['ng']).provider({
+	  $browser: angular.mock.$BrowserProvider,
+	  $exceptionHandler: angular.mock.$ExceptionHandlerProvider,
+	  $log: angular.mock.$LogProvider,
+	  $interval: angular.mock.$IntervalProvider,
+	  $httpBackend: angular.mock.$HttpBackendProvider,
+	  $rootElement: angular.mock.$RootElementProvider,
+	  $componentController: angular.mock.$ComponentControllerProvider
+	}).config(['$provide', function($provide) {
+	  $provide.decorator('$timeout', angular.mock.$TimeoutDecorator);
+	  $provide.decorator('$$rAF', angular.mock.$RAFDecorator);
+	  $provide.decorator('$rootScope', angular.mock.$RootScopeDecorator);
+	  $provide.decorator('$controller', angular.mock.$ControllerDecorator);
+	}]);
+
+	/**
+	 * @ngdoc module
+	 * @name ngMockE2E
+	 * @module ngMockE2E
+	 * @packageName angular-mocks
+	 * @description
+	 *
+	 * The `ngMockE2E` is an angular module which contains mocks suitable for end-to-end testing.
+	 * Currently there is only one mock present in this module -
+	 * the {@link ngMockE2E.$httpBackend e2e $httpBackend} mock.
+	 */
+	angular.module('ngMockE2E', ['ng']).config(['$provide', function($provide) {
+	  $provide.decorator('$httpBackend', angular.mock.e2e.$httpBackendDecorator);
+	}]);
+
+	/**
+	 * @ngdoc service
+	 * @name $httpBackend
+	 * @module ngMockE2E
+	 * @description
+	 * Fake HTTP backend implementation suitable for end-to-end testing or backend-less development of
+	 * applications that use the {@link ng.$http $http service}.
+	 *
+	 * *Note*: For fake http backend implementation suitable for unit testing please see
+	 * {@link ngMock.$httpBackend unit-testing $httpBackend mock}.
+	 *
+	 * This implementation can be used to respond with static or dynamic responses via the `when` api
+	 * and its shortcuts (`whenGET`, `whenPOST`, etc) and optionally pass through requests to the
+	 * real $httpBackend for specific requests (e.g. to interact with certain remote apis or to fetch
+	 * templates from a webserver).
+	 *
+	 * As opposed to unit-testing, in an end-to-end testing scenario or in scenario when an application
+	 * is being developed with the real backend api replaced with a mock, it is often desirable for
+	 * certain category of requests to bypass the mock and issue a real http request (e.g. to fetch
+	 * templates or static files from the webserver). To configure the backend with this behavior
+	 * use the `passThrough` request handler of `when` instead of `respond`.
+	 *
+	 * Additionally, we don't want to manually have to flush mocked out requests like we do during unit
+	 * testing. For this reason the e2e $httpBackend flushes mocked out requests
+	 * automatically, closely simulating the behavior of the XMLHttpRequest object.
+	 *
+	 * To setup the application to run with this http backend, you have to create a module that depends
+	 * on the `ngMockE2E` and your application modules and defines the fake backend:
+	 *
+	 * ```js
+	 *   myAppDev = angular.module('myAppDev', ['myApp', 'ngMockE2E']);
+	 *   myAppDev.run(function($httpBackend) {
+	 *     phones = [{name: 'phone1'}, {name: 'phone2'}];
+	 *
+	 *     // returns the current list of phones
+	 *     $httpBackend.whenGET('/phones').respond(phones);
+	 *
+	 *     // adds a new phone to the phones array
+	 *     $httpBackend.whenPOST('/phones').respond(function(method, url, data) {
+	 *       var phone = angular.fromJson(data);
+	 *       phones.push(phone);
+	 *       return [200, phone, {}];
+	 *     });
+	 *     $httpBackend.whenGET(/^\/templates\//).passThrough();
+	 *     //...
+	 *   });
+	 * ```
+	 *
+	 * Afterwards, bootstrap your app with this new module.
+	 */
+
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#when
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition.
+	 *
+	 * @param {string} method HTTP method.
+	 * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	 *   and returns true if the url matches the current definition.
+	 * @param {(string|RegExp)=} data HTTP request body.
+	 * @param {(Object|function(Object))=} headers HTTP headers or function that receives http header
+	 *   object and returns true if the headers match the current definition.
+	 * @param {(Array)=} keys Array of keys to assign to regex matches in request url described on
+	 *   {@link ngMock.$httpBackend $httpBackend mock}.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 *
+	 *  - respond –
+	 *    ```
+	 *    { function([status,] data[, headers, statusText])
+	 *    | function(function(method, url, data, headers, params)}
+	 *    ```
+	 *    – The respond method takes a set of static data to be returned or a function that can return
+	 *    an array containing response status (number), response data (Array|Object|string), response
+	 *    headers (Object), and the text for the status (string).
+	 *  - passThrough – `{function()}` – Any request matching a backend definition with
+	 *    `passThrough` handler will be passed through to the real backend (an XHR request will be made
+	 *    to the server.)
+	 *  - Both methods return the `requestHandler` object for possible overrides.
+	 */
+
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#whenGET
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition for GET requests. For more info see `when()`.
+	 *
+	 * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	 *   and returns true if the url matches the current definition.
+	 * @param {(Object|function(Object))=} headers HTTP headers.
+	 * @param {(Array)=} keys Array of keys to assign to regex matches in request url described on
+	 *   {@link ngMock.$httpBackend $httpBackend mock}.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 */
+
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#whenHEAD
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition for HEAD requests. For more info see `when()`.
+	 *
+	 * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	 *   and returns true if the url matches the current definition.
+	 * @param {(Object|function(Object))=} headers HTTP headers.
+	 * @param {(Array)=} keys Array of keys to assign to regex matches in request url described on
+	 *   {@link ngMock.$httpBackend $httpBackend mock}.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 */
+
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#whenDELETE
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition for DELETE requests. For more info see `when()`.
+	 *
+	 * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	 *   and returns true if the url matches the current definition.
+	 * @param {(Object|function(Object))=} headers HTTP headers.
+	 * @param {(Array)=} keys Array of keys to assign to regex matches in request url described on
+	 *   {@link ngMock.$httpBackend $httpBackend mock}.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 */
+
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#whenPOST
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition for POST requests. For more info see `when()`.
+	 *
+	 * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	 *   and returns true if the url matches the current definition.
+	 * @param {(string|RegExp)=} data HTTP request body.
+	 * @param {(Object|function(Object))=} headers HTTP headers.
+	 * @param {(Array)=} keys Array of keys to assign to regex matches in request url described on
+	 *   {@link ngMock.$httpBackend $httpBackend mock}.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 */
+
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#whenPUT
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition for PUT requests.  For more info see `when()`.
+	 *
+	 * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	 *   and returns true if the url matches the current definition.
+	 * @param {(string|RegExp)=} data HTTP request body.
+	 * @param {(Object|function(Object))=} headers HTTP headers.
+	 * @param {(Array)=} keys Array of keys to assign to regex matches in request url described on
+	 *   {@link ngMock.$httpBackend $httpBackend mock}.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 */
+
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#whenPATCH
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition for PATCH requests.  For more info see `when()`.
+	 *
+	 * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	 *   and returns true if the url matches the current definition.
+	 * @param {(string|RegExp)=} data HTTP request body.
+	 * @param {(Object|function(Object))=} headers HTTP headers.
+	 * @param {(Array)=} keys Array of keys to assign to regex matches in request url described on
+	 *   {@link ngMock.$httpBackend $httpBackend mock}.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 */
+
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#whenJSONP
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition for JSONP requests. For more info see `when()`.
+	 *
+	 * @param {string|RegExp|function(string)} url HTTP url or function that receives a url
+	 *   and returns true if the url matches the current definition.
+	 * @param {(Array)=} keys Array of keys to assign to regex matches in request url described on
+	 *   {@link ngMock.$httpBackend $httpBackend mock}.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 */
+	/**
+	 * @ngdoc method
+	 * @name $httpBackend#whenRoute
+	 * @module ngMockE2E
+	 * @description
+	 * Creates a new backend definition that compares only with the requested route.
+	 *
+	 * @param {string} method HTTP method.
+	 * @param {string} url HTTP url string that supports colon param matching.
+	 * @returns {requestHandler} Returns an object with `respond` and `passThrough` methods that
+	 *   control how a matched request is handled. You can save this object for later use and invoke
+	 *   `respond` or `passThrough` again in order to change how a matched request is handled.
+	 */
+	angular.mock.e2e = {};
+	angular.mock.e2e.$httpBackendDecorator =
+	  ['$rootScope', '$timeout', '$delegate', '$browser', createHttpBackendMock];
+
+
+	/**
+	 * @ngdoc type
+	 * @name $rootScope.Scope
+	 * @module ngMock
+	 * @description
+	 * {@link ng.$rootScope.Scope Scope} type decorated with helper methods useful for testing. These
+	 * methods are automatically available on any {@link ng.$rootScope.Scope Scope} instance when
+	 * `ngMock` module is loaded.
+	 *
+	 * In addition to all the regular `Scope` methods, the following helper methods are available:
+	 */
+	angular.mock.$RootScopeDecorator = ['$delegate', function($delegate) {
+
+	  var $rootScopePrototype = Object.getPrototypeOf($delegate);
+
+	  $rootScopePrototype.$countChildScopes = countChildScopes;
+	  $rootScopePrototype.$countWatchers = countWatchers;
+
+	  return $delegate;
+
+	  // ------------------------------------------------------------------------------------------ //
+
+	  /**
+	   * @ngdoc method
+	   * @name $rootScope.Scope#$countChildScopes
+	   * @module ngMock
+	   * @description
+	   * Counts all the direct and indirect child scopes of the current scope.
+	   *
+	   * The current scope is excluded from the count. The count includes all isolate child scopes.
+	   *
+	   * @returns {number} Total number of child scopes.
+	   */
+	  function countChildScopes() {
+	    // jshint validthis: true
+	    var count = 0; // exclude the current scope
+	    var pendingChildHeads = [this.$$childHead];
+	    var currentScope;
+
+	    while (pendingChildHeads.length) {
+	      currentScope = pendingChildHeads.shift();
+
+	      while (currentScope) {
+	        count += 1;
+	        pendingChildHeads.push(currentScope.$$childHead);
+	        currentScope = currentScope.$$nextSibling;
+	      }
+	    }
+
+	    return count;
+	  }
+
+
+	  /**
+	   * @ngdoc method
+	   * @name $rootScope.Scope#$countWatchers
+	   * @module ngMock
+	   * @description
+	   * Counts all the watchers of direct and indirect child scopes of the current scope.
+	   *
+	   * The watchers of the current scope are included in the count and so are all the watchers of
+	   * isolate child scopes.
+	   *
+	   * @returns {number} Total number of watchers.
+	   */
+	  function countWatchers() {
+	    // jshint validthis: true
+	    var count = this.$$watchers ? this.$$watchers.length : 0; // include the current scope
+	    var pendingChildHeads = [this.$$childHead];
+	    var currentScope;
+
+	    while (pendingChildHeads.length) {
+	      currentScope = pendingChildHeads.shift();
+
+	      while (currentScope) {
+	        count += currentScope.$$watchers ? currentScope.$$watchers.length : 0;
+	        pendingChildHeads.push(currentScope.$$childHead);
+	        currentScope = currentScope.$$nextSibling;
+	      }
+	    }
+
+	    return count;
+	  }
+	}];
+
+
+	!(function(jasmineOrMocha) {
+
+	  if (!jasmineOrMocha) {
+	    return;
+	  }
+
+	  var currentSpec = null,
+	      injectorState = new InjectorState(),
+	      annotatedFunctions = [],
+	      wasInjectorCreated = function() {
+	        return !!currentSpec;
+	      };
+
+	  angular.mock.$$annotate = angular.injector.$$annotate;
+	  angular.injector.$$annotate = function(fn) {
+	    if (typeof fn === 'function' && !fn.$inject) {
+	      annotatedFunctions.push(fn);
+	    }
+	    return angular.mock.$$annotate.apply(this, arguments);
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name angular.mock.module
+	   * @description
+	   *
+	   * *NOTE*: This function is also published on window for easy access.<br>
+	   * *NOTE*: This function is declared ONLY WHEN running tests with jasmine or mocha
+	   *
+	   * This function registers a module configuration code. It collects the configuration information
+	   * which will be used when the injector is created by {@link angular.mock.inject inject}.
+	   *
+	   * See {@link angular.mock.inject inject} for usage example
+	   *
+	   * @param {...(string|Function|Object)} fns any number of modules which are represented as string
+	   *        aliases or as anonymous module initialization functions. The modules are used to
+	   *        configure the injector. The 'ng' and 'ngMock' modules are automatically loaded. If an
+	   *        object literal is passed each key-value pair will be registered on the module via
+	   *        {@link auto.$provide $provide}.value, the key being the string name (or token) to associate
+	   *        with the value on the injector.
+	   */
+	  var module = window.module = angular.mock.module = function() {
+	    var moduleFns = Array.prototype.slice.call(arguments, 0);
+	    return wasInjectorCreated() ? workFn() : workFn;
+	    /////////////////////
+	    function workFn() {
+	      if (currentSpec.$injector) {
+	        throw new Error('Injector already created, can not register a module!');
+	      } else {
+	        var fn, modules = currentSpec.$modules || (currentSpec.$modules = []);
+	        angular.forEach(moduleFns, function(module) {
+	          if (angular.isObject(module) && !angular.isArray(module)) {
+	            fn = ['$provide', function($provide) {
+	              angular.forEach(module, function(value, key) {
+	                $provide.value(key, value);
+	              });
+	            }];
+	          } else {
+	            fn = module;
+	          }
+	          if (currentSpec.$providerInjector) {
+	            currentSpec.$providerInjector.invoke(fn);
+	          } else {
+	            modules.push(fn);
+	          }
+	        });
+	      }
 	    }
 	  };
-	}
+
+	  module.$$beforeAllHook = (window.before || window.beforeAll);
+	  module.$$afterAllHook = (window.after || window.afterAll);
+
+	  // purely for testing ngMock itself
+	  module.$$currentSpec = function(to) {
+	    if (arguments.length === 0) return to;
+	    currentSpec = to;
+	  };
+
+	  /**
+	   * @ngdoc function
+	   * @name angular.mock.module.sharedInjector
+	   * @description
+	   *
+	   * *NOTE*: This function is declared ONLY WHEN running tests with jasmine or mocha
+	   *
+	   * This function ensures a single injector will be used for all tests in a given describe context.
+	   * This contrasts with the default behaviour where a new injector is created per test case.
+	   *
+	   * Use sharedInjector when you want to take advantage of Jasmine's `beforeAll()`, or mocha's
+	   * `before()` methods. Call `module.sharedInjector()` before you setup any other hooks that
+	   * will create (i.e call `module()`) or use (i.e call `inject()`) the injector.
+	   *
+	   * You cannot call `sharedInjector()` from within a context already using `sharedInjector()`.
+	   *
+	   * ## Example
+	   *
+	   * Typically beforeAll is used to make many assertions about a single operation. This can
+	   * cut down test run-time as the test setup doesn't need to be re-run, and enabling focussed
+	   * tests each with a single assertion.
+	   *
+	   * ```js
+	   * describe("Deep Thought", function() {
+	   *
+	   *   module.sharedInjector();
+	   *
+	   *   beforeAll(module("UltimateQuestion"));
+	   *
+	   *   beforeAll(inject(function(DeepThought) {
+	   *     expect(DeepThought.answer).toBeUndefined();
+	   *     DeepThought.generateAnswer();
+	   *   }));
+	   *
+	   *   it("has calculated the answer correctly", inject(function(DeepThought) {
+	   *     // Because of sharedInjector, we have access to the instance of the DeepThought service
+	   *     // that was provided to the beforeAll() hook. Therefore we can test the generated answer
+	   *     expect(DeepThought.answer).toBe(42);
+	   *   }));
+	   *
+	   *   it("has calculated the answer within the expected time", inject(function(DeepThought) {
+	   *     expect(DeepThought.runTimeMillennia).toBeLessThan(8000);
+	   *   }));
+	   *
+	   *   it("has double checked the answer", inject(function(DeepThought) {
+	   *     expect(DeepThought.absolutelySureItIsTheRightAnswer).toBe(true);
+	   *   }));
+	   *
+	   * });
+	   *
+	   * ```
+	   */
+	  module.sharedInjector = function() {
+	    if (!(module.$$beforeAllHook && module.$$afterAllHook)) {
+	      throw Error("sharedInjector() cannot be used unless your test runner defines beforeAll/afterAll");
+	    }
+
+	    var initialized = false;
+
+	    module.$$beforeAllHook(function() {
+	      if (injectorState.shared) {
+	        injectorState.sharedError = Error("sharedInjector() cannot be called inside a context that has already called sharedInjector()");
+	        throw injectorState.sharedError;
+	      }
+	      initialized = true;
+	      currentSpec = this;
+	      injectorState.shared = true;
+	    });
+
+	    module.$$afterAllHook(function() {
+	      if (initialized) {
+	        injectorState = new InjectorState();
+	        module.$$cleanup();
+	      } else {
+	        injectorState.sharedError = null;
+	      }
+	    });
+	  };
+
+	  module.$$beforeEach = function() {
+	    if (injectorState.shared && currentSpec && currentSpec != this) {
+	      var state = currentSpec;
+	      currentSpec = this;
+	      angular.forEach(["$injector","$modules","$providerInjector", "$injectorStrict"], function(k) {
+	        currentSpec[k] = state[k];
+	        state[k] = null;
+	      });
+	    } else {
+	      currentSpec = this;
+	      originalRootElement = null;
+	      annotatedFunctions = [];
+	    }
+	  };
+
+	  module.$$afterEach = function() {
+	    if (injectorState.cleanupAfterEach()) {
+	      module.$$cleanup();
+	    }
+	  };
+
+	  module.$$cleanup = function() {
+	    var injector = currentSpec.$injector;
+
+	    annotatedFunctions.forEach(function(fn) {
+	      delete fn.$inject;
+	    });
+
+	    angular.forEach(currentSpec.$modules, function(module) {
+	      if (module && module.$$hashKey) {
+	        module.$$hashKey = undefined;
+	      }
+	    });
+
+	    currentSpec.$injector = null;
+	    currentSpec.$modules = null;
+	    currentSpec.$providerInjector = null;
+	    currentSpec = null;
+
+	    if (injector) {
+	      // Ensure `$rootElement` is instantiated, before checking `originalRootElement`
+	      var $rootElement = injector.get('$rootElement');
+	      var rootNode = $rootElement && $rootElement[0];
+	      var cleanUpNodes = !originalRootElement ? [] : [originalRootElement[0]];
+	      if (rootNode && (!originalRootElement || rootNode !== originalRootElement[0])) {
+	        cleanUpNodes.push(rootNode);
+	      }
+	      angular.element.cleanData(cleanUpNodes);
+
+	      // Ensure `$destroy()` is available, before calling it
+	      // (a mocked `$rootScope` might not implement it (or not even be an object at all))
+	      var $rootScope = injector.get('$rootScope');
+	      if ($rootScope && $rootScope.$destroy) $rootScope.$destroy();
+	    }
+
+	    // clean up jquery's fragment cache
+	    angular.forEach(angular.element.fragments, function(val, key) {
+	      delete angular.element.fragments[key];
+	    });
+
+	    MockXhr.$$lastInstance = null;
+
+	    angular.forEach(angular.callbacks, function(val, key) {
+	      delete angular.callbacks[key];
+	    });
+	    angular.callbacks.counter = 0;
+	  };
+
+	  (window.beforeEach || window.setup)(module.$$beforeEach);
+	  (window.afterEach || window.teardown)(module.$$afterEach);
+
+	  /**
+	   * @ngdoc function
+	   * @name angular.mock.inject
+	   * @description
+	   *
+	   * *NOTE*: This function is also published on window for easy access.<br>
+	   * *NOTE*: This function is declared ONLY WHEN running tests with jasmine or mocha
+	   *
+	   * The inject function wraps a function into an injectable function. The inject() creates new
+	   * instance of {@link auto.$injector $injector} per test, which is then used for
+	   * resolving references.
+	   *
+	   *
+	   * ## Resolving References (Underscore Wrapping)
+	   * Often, we would like to inject a reference once, in a `beforeEach()` block and reuse this
+	   * in multiple `it()` clauses. To be able to do this we must assign the reference to a variable
+	   * that is declared in the scope of the `describe()` block. Since we would, most likely, want
+	   * the variable to have the same name of the reference we have a problem, since the parameter
+	   * to the `inject()` function would hide the outer variable.
+	   *
+	   * To help with this, the injected parameters can, optionally, be enclosed with underscores.
+	   * These are ignored by the injector when the reference name is resolved.
+	   *
+	   * For example, the parameter `_myService_` would be resolved as the reference `myService`.
+	   * Since it is available in the function body as _myService_, we can then assign it to a variable
+	   * defined in an outer scope.
+	   *
+	   * ```
+	   * // Defined out reference variable outside
+	   * var myService;
+	   *
+	   * // Wrap the parameter in underscores
+	   * beforeEach( inject( function(_myService_){
+	   *   myService = _myService_;
+	   * }));
+	   *
+	   * // Use myService in a series of tests.
+	   * it('makes use of myService', function() {
+	   *   myService.doStuff();
+	   * });
+	   *
+	   * ```
+	   *
+	   * See also {@link angular.mock.module angular.mock.module}
+	   *
+	   * ## Example
+	   * Example of what a typical jasmine tests looks like with the inject method.
+	   * ```js
+	   *
+	   *   angular.module('myApplicationModule', [])
+	   *       .value('mode', 'app')
+	   *       .value('version', 'v1.0.1');
+	   *
+	   *
+	   *   describe('MyApp', function() {
+	   *
+	   *     // You need to load modules that you want to test,
+	   *     // it loads only the "ng" module by default.
+	   *     beforeEach(module('myApplicationModule'));
+	   *
+	   *
+	   *     // inject() is used to inject arguments of all given functions
+	   *     it('should provide a version', inject(function(mode, version) {
+	   *       expect(version).toEqual('v1.0.1');
+	   *       expect(mode).toEqual('app');
+	   *     }));
+	   *
+	   *
+	   *     // The inject and module method can also be used inside of the it or beforeEach
+	   *     it('should override a version and test the new version is injected', function() {
+	   *       // module() takes functions or strings (module aliases)
+	   *       module(function($provide) {
+	   *         $provide.value('version', 'overridden'); // override version here
+	   *       });
+	   *
+	   *       inject(function(version) {
+	   *         expect(version).toEqual('overridden');
+	   *       });
+	   *     });
+	   *   });
+	   *
+	   * ```
+	   *
+	   * @param {...Function} fns any number of functions which will be injected using the injector.
+	   */
+
+
+
+	  var ErrorAddingDeclarationLocationStack = function(e, errorForStack) {
+	    this.message = e.message;
+	    this.name = e.name;
+	    if (e.line) this.line = e.line;
+	    if (e.sourceId) this.sourceId = e.sourceId;
+	    if (e.stack && errorForStack)
+	      this.stack = e.stack + '\n' + errorForStack.stack;
+	    if (e.stackArray) this.stackArray = e.stackArray;
+	  };
+	  ErrorAddingDeclarationLocationStack.prototype.toString = Error.prototype.toString;
+
+	  window.inject = angular.mock.inject = function() {
+	    var blockFns = Array.prototype.slice.call(arguments, 0);
+	    var errorForStack = new Error('Declaration Location');
+	    // IE10+ and PhanthomJS do not set stack trace information, until the error is thrown
+	    if (!errorForStack.stack) {
+	      try {
+	        throw errorForStack;
+	      } catch (e) {}
+	    }
+	    return wasInjectorCreated() ? workFn.call(currentSpec) : workFn;
+	    /////////////////////
+	    function workFn() {
+	      var modules = currentSpec.$modules || [];
+	      var strictDi = !!currentSpec.$injectorStrict;
+	      modules.unshift(['$injector', function($injector) {
+	        currentSpec.$providerInjector = $injector;
+	      }]);
+	      modules.unshift('ngMock');
+	      modules.unshift('ng');
+	      var injector = currentSpec.$injector;
+	      if (!injector) {
+	        if (strictDi) {
+	          // If strictDi is enabled, annotate the providerInjector blocks
+	          angular.forEach(modules, function(moduleFn) {
+	            if (typeof moduleFn === "function") {
+	              angular.injector.$$annotate(moduleFn);
+	            }
+	          });
+	        }
+	        injector = currentSpec.$injector = angular.injector(modules, strictDi);
+	        currentSpec.$injectorStrict = strictDi;
+	      }
+	      for (var i = 0, ii = blockFns.length; i < ii; i++) {
+	        if (currentSpec.$injectorStrict) {
+	          // If the injector is strict / strictDi, and the spec wants to inject using automatic
+	          // annotation, then annotate the function here.
+	          injector.annotate(blockFns[i]);
+	        }
+	        try {
+	          /* jshint -W040 *//* Jasmine explicitly provides a `this` object when calling functions */
+	          injector.invoke(blockFns[i] || angular.noop, this);
+	          /* jshint +W040 */
+	        } catch (e) {
+	          if (e.stack && errorForStack) {
+	            throw new ErrorAddingDeclarationLocationStack(e, errorForStack);
+	          }
+	          throw e;
+	        } finally {
+	          errorForStack = null;
+	        }
+	      }
+	    }
+	  };
+
+
+	  angular.mock.inject.strictDi = function(value) {
+	    value = arguments.length ? !!value : true;
+	    return wasInjectorCreated() ? workFn() : workFn;
+
+	    function workFn() {
+	      if (value !== currentSpec.$injectorStrict) {
+	        if (currentSpec.$injector) {
+	          throw new Error('Injector already created, can not modify strict annotations');
+	        } else {
+	          currentSpec.$injectorStrict = value;
+	        }
+	      }
+	    }
+	  };
+
+	  function InjectorState() {
+	    this.shared = false;
+	    this.sharedError = null;
+
+	    this.cleanupAfterEach = function() {
+	      return !this.shared || this.sharedError;
+	    };
+	  }
+	})(window.jasmine || window.mocha);
 
 
 	})(window, window.angular);
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
-	    var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
-	    var tokenFromLocalStorage;
-	    var newArray;
-	    this.user = {};
-	    this.queryRoute = {};
-	    this.driverRoute = {};
-	    this.riderRoute = {};
-	    this.arrayOfCoordinates = [];
-	    this.origin = '';
-	    this.startCoordinates = {};
-	    this.markerPoints = [];
-
-
-	    this.initialize = function(){
-	      $window.Gmap.initMap();
-	    };
-
-	    this.search = function(cb){
-	      cb = this.postRoutes;
-	      console.log('hitting here in search!');
-	      // $window.Gmap.getDirections(this.origin);
-	      $window.Gmap.convertAddressForData(this.origin, function(coordinates){
-	        this.startCoordinates = coordinates;
-	        console.log('startCoordinates : ' + JSON.stringify(this.startCoordinates));
-	        cb(JSON.stringify(this.startCoordinates));
-	      });
-	    };
-
-	    //Searching available drivers within 1 mile radius (radius set on BE side)
-	    this.searchAvailWithinRadius = function(data, cb){
-	      cb = this.sendCoordinates;
-	      $window.Gmap.convertAddressForData(data, (coordinates)=>{
-	        $window.Gmap.markerOnStartPoint(coordinates);
-	        var obj = this.coordsIntoObj(coordinates);
-	        console.log('Objecttttt : ' + JSON.stringify(obj));
-	        cb(obj);
-	      });
-	    };
-
-	    //Changing WKT coordinates into regular coordinates object
-	    this.coordsIntoObj = function(originalCords){
-	      var newCordsObj = {};
-	      var regex = /\(([^)]+)\)/;
-	      var cords = regex.exec(originalCords);
-	      var cordsLat = String(cords).split(',')[2];
-	      var cordsLng = String(cords).split(',')[3];
-	      newCordsObj.lat = cordsLat;
-	      newCordsObj.lng = cordsLng;
-	      console.log('Catching Lat: ' + cordsLat);
-	      console.log('Catching Lng: ' + cordsLng);
-	      // console.log('Catching split: ' + cordsLng);
-	      return newCordsObj;
-	    };
-
-
-	    //sending newly created coordinates object to BE server using query string on url
-	    //and getting back array of coordinates data in WKT format, and converting that into
-	    //regular json that gmap reads.
-	    this.sendCoordinates = function(data, cb){
-	      cb = $window.Gmap.markersOnOrigins;
-	      tokenFromLocalStorage = $window.localStorage.token;
-	      $http.get(mainRoute + 'query/?lat=' + data.lat + '&lng=' + data.lng, {
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Token ' + tokenFromLocalStorage
-	        }
-	      }).then((res)=>{
-	        newArray = [];
-	        res.data.forEach((data)=>{
-	          var newObj = {};
-	          var transformedData = data.start_point.split(' ').splice(1);
-	          var stringifiedCords = String(transformedData).split(',');
-	          var regex = /\(([^)]+)\)/;
-	          newObj.lat = JSON.parse(regex.exec(stringifiedCords)[1].split(',')[1]);
-	          newObj.lng = JSON.parse(regex.exec(stringifiedCords)[1].split(',')[0]);
-	          newArray.push(newObj);
-	          console.log('New Array of Obj?? : ' + JSON.stringify(newArray));
-	        });
-	        cb(newArray);
-	      });
-	    };
-
-
-	    //getting coordinates from /routes/add/
-	    this.getDriverRoutes = function(){
-	      var tokenFromLocalStorage = $window.localStorage.token;
-	      console.log('localStorage?? ' + $window.localStorage.token);
-	      $http.get(mainRoute + 'routes/add/',{
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Token ' + tokenFromLocalStorage
-	        }
-	      })
-	        .then((res)=>{
-	          $window.Gmap.markersOnOrigins();
-	          console.dir('Response back : ' + JSON.stringify(res));
-	          console.dir('Response back : ' + JSON.stringify(res.data));
-	          var data = res.data.map((data)=>{
-	            var obj = {};
-	            obj.start_point = data.start_point;
-	            return obj;
-	          })[0].start_point.split(' ').splice(1);
-	          var stringifiedCords = String(data).split(',');
-	          var regex = /\(([^)]+)\)/;
-	          var cords = regex.exec(stringifiedCords)[1].split(',');
-	          console.dir('Starting Point? '+ stringifiedCords);
-	          console.dir('Starting Point? '+ cords);
-	        });
-	    };
-
-	    this.getQueryRoutes = function() {
-	      var tokenFromLocalStorage = $window.localStorage.token;
-	      console.log('localStorage_Query ' + $window.localStorage.token);
-	      $http.get(mainRoute + 'query/?lat='+'&lng=1', {
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Token ' + tokenFromLocalStorage
-	        }
-	      })
-	      .then((res)=>{
-	        console.log(res);
-	        var data = res.data.map((data)=>{
-	          var obj = {};
-	          obj.start_point = data.start_point;
-	          return obj;
-	        })[0].start_point.split(' ').splice(1);
-	        var stringifiedCords = String(data).split(',');
-	        var regex = /\(([^)]+)\)/;
-	        var cords = regex.exec(stringifiedCords)[1].split(',');
-	        console.dir('Starting Point? '+ stringifiedCords);
-	        console.dir('Starting Point? '+ cords);
-
-	      });
-	    };
-	    this.getUserRoutes = function(user){
-	      console.log(user);
-	      var tokenFromLocalStorage = $window.localStorage.token;
-	      console.log('localStorage_Query ' + $window.localStorage.token);
-	      $http.get(mainRoute + '/routes/add/' + this.data.id, {
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Token ' + tokenFromLocalStorage
-	        }
-	      })
-	        .then((res)=>{
-	          console.log(res);
-
-	        });
-	    };
-
-
-	    //check if route is with / or without it
-	    this.postRoutes = function(coordinates){
-	      console.log('I am inside of postRoute : ' + coordinates);
-	      $http.post(mainRoute + 'users/', coordinates)
-	        .then((res)=>{
-	          console.log('Response back : ' + res);
-	        });
-	    };
-
-	    this.getAllDriverOrigins = function(){
-	      $window.Gmap.markersOnOrigins(this.markerPoints);
-	    };
-
-
-
-	  }]);
-	};
-
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(app){
-	  app.factory('AuthService', ['$http', '$window', function($http, $window){
-	    var token;
-	    var url = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com';
-	    var auth = {
-	      getToken(){
-	        return token || $window.localStorage.token;
-	      },
-	      signOut(cb){
-	        token = null;
-	        $window.localStorage.token = null;
-	        if(cb) cb();
-	      },
-
-	      signIn(user, cb){
-	        cb || function(){};
-	        $http.post(url + '/auth-token/',{},{
-	          headers: {
-	            'Content-Type': 'application/json',
-	            'Authorization': 'Basic ' + btoa(user.username + ':' + user.password)
-	          }
-	        }).then((res)=>{
-	          token = $window.localStorage.token = res.data.token;
-	          cb(null, res);
-	        }, (err)=>{
-	          cb(err);
-	        });
-	      }
-	    };
-	    return auth;
-	  }]);
-	};
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	'use strict';
-	module.exports = function (app) {
-
-	  app.service('fileUpload', ['$http', function ($http) {
-	    this.uploadFileToUrl = function(file, uploadUrl){
-	      var fd = new FormData();
-	      fd.append('file', file);
-	      $http.post(uploadUrl, fd, {
-	        transformRequest: angular.identity,
-	        headers: {'Content-Type': undefined}
-	      })
-	        .success(function(){
-	        })
-	        .error(function(){
-	        });
-	    };
-	  }]);
-	};
-
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	module.exports = function(app){
-	  app.directive('mapRider',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/form-rider.html'
-	    };
-	  });
-
-	  app.directive('mapDriver',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/form-driver.html'
-	    };
-	  });
-
-	  app.directive('mapView',function(){
-	    return {
-	      restrict: 'E',
-	      replace: true,
-	      controller: 'mapController',
-	      templateUrl: '/templates/gmap-view.html'
-	    };
-	  });
-	  // app.directive('mapRider',function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     replace: true,
-	  //     controller: 'mapController',
-	  //     templateUrl: '/templates/gmap-view.html'
-	  //   };
-	  // });
-	};
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	'use strict';
-	module.exports = function (app) {
-
-	  // app.directive('userProfile', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/user-profile.html'
-	  //
-	  //   };
-	  // });
-	  //
-	  // app.directive('newProfile', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/new-profile.html'
-	  //
-	  //   };
-	  // });
-	  //
-	  // app.directive('home', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './views/01_home.html'
-	  //
-	  //   };
-	  // });
-	  //
-	  // app.directive('dashboardPage', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/dashboard.html',
-	  //     controller: 'ProfileController'
-	  //
-	  //   };
-	  // });
-	  //
-	  app.directive('userSignin', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/signin.html'
-	    };
-	  });
-	  //
-	  // app.directive('aboutUs', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/about-us.html'
-	  //   };
-	  // });
-	  //
-	  //
-	  // app.directive('fileModel', ['$parse', function ($parse) {
-	  //   return {
-	  //     restrict: 'A',
-	  //     link: function(scope, element, attrs) {
-	  //       var model = $parse(attrs.fileModel);
-	  //       var modelSetter = model.assign;
-	  //
-	  //       element.bind('change', function(){
-	  //         scope.$apply(function(){
-	  //           modelSetter(scope, element[0].files[0]);
-	  //         });
-	  //       });
-	  //     }
-	  //   };
-	  // }]);
-	  //
-	  app.directive('customNav', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: './templates/tabs.html'
-	    };
-	  });
-
-	  app.directive('mainHeader', function(){
-	    return {
-	      restrict: 'E',
-	      templateUrl: ' ./templates/header.html'
-	    };
-	  });
-
-	};
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(app){
-	  app.controller('UserController', ['$http','AuthService', '$location', function($http, AuthService, $location) {
-	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	    const self = this;
-	    self.users = ['user'];
-
-	    self.submit = function(){
-	      if(self.users){
-	        self.users.push(self.users);
-	        self.users = '';
-	      }
-	    };
-
-	    self.getUser = function(){
-	      var tokenFromLocalStorage = $window.localStorage.token;
-	      console.log('localToken ' + $window.localStorage.token);
-	      $http.get(userRoute, {
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Token ' + tokenFromLocalStorage
-	        }
-	      })
-	        .then((result)=>{
-	          self.users = result.data;
-	        }, (error)=>{
-	          return error;
-	        });
-	    };
-
-	    self.createUser = function(user){
-	      $http.post(userRoute, user)
-	        .then(function(res){
-	          console.log('post is hit');
-	          self.users.push(res.data);
-	          self.newUser = null;
-	        });
-	    };
-
-	    self.updateUser = function(user){
-	      $http.put(userRoute + user.id, {
-	        headers: AuthService.getToken()
-	      })
-	      .then((result)=>{
-	        self.users = self.users.map((u)=>{
-	          if(u.id === user.id){
-	            return user;
-	          }else {
-	            return u;
-	          }
-	        });
-	      });
-	    };
-
-	    self.removeUser = function(user){
-	      $http.delete(userRoute + user.id, {
-	        headers: AuthService.getToken()
-	      })
-	      .then((result)=>{
-	        self.users = self.users.filter((u)=> u.id !=u.id);
-	      });
-	    };
-
-	//auth routes
-
-	    // self.signUp = function(user){
-	    //   AuthService.createUser(user, (err, res)=>{
-	    //     if(err) return console.log(err);
-	    //     console.log('hitting' + res);
-	    //   });
-	    // };
-
-	    self.logOut = function(user){
-	      AuthService.signOut((err, res)=>{
-	        if(err) return console.log(err);
-	        console.log('hitting' + res);
-	        $location.path('/signin')
-	      });
-	    };
-
-
-	    self.logIn = function(user){
-	      // console.dir(angular.toJson(user));
-	      AuthService.signIn(user, (err, res)=>{
-	        if(err) return console.log(err);
-	        console.log('Log in res.body : ' + angular.toJson(res.body));
-	        console.log('Log in res : ' + angular.toJson(res));
-	        $location.path('/dashboard');
-	      });
-	    };
-	  }]);
-
-	};
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	module.exports = function(app){
-
-	  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
-	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
-	    this.profiles = ['profile'];
-	    this.editingProfile = false;
-	    this.newProfile = {};
-
-	    this.getProfile = function(){
-	      var tokenFromLocalStorage = $window.localStorage.token;
-	      console.log('localStorage?? ' + $window.localStorage.token);
-	      $http.get(profileRoute + '3/' ,{
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Token ' + tokenFromLocalStorage
-	        }
-	      })
-	      .then((result)=>{
-	        this.profiles = result.data;
-	      }, function(error){
-	        console.log(error);
-	      });
-
-	    };
-
-	    this.goToGmapView = function(){
-	      console.log('searching!!!');
-	      $location.path('/search');
-	    };
-
-	    this.goToAboutMe = function(){
-	      $location.path('/about');
-	    };
-	    // this.getProfile = function(){
-	    //   $http.get(profileRoute)
-	    // this.createProfile = function(profile){
-	    //   $http.post(profileRoute, user)
-	    //     .then((result)=>{
-	    //       console.log('post is hit');
-	    //       this.profiles.push(result.data);
-	    //     });
-	    //   };
-	    //***********************
-	    //getting dashboard data
-	    //***********************
-	    this.dashboardView = function(){
-	      $http.get(profileRoute, {
-	        headers: {
-	          'Content-Type': 'application/json',
-	          'Authorization': 'Basic ' + $window.localStorage.token
-	        }
-	      }).then((res)=>{
-	        console.log('Profile Result : ' + JSON.stringify(res));
-	        $location.path('/dashboard');
-	      });
-	    };
-
-	    this.updateProfile = function(profile){
-	      $http.put(profileRoute + profile.id)
-	        .then((result)=>{
-	          this.profiles = this.profiles.map((p)=>{
-	            if(p.id === profile.id){
-	              return profile;
-	            } else {
-	              return p;
-	            }
-	          });
-	        });
-	    };
-
-	    this.editButtonShow = function(){
-	      this.editingProfile = true;
-	    };
-
-	    this.submit = function(profile){
-	      if(this.profiles){
-	        this.profiles.push(this.profiles);
-	        this.profiles = '';
-	      }
-
-	    };
-
-	  }]);
-
-	  app.controller('FileController', [ 'fileUpload', function( fileUpload){
-
-	    this.uploadFile = function(){
-	      var file = this.myFile;
-	      console.log('file is ' );
-	      console.dir(file);
-	      var uploadUrl = '/fileUpload';
-	      fileUpload.uploadFileToUrl(file, uploadUrl);
-	    };
-
-
-	  }]);
-
-	};
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports) {
-
-	(function(module){
-	  var Gmap = {};
-	  var map;
-	  var geocoder;
-	  var request;
-
-	  Gmap.initMap = function (){
-	    var centerCord = {lat: 47.610366, lng: -122.303345};
-	    geocoder = new google.maps.Geocoder();
-	    map = new google.maps.Map(document.getElementById('map'),{
-	      center: centerCord,
-	      scrollwheel: false,
-	      zoom: 13
-	    });
-	  };
-
-	  Gmap.getDirections = function(startPoint){
-	    Gmap.convertAddress(startPoint, function(){
-	      console.log('Is it start point ? ' + startPoint);
-	      request = {
-	        destination: {lat: 47.618427, lng: -122.351843},
-	        origin: startPoint,
-	        travelMode: google.maps.TravelMode.DRIVING
-	      };
-	      var directionsDisplay = new google.maps.DirectionsRenderer({
-	        map: map
-	      });
-
-	      var directionsService = new google.maps.DirectionsService();
-	      directionsService.route(request, function(res, status){
-	        if(status == google.maps.DirectionsStatus.OK){
-	          directionsDisplay.setDirections(res);
-	        }
-	      });
-
-	    });
-	  };
-
-	  Gmap.convertAddressForData = function(address, cb){
-	    geocoder.geocode({'address': address}, function(results, status){
-	      if(status == google.maps.GeocoderStatus.OK){
-	        map.setCenter(results[0].geometry.location);
-	        var marker = new google.maps.Marker({
-	          map: map,
-	          position: results[0].geometry.location,
-	          clickable: true,
-	          animation: google.maps.Animation.DROP
-	        });
-	        var coordinates = results[0].geometry.location;
-	        cb(coordinates);
-	      } else {
-	        alert('Geocode was not successful : ' + status);
-	      }
-	    });
-	  };
-
-	  Gmap.convertAddress = function(address, cb){
-	    geocoder.geocode({'address': address}, function(results, status){
-	      if(status == google.maps.GeocoderStatus.OK){
-	        map.setCenter(results[0].geometry.location);
-	        var marker = new google.maps.Marker({
-	          map: map,
-	          position: results[0].geometry.location,
-	          clickable: true,
-	          animation: google.maps.Animation.DROP
-	        });
-	        startPoint = results[0].geometry.location;
-	        cb(startPoint);
-	      } else {
-	        alert('Geocode was not successful : ' + status);
-	      }
-	    });
-	  };
-	  Gmap.markerOnStartPoint = function(cords){
-	    var marker = new google.maps.Marker({
-	      position: cords,
-	      map: map,
-	      clickable: true,
-	      animation: google.maps.Animation.DROP
-	    });
-	  }
-
-	  Gmap.markersOnOrigins = function(markerPoints){
-	    var marker;
-	    var markerImg = 'img/ride-marker.png';
-	    console.log('hitting marker fn ' + markerPoints + 'here')
-	    markerPoints.forEach((startingPoint)=>{
-	      marker = new google.maps.Marker({
-	        position: startingPoint,
-	        map: map,
-	        clickable: true,
-	        animation: google.maps.Animation.DROP,
-	        icon: markerImg
-	      });
-	    });
-	  };
-
-	  module.Gmap = Gmap;
-
-	})(window);
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
-	// $(document).ready(function() {
-	//
-	//   //defining our global variables
-	//     var $menu     = $('#menu'), //the entire navigation
-	//         $menulink = $('.nav-trigger'); // the small navigation trigger
-	//
-	//     // small nav menu click event
-	//     $menulink.click(function(e) {
-	//         // add active classes to small navigation trigger and entire navigation
-	//         $menulink.toggleClass('active');
-	//         $menu.toggleClass('active');
-	//
-	//       // conditional check for directional icon
-	//       if($menulink.hasClass('active')) {
-	//         // if class is active give an up arrow
-	//       	$('.directional').html('&uparrow;');
-	//       }else {
-	//         // ...otherwise show me a down arrrow alex
-	//       	$('.directional').html('&downarrow;');
-	//       }
-	//
-	//       // don't return nothin'...k?
-	// 			return false;
-	//
-	//       // prevent the defualt behaviour of the element...k?
-	//       e.preventDefault();
-	// 		});
-	//
-	//   	// matched media detection for aria-hidden attribute manipulation
-	//   	// this only changes based on the intitial page load query matched
-	//   	//window.innerWidth might be a better way at the moment and does not require a refresh like our friend matchMedia desires.
-	//
-	//   	if(window.matchMedia("(min-width: 60em)").matches){
-	//   		$menulink.attr('aria-hidden', 'false');
-	//   	}else {
-	//   		$menulink.attr('aria-hidden', 'true');
-	//   	}
-	//
-	// });
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	'use strict';
-	module.exports = function(app) {
-	  app.factory('ErrorService', function() {
-	    var error;
-	    return function(newError) {
-	      if (newError === null) return error = null;
-	      if (!newError) return error;
-	      return error = newError;
-	    };
-	  });
-	};
 
 
 /***/ }

@@ -56,4 +56,4 @@ gulp.task('bundle:test', () => {
 
 
 
-gulp.task('default', ['bundle:dev', 'build:css', 'copy:image', 'copy', 'copyImg']);
+gulp.task('default', ['bundle:dev', 'build:css', 'copy:image', 'copy', 'copyImg', 'bundle:test']);
