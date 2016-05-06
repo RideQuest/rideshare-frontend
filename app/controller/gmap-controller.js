@@ -1,8 +1,8 @@
 module.exports = function(app){
   app.controller('mapController', ['$window','$http', 'AuthService',function($window, $http, AuthService){
     var mainRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/';
-    var pikePlace = {lat: 47.608953, lng: -122.341099};
-    var bellevueMall = {lat: 47.616591, lng: -122.198797};
+    // var pikePlace = {lat: 47.608953, lng: -122.341099};
+    // var bellevueMall = {lat: 47.616591, lng: -122.198797};
     var tokenFromLocalStorage;
     this.user = {};
     this.queryRoute = {};
@@ -30,25 +30,18 @@ module.exports = function(app){
       });
     };
 
-    this.seachAvailWithinRadius = function(data){
+    //Search radius
+    this.searchAvailWithinRadius = function(data){
       $window.Gmap.convertAddressForData(data, (coordinates)=>{
-        console.log('data : ' + data);
-        console.log('coordinates : ' + coordinates);
-        var catchCords = this.coordsIntoObj(coordinates);
-        console.log('Catching inside fn : ' + JSON.stringify(catchCords));
         $window.Gmap.markersOnOrigins(coordinates);
-
+        var obj = this.coordsIntoObj(coordinates);
+        console.log('Objecttttt : ' + obj);
       });
     };
 
-    // this.extractCoordinates = function(arrayData, cb){
-    //   cb =
-    //   console.log('Extract Extract');
-    //
-    // };
-
+    //Changing WKT coordinates into regular coordinates object
     this.coordsIntoObj = function(originalCords){
-      var newCordsObj = {};
+      var newCordsObj = {lat: '',lng: ''};
       var regex = /\(([^)]+)\)/;
       var cords = regex.exec(originalCords);
       var cordsLat = String(cords).split(',')[2];
@@ -59,19 +52,23 @@ module.exports = function(app){
       console.log('Catching Lng: ' + cordsLng);
       // console.log('Catching split: ' + cordsLng);
       return newCordsObj;
-    }
+    };
 
+    //sending newly created coordinates object to BE server using query string on url
     this.sendCoordinates = function(data){
+      console.log('Object?? : ' + JSON.stringify(data));
       tokenFromLocalStorage = $window.localStorage.token;
-      $http.get(mainRoute + 'query/?lat=' + lat + '&lng=' + lng, {
+      $http.get(mainRoute + 'query/?lat=' + data.lat + '&lng=' + data.lng, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Token ' + tokenFromLocalStorage
         }
       }).then((res)=>{
-
+        console.log('Back from awesome BE server! : ' + res);
       });
     };
+
+
     //getting coordinates from /routes/add/
     this.getDriverRoutes = function(){
       var tokenFromLocalStorage = $window.localStorage.token;
@@ -83,7 +80,7 @@ module.exports = function(app){
         }
       })
         .then((res)=>{
-          $window.Gmap.markersOnOrigins()
+          $window.Gmap.markersOnOrigins();
           console.dir('Response back : ' + JSON.stringify(res));
           console.dir('Response back : ' + JSON.stringify(res.data));
           var data = res.data.map((data)=>{
@@ -122,7 +119,7 @@ module.exports = function(app){
         console.dir('Starting Point? '+ cords);
 
       });
-  };
+    };
     this.getUserRoutes = function(user){
       console.log(user);
       var tokenFromLocalStorage = $window.localStorage.token;
@@ -136,8 +133,8 @@ module.exports = function(app){
         .then((res)=>{
           console.log(res);
 
-        })
-    }
+        });
+    };
 
 
     //check if route is with / or without it
