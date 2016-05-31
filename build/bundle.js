@@ -50,11 +50,11 @@
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
-	__webpack_require__(9);
 	__webpack_require__(13);
-	__webpack_require__(10);
 	__webpack_require__(14);
-	module.exports = __webpack_require__(15);
+	__webpack_require__(9);
+	__webpack_require__(15);
+	module.exports = __webpack_require__(10);
 
 
 /***/ },
@@ -32075,7 +32075,7 @@
 	    };
 
 	    self.createUser = function(user){
-	      $http.post(userRoute, user)
+	      $http.post('http://ec2-52-38-140-35.us-west-2.compute.amazonaws.com/users/signup', user)
 	        .then(function(res){
 	          console.log('post is hit');
 	          self.users.push(res.data);
@@ -32619,23 +32619,6 @@
 /* 13 */
 /***/ function(module, exports) {
 
-	'use strict';
-	module.exports = function(app) {
-	  app.factory('ErrorService', function() {
-	    var error;
-	    return function(newError) {
-	      if (newError === null) return error = null;
-	      if (!newError) return error;
-	      return error = newError;
-	    };
-	  });
-	};
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
 	(function(module){
 	  var Gmap = {};
 	  var map;
@@ -32739,7 +32722,7 @@
 
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	// $(document).ready(function() {
@@ -32781,6 +32764,23 @@
 	//   	}
 	//
 	// });
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+	module.exports = function(app) {
+	  app.factory('ErrorService', function() {
+	    var error;
+	    return function(newError) {
+	      if (newError === null) return error = null;
+	      if (!newError) return error;
+	      return error = newError;
+	    };
+	  });
+	};
 
 
 /***/ }

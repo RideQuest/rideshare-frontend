@@ -32095,7 +32095,7 @@
 	    };
 
 	    self.createUser = function(user){
-	      $http.post(userRoute, user)
+	      $http.post('http://ec2-52-38-140-35.us-west-2.compute.amazonaws.com/users/signup', user)
 	        .then(function(res){
 	          console.log('post is hit');
 	          self.users.push(res.data);

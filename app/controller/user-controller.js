@@ -30,7 +30,7 @@ module.exports = function(app){
     };
 
     self.createUser = function(user){
-      $http.post(userRoute, user)
+      $http.post('http://ec2-52-38-140-35.us-west-2.compute.amazonaws.com/users/signup', user)
         .then(function(res){
           console.log('post is hit');
           self.users.push(res.data);
@@ -62,14 +62,6 @@ module.exports = function(app){
       });
     };
 
-//auth routes
-
-    // self.signUp = function(user){
-    //   AuthService.createUser(user, (err, res)=>{
-    //     if(err) return console.log(err);
-    //     console.log('hitting' + res);
-    //   });
-    // };
 
     self.logOut = function(user){
       AuthService.signOut((err, res)=>{
@@ -81,7 +73,6 @@ module.exports = function(app){
 
 
     self.logIn = function(user){
-      // console.dir(angular.toJson(user));
       AuthService.signIn(user, (err, res)=>{
         if(err) return console.log(err);
         console.log('Log in res.body : ' + angular.toJson(res.body));
