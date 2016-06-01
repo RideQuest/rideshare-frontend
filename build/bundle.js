@@ -91,11 +91,10 @@
 	    controller: 'UserController',
 	    templateUrl: './views/01_signup_in.html'
 	  })
-	  // .when('/home', {
+	  // .when('/signout', {
 	  //   controller: 'UserController',
-	  //   templateUrl: './views/home.html'
+	  //   templateUrl: './views/01_signup_in.html'
 	  // })
-
 	  .when('/dashboard', {
 	    controller: 'UserController',
 	    templateUrl: './templates/dashboard.html'
@@ -32046,7 +32045,7 @@
 	'use strict';
 
 	module.exports = function(app){
-	  app.controller('UserController', ['$http','AuthService', '$location', function($http, AuthService, $location) {
+	  app.controller('UserController', ['$http','AuthService','$location','$window', function($http, AuthService, $location, $window) {
 	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
 	    const self = this;
 	    self.users = ['user'];
@@ -32116,11 +32115,11 @@
 	    //   });
 	    // };
 
-	    self.logOut = function(user){
+	    self.logOut = function(){
 	      AuthService.signOut((err, res)=>{
 	        if(err) return console.log(err);
-	        console.log('hitting' + res);
-	        $location.path('/signin')
+	        console.log('hitting ' + res);
+	        $location.path('/');
 	      });
 	    };
 
@@ -32573,13 +32572,13 @@
 	      templateUrl: './templates/signin.html'
 	    };
 	  });
-	  //
-	  // app.directive('aboutUs', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/about-us.html'
-	  //   };
-	  // });
+
+	  app.directive('logoBar', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/logo-bar.html'
+	    };
+	  });
 	  //
 	  //
 	  // app.directive('fileModel', ['$parse', function ($parse) {

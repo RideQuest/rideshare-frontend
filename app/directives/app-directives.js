@@ -40,13 +40,13 @@ module.exports = function (app) {
       templateUrl: './templates/signin.html'
     };
   });
-  //
-  // app.directive('aboutUs', function(){
-  //   return {
-  //     restrict: 'E',
-  //     templateUrl: './templates/about-us.html'
-  //   };
-  // });
+
+  app.directive('logoBar', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/logo-bar.html'
+    };
+  });
   //
   //
   // app.directive('fileModel', ['$parse', function ($parse) {
