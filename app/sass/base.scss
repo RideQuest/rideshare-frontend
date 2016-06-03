@@ -1,3 +1,6 @@
+@import url(http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css);
+
+
 @font-face {
   font-family: 'Lato';
   font-style: normal;
@@ -436,12 +439,72 @@ input {
   margin-bottom: 15px
 }
 
+@media(max-width:767px) {
+.navbar-nav>li>a {
+    color: white;
+}
+.container>.topnav {
+  background-color: transparent;
+}
+.navbar-default .navbar-toggle {
+  border-color: transparent;
+}
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    color: coral;
+    /*background-color: black;*/
+
+}
+.navbar-default .navbar-toggle:select {
+  color:blue;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: lightgrey;
+    /*background-color: black;*/
+}
+
+.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
+    background-color: coral;
+}
+.topnav {
+    font-size: 1.2em;
+    background-color: rgba(0,0,0,0.5) ;
+}
+.navbar-brand.topnav {
+  color: coral;
+  text-shadow: 2px 2px 3px rgba(0,0,0,0.5);
+  background-color: transparent;
+  font-size: 2em;
+}
+
+.container.topnav {
+  background-color: transparent;
+}
 .delete-button {
   font-size: 0.7em;
   float: right;
   line-height: 25px
 }
 
+.ion-android-arrow-dropdown-circle:before {
+    content: "\f35e";
+    color: rgba(202,207,215,0.5);
+    font-size: 5em;
+}
+
+.ion-ios-arrow-down:hover{
+    font-size: 4em;
+    color: pink;
+    border-radius: 50%;
+    border: pink solid;
+    height: 50px;
+    width: 50px;
+}
+}
 /*======================= media queries =======================*/
 
 @media screen and (min-width: 43.75em) {

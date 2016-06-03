@@ -30,7 +30,7 @@ module.exports = function(app){
     };
 
     self.createUser = function(user){
-      $http.post(userRoute, user)
+      $http.post(userRoute + 'signup', user)
         .then(function(res){
           console.log('post is hit');
           self.users.push(res.data);

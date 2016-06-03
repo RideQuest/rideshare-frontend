@@ -111,6 +111,11 @@
 	    controller: 'UserController',
 	    templateUrl: './views/01_signup_in.html'
 	  })
+
+	  .when('/auth', {
+	    controller: 'UserController',
+	    templateUrl: './views/01_signup_in.html'
+	  })
 	  // .when('/signout', {
 	  //   controller: 'UserController',
 	  //   templateUrl: './views/01_signup_in.html'
@@ -32094,7 +32099,7 @@
 	    };
 
 	    self.createUser = function(user){
-	      $http.post(userRoute, user)
+	      $http.post(userRoute + 'signup', user)
 	        .then(function(res){
 	          console.log('post is hit');
 	          self.users.push(res.data);

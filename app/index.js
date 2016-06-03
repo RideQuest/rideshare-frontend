@@ -28,6 +28,11 @@ app.config(['$routeProvider', function(routeProvider){
     controller: 'UserController',
     templateUrl: './views/01_signup_in.html'
   })
+
+  .when('/auth', {
+    controller: 'UserController',
+    templateUrl: './views/01_signup_in.html'
+  })
   // .when('/signout', {
   //   controller: 'UserController',
   //   templateUrl: './views/01_signup_in.html'
