@@ -50,11 +50,11 @@
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
-	__webpack_require__(9);
 	__webpack_require__(13);
-	__webpack_require__(10);
 	__webpack_require__(14);
-	module.exports = __webpack_require__(15);
+	__webpack_require__(9);
+	__webpack_require__(15);
+	module.exports = __webpack_require__(10);
 
 
 /***/ },
@@ -91,11 +91,10 @@
 	    controller: 'UserController',
 	    templateUrl: './views/01_signup_in.html'
 	  })
-	  // .when('/home', {
+	  // .when('/signout', {
 	  //   controller: 'UserController',
-	  //   templateUrl: './views/home.html'
+	  //   templateUrl: './views/01_signup_in.html'
 	  // })
-
 	  .when('/dashboard', {
 	    controller: 'UserController',
 	    templateUrl: './templates/dashboard.html'
@@ -32046,7 +32045,7 @@
 	'use strict';
 
 	module.exports = function(app){
-	  app.controller('UserController', ['$http','AuthService', '$location', function($http, AuthService, $location) {
+	  app.controller('UserController', ['$http','AuthService','$location','$window', function($http, AuthService, $location, $window) {
 	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
 	    const self = this;
 	    self.users = ['user'];
@@ -32116,11 +32115,11 @@
 	    //   });
 	    // };
 
-	    self.logOut = function(user){
+	    self.logOut = function(){
 	      AuthService.signOut((err, res)=>{
 	        if(err) return console.log(err);
-	        console.log('hitting' + res);
-	        $location.path('/signin')
+	        console.log('hitting ' + res);
+	        $location.path('/');
 	      });
 	    };
 
@@ -32573,13 +32572,13 @@
 	      templateUrl: './templates/signin.html'
 	    };
 	  });
-	  //
-	  // app.directive('aboutUs', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/about-us.html'
-	  //   };
-	  // });
+
+	  app.directive('logoBar', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/logo-bar.html'
+	    };
+	  });
 	  //
 	  //
 	  // app.directive('fileModel', ['$parse', function ($parse) {
@@ -32617,23 +32616,6 @@
 
 /***/ },
 /* 13 */
-/***/ function(module, exports) {
-
-	'use strict';
-	module.exports = function(app) {
-	  app.factory('ErrorService', function() {
-	    var error;
-	    return function(newError) {
-	      if (newError === null) return error = null;
-	      if (!newError) return error;
-	      return error = newError;
-	    };
-	  });
-	};
-
-
-/***/ },
-/* 14 */
 /***/ function(module, exports) {
 
 	(function(module){
@@ -32739,7 +32721,7 @@
 
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	// $(document).ready(function() {
@@ -32781,6 +32763,23 @@
 	//   	}
 	//
 	// });
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+	module.exports = function(app) {
+	  app.factory('ErrorService', function() {
+	    var error;
+	    return function(newError) {
+	      if (newError === null) return error = null;
+	      if (!newError) return error;
+	      return error = newError;
+	    };
+	  });
+	};
 
 
 /***/ }
