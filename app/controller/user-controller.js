@@ -2,9 +2,10 @@
 
 module.exports = function(app){
   app.controller('UserController', ['$http','AuthService','$location','$window', function($http, AuthService, $location, $window) {
-    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-    const self = this;
-    self.users = ['user'];
+    var userRoute = 'http://ec2-54-213-128-146.us-west-2.compute.amazonaws.com/users/';
+    var self = this;
+    self.users = [];
+    self.currentUser = {};
 
     self.submit = function(){
       if(self.users){
@@ -30,11 +31,13 @@ module.exports = function(app){
     };
 
     self.createUser = function(user){
-      $http.post(userRoute, user)
+      console.log('newUser data : ' + JSON.stringify(user));
+      $http.post(userRoute + 'signup',JSON.stringify(user))
         .then(function(res){
-          console.log('post is hit');
           self.users.push(res.data);
-          self.newUser = null;
+          console.log('created a user : ' + JSON.stringify(res.data));
+          console.log('created a user and stored : ' + JSON.stringify(self.users));
+          $location.path('/');
         });
     };
 
@@ -62,15 +65,6 @@ module.exports = function(app){
       });
     };
 
-//auth routes
-
-    // self.signUp = function(user){
-    //   AuthService.createUser(user, (err, res)=>{
-    //     if(err) return console.log(err);
-    //     console.log('hitting' + res);
-    //   });
-    // };
-
     self.logOut = function(){
       AuthService.signOut((err, res)=>{
         if(err) return console.log(err);
@@ -81,12 +75,15 @@ module.exports = function(app){
 
 
     self.logIn = function(user){
-      // console.dir(angular.toJson(user));
+      console.log(JSON.stringify(user));
       AuthService.signIn(user, (err, res)=>{
         if(err) return console.log(err);
-        console.log('Log in res.body : ' + angular.toJson(res.body));
-        console.log('Log in res : ' + angular.toJson(res));
-        $location.path('/dashboard');
+        if($window.localStorage.profile_id === null){
+          $location.path('/newprofile');
+        } else {
+          console.log('Log in res : ' + JSON.stringify(res));
+          $location.path('/dashboard');
+        }
       });
     };
   }]);

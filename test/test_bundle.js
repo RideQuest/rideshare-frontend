@@ -134,6 +134,10 @@
 	  .when('/search', {
 	    controller: 'ProfileController',
 	    templateUrl: './templates/gmap-view.html'
+	  })
+	  .when('/newprofile', {
+	    controller: 'ProfileController',
+	    templateUrl: './templates/new-profile.html'
 	  });
 	}]);
 
@@ -32066,9 +32070,10 @@
 
 	module.exports = function(app){
 	  app.controller('UserController', ['$http','AuthService','$location','$window', function($http, AuthService, $location, $window) {
-	    const userRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/users/';
-	    const self = this;
-	    self.users = ['user'];
+	    var userRoute = 'http://ec2-54-213-128-146.us-west-2.compute.amazonaws.com/users/';
+	    var self = this;
+	    self.users = [];
+	    self.currentUser = {};
 
 	    self.submit = function(){
 	      if(self.users){
@@ -32094,11 +32099,13 @@
 	    };
 
 	    self.createUser = function(user){
-	      $http.post(userRoute, user)
+	      console.log('newUser data : ' + JSON.stringify(user));
+	      $http.post(userRoute + 'signup',JSON.stringify(user))
 	        .then(function(res){
-	          console.log('post is hit');
 	          self.users.push(res.data);
-	          self.newUser = null;
+	          console.log('created a user : ' + JSON.stringify(res.data));
+	          console.log('created a user and stored : ' + JSON.stringify(self.users));
+	          $location.path('/');
 	        });
 	    };
 
@@ -32126,15 +32133,6 @@
 	      });
 	    };
 
-	//auth routes
-
-	    // self.signUp = function(user){
-	    //   AuthService.createUser(user, (err, res)=>{
-	    //     if(err) return console.log(err);
-	    //     console.log('hitting' + res);
-	    //   });
-	    // };
-
 	    self.logOut = function(){
 	      AuthService.signOut((err, res)=>{
 	        if(err) return console.log(err);
@@ -32145,12 +32143,15 @@
 
 
 	    self.logIn = function(user){
-	      // console.dir(angular.toJson(user));
+	      console.log(JSON.stringify(user));
 	      AuthService.signIn(user, (err, res)=>{
 	        if(err) return console.log(err);
-	        console.log('Log in res.body : ' + angular.toJson(res.body));
-	        console.log('Log in res : ' + angular.toJson(res));
-	        $location.path('/dashboard');
+	        if($window.localStorage.profile_id === null){
+	          $location.path('/newprofile');
+	        } else {
+	          console.log('Log in res : ' + JSON.stringify(res));
+	          $location.path('/dashboard');
+	        }
 	      });
 	    };
 	  }]);
@@ -32167,24 +32168,27 @@
 	module.exports = function(app){
 
 	  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
-	    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
+	    var profileRoute = 'http://ec2-54-213-128-146.us-west-2.compute.amazonaws.com/profiles/';
 	    this.profiles = ['profile'];
 	    this.editingProfile = false;
 	    this.newProfile = {};
 
+
 	    this.getProfile = function(){
 	      var tokenFromLocalStorage = $window.localStorage.token;
-	      console.log('localStorage?? ' + $window.localStorage.token);
-	      $http.get(profileRoute + '3/' ,{
+	      var idStored = $window.localStorage.profile_id;
+	      $http.get(profileRoute + idStored + '/',{
 	        headers: {
 	          'Content-Type': 'application/json',
 	          'Authorization': 'Token ' + tokenFromLocalStorage
 	        }
 	      })
 	      .then((result)=>{
+	        console.log('hit ' + result.status);
 	        this.profiles = result.data;
 	      }, function(error){
 	        console.log(error);
+	        $location.path('/newprofile');
 	      });
 
 	    };
@@ -32197,15 +32201,26 @@
 	    this.goToAboutMe = function(){
 	      $location.path('/about');
 	    };
-	    // this.getProfile = function(){
-	    //   $http.get(profileRoute)
-	    // this.createProfile = function(profile){
-	    //   $http.post(profileRoute, user)
-	    //     .then((result)=>{
-	    //       console.log('post is hit');
-	    //       this.profiles.push(result.data);
-	    //     });
-	    //   };
+
+	    this.createProfile = function(profile){
+	      var tokenFromLocalStorage = $window.localStorage.token;
+	      this.newProfile = profile;
+	      console.log('token : ' + tokenFromLocalStorage);
+	      console.log('Profile : ' + JSON.stringify(this.newProfile));
+	      $http.post(profileRoute + 'add', JSON.stringify(profile), {
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
+	        .then((result)=>{
+	          console.log('post result is hit ' + JSON.stringify(result));
+	          $window.localStorage.profile_id = result.data.id;
+	          $window.localStorage.user_id = result.data.user;
+	          this.profiles.push(result.data);
+	          $location.path('/dashboard');
+	        });
+	    };
 	    //***********************
 	    //getting dashboard data
 	    //***********************
@@ -32449,14 +32464,20 @@
 	module.exports = function(app){
 	  app.factory('AuthService', ['$http', '$window', function($http, $window){
 	    var token;
-	    var url = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com';
+	    var userId;
+	    var profileId;
+	    var url = 'http://ec2-54-213-128-146.us-west-2.compute.amazonaws.com';
 	    var auth = {
 	      getToken(){
 	        return token || $window.localStorage.token;
 	      },
 	      signOut(cb){
 	        token = null;
+	        userId = null;
+	        profileId = null;
 	        $window.localStorage.token = null;
+	        $window.localStorage.profile_id = null;
+	        $window.localStorage.user_id = null;
 	        if(cb) cb();
 	      },
 
@@ -32469,11 +32490,17 @@
 	          }
 	        }).then((res)=>{
 	          token = $window.localStorage.token = res.data.token;
+	          profileId = $window.localStorage.profile_id = res.data.profile_id;
+	          userId = $window.localStorage.user_id = res.data.user_id;
+	          console.log('raw : ' + JSON.stringify(res.data.profile_id));
+	          console.log('raw : ' + JSON.stringify(res.data.user_id));
 	          cb(null, res);
 	        }, (err)=>{
 	          cb(err);
 	        });
-	      }
+	      },
+
+
 	    };
 	    return auth;
 	  }]);
