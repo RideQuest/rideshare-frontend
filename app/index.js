@@ -51,5 +51,9 @@ app.config(['$routeProvider', function(routeProvider){
   .when('/search', {
     controller: 'ProfileController',
     templateUrl: './templates/gmap-view.html'
+  })
+  .when('/newprofile', {
+    controller: 'ProfileController',
+    templateUrl: './templates/new-profile.html'
   });
 }]);

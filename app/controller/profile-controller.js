@@ -3,24 +3,27 @@
 module.exports = function(app){
 
   app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
-    const profileRoute = 'http://ec2-54-191-10-228.us-west-2.compute.amazonaws.com/profiles/';
+    var profileRoute = 'http://ec2-54-213-128-146.us-west-2.compute.amazonaws.com/profiles/';
     this.profiles = ['profile'];
     this.editingProfile = false;
     this.newProfile = {};
 
+
     this.getProfile = function(){
       var tokenFromLocalStorage = $window.localStorage.token;
-      console.log('localStorage?? ' + $window.localStorage.token);
-      $http.get(profileRoute + '3/' ,{
+      var idStored = $window.localStorage.profile_id;
+      $http.get(profileRoute + idStored + '/',{
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Token ' + tokenFromLocalStorage
         }
       })
       .then((result)=>{
+        console.log('hit ' + result.status);
         this.profiles = result.data;
       }, function(error){
         console.log(error);
+        $location.path('/newprofile');
       });
 
     };
@@ -33,15 +36,26 @@ module.exports = function(app){
     this.goToAboutMe = function(){
       $location.path('/about');
     };
-    // this.getProfile = function(){
-    //   $http.get(profileRoute)
-    // this.createProfile = function(profile){
-    //   $http.post(profileRoute, user)
-    //     .then((result)=>{
-    //       console.log('post is hit');
-    //       this.profiles.push(result.data);
-    //     });
-    //   };
+
+    this.createProfile = function(profile){
+      var tokenFromLocalStorage = $window.localStorage.token;
+      this.newProfile = profile;
+      console.log('token : ' + tokenFromLocalStorage);
+      console.log('Profile : ' + JSON.stringify(this.newProfile));
+      $http.post(profileRoute + 'add', JSON.stringify(profile), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token ' + tokenFromLocalStorage
+        }
+      })
+        .then((result)=>{
+          console.log('post result is hit ' + JSON.stringify(result));
+          $window.localStorage.profile_id = result.data.id;
+          $window.localStorage.user_id = result.data.user;
+          this.profiles.push(result.data);
+          $location.path('/dashboard');
+        });
+    };
     //***********************
     //getting dashboard data
     //***********************
