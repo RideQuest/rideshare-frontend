@@ -50,11 +50,11 @@
 	__webpack_require__(6);
 	__webpack_require__(12);
 	__webpack_require__(11);
-	__webpack_require__(13);
-	__webpack_require__(14);
 	__webpack_require__(9);
-	__webpack_require__(15);
-	module.exports = __webpack_require__(10);
+	__webpack_require__(13);
+	__webpack_require__(10);
+	__webpack_require__(14);
+	module.exports = __webpack_require__(15);
 
 
 /***/ },
@@ -32149,14 +32149,18 @@
 
 	  app.controller('ProfileController', ['$http', '$window','$location', function($http, $window, $location) {
 	    var profileRoute = 'http://ec2-54-213-128-146.us-west-2.compute.amazonaws.com/profiles/';
-	    this.profiles = ['profile'];
+	    this.profiles = {};
+	    this.copiedProfile = {};
 	    this.editingProfile = false;
 	    this.newProfile = {};
+	    this.editedProfile = {};
+	    this.updateStatus = {};
+	    
+	    var idStored = $window.localStorage.profile_id;
+	    var tokenFromLocalStorage = $window.localStorage.token;
 
-
+	    //getting profile data
 	    this.getProfile = function(){
-	      var tokenFromLocalStorage = $window.localStorage.token;
-	      var idStored = $window.localStorage.profile_id;
 	      $http.get(profileRoute + idStored + '/',{
 	        headers: {
 	          'Content-Type': 'application/json',
@@ -32164,13 +32168,13 @@
 	        }
 	      })
 	      .then((result)=>{
-	        console.log('hit ' + result.status);
-	        this.profiles = result.data;
+	        this.profiles = result.data; //saving profile data in this.profile for later use
+	        this.copiedProfile = angular.copy(result.data);
+	        console.log('this.profiles', this.profiles);
 	      }, function(error){
-	        console.log(error);
+	        console.error(error);
 	        $location.path('/newprofile');
 	      });
-
 	    };
 
 	    this.goToGmapView = function(){
@@ -32183,9 +32187,8 @@
 	    };
 
 	    this.createProfile = function(profile){
-	      var tokenFromLocalStorage = $window.localStorage.token;
 	      this.newProfile = profile;
-	      console.log('token : ' + tokenFromLocalStorage);
+	      // console.log('token : ' + tokenFromLocalStorage);
 	      console.log('Profile : ' + JSON.stringify(this.newProfile));
 	      $http.post(profileRoute + 'add', JSON.stringify(profile), {
 	        headers: {
@@ -32216,21 +32219,33 @@
 	      });
 	    };
 
-	    this.updateProfile = function(profile){
-	      $http.put(profileRoute + profile.id)
+	    this.updateProfile = function(){
+	      console.log('this.editedProfile', this.profiles);
+	      console.log('token in put', tokenFromLocalStorage);
+	      $http.put(profileRoute + idStored + '/', this.profiles, {
+	        headers: {
+	          'Content-Type': 'application/json',
+	          'Authorization': 'Token ' + tokenFromLocalStorage
+	        }
+	      })
 	        .then((result)=>{
-	          this.profiles = this.profiles.map((p)=>{
-	            if(p.id === profile.id){
-	              return profile;
-	            } else {
-	              return p;
-	            }
-	          });
+	          console.log('update profile result', result);
+	          this.updateStatus = {
+	            message: 'Your data has been updated!'
+	          }
+	          this.profiles = result.data;
+
 	        });
 	    };
 
-	    this.editButtonShow = function(){
-	      this.editingProfile = true;
+	    //edit button toggle
+	    this.editFieldShow = function(){
+	      if(!this.editingProfile)
+	        return this.editingProfile = true;
+
+	      if(this.editingProfile)
+	        return this.editingProfile = false;
+	      console.log('edit button true?', this.editingProfile);
 	    };
 
 	    this.submit = function(profile){
@@ -32560,13 +32575,12 @@
 	'use strict';
 	module.exports = function (app) {
 
-	  // app.directive('userProfile', function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     templateUrl: './templates/user-profile.html'
-	  //
-	  //   };
-	  // });
+	  app.directive('userProfile', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './templates/edit-profile-form.html'
+	    };
+	  });
 	  //
 	  // app.directive('newProfile', function(){
 	  //   return {
@@ -32643,6 +32657,23 @@
 
 /***/ },
 /* 13 */
+/***/ function(module, exports) {
+
+	'use strict';
+	module.exports = function(app) {
+	  app.factory('ErrorService', function() {
+	    var error;
+	    return function(newError) {
+	      if (newError === null) return error = null;
+	      if (!newError) return error;
+	      return error = newError;
+	    };
+	  });
+	};
+
+
+/***/ },
+/* 14 */
 /***/ function(module, exports) {
 
 	(function(module){
@@ -32748,7 +32779,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	// $(document).ready(function() {
@@ -32790,23 +32821,6 @@
 	//   	}
 	//
 	// });
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	'use strict';
-	module.exports = function(app) {
-	  app.factory('ErrorService', function() {
-	    var error;
-	    return function(newError) {
-	      if (newError === null) return error = null;
-	      if (!newError) return error;
-	      return error = newError;
-	    };
-	  });
-	};
 
 
 /***/ }

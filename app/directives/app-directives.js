@@ -1,13 +1,12 @@
 'use strict';
 module.exports = function (app) {
 
-  // app.directive('userProfile', function(){
-  //   return {
-  //     restrict: 'E',
-  //     templateUrl: './templates/user-profile.html'
-  //
-  //   };
-  // });
+  app.directive('userProfile', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './templates/edit-profile-form.html'
+    };
+  });
   //
   // app.directive('newProfile', function(){
   //   return {
