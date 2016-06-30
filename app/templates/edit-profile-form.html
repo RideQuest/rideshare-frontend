@@ -1,0 +1,13 @@
+<section class="edit-form-section" ng-show="profilectrl.editingProfile">
+  <form class="update-profile" ng-submit="profilectrl.updateProfile(profile)" method="post">
+    <button type="button" value="Edit Profile" ng-click="profilectrl.updateProfile()">Save Updates</button>
+    <h3 id="edit-profile-h3">Edit Your Profile Info</h3>
+    <label>First Name: </label><input ng-model="profilectrl.profiles.firstname" type="text" placeholder="First Name">
+    <label>Last Name: </label><input ng-model="profilectrl.profiles.lastname" type="text" placeholder="Last Name">
+    <label>Email: </label><input ng-model="profilectrl.profiles.email" type="text" placeholder="Email">
+    <label>Phone Number: </label><input ng-model="profilectrl.profiles.phonenumber" type="text" placeholder="Phone Number">
+    <label>Car Make:</label><input ng-model="profilectrl.profiles.carbrand" type="text" placeholder="Car Brand">
+    <label>Car Seats:</label><input ng-model="profilectrl.profiles.carseat" type="text" placeholder="Car Seat Number">
+    <label>Pets: </label><input ng-model="profilectrl.profiles.petsallowed" type="text" placeholder="Pets Allowed true or false">
+  </form>
+</section>
