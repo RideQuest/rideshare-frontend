@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.directive('userProfile', function(){
     return {
       restrict: 'E',
-      templateUrl: './templates/edit-profile-form.html'
+      templateUrl: './components/profile/edit-profile-form.html'
     };
   });
   //
@@ -36,14 +36,14 @@ module.exports = function (app) {
   app.directive('userSignin', function(){
     return {
       restrict: 'E',
-      templateUrl: './templates/signin.html'
+      templateUrl: './components/signin_up/signin.html'
     };
   });
 
   app.directive('logoBar', function(){
     return {
       restrict: 'E',
-      templateUrl: './templates/logo-bar.html'
+      templateUrl: './components/header/logo-bar.html'
     };
   });
   //
@@ -67,15 +67,23 @@ module.exports = function (app) {
   app.directive('customNav', function(){
     return {
       restrict: 'E',
-      templateUrl: './templates/tabs.html'
+      templateUrl: './components/header/tabs.html'
     };
   });
 
   app.directive('mainHeader', function(){
     return {
       restrict: 'E',
-      templateUrl: ' ./templates/header.html'
+      templateUrl: ' ./components/header/main-header.html'
     };
   });
+
+  app.directive('adminHeader', function(){
+    return {
+      restrict: 'E',
+      templateUrl: ' ./components/header/admin-header.html'
+    };
+  });
+
 
 };

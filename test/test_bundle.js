@@ -45,8 +45,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
-	__webpack_require__(15);
-	module.exports = __webpack_require__(16);
+	__webpack_require__(16);
+	module.exports = __webpack_require__(17);
 
 
 /***/ },
@@ -55,7 +55,7 @@
 
 	__webpack_require__(2);
 	const angular = __webpack_require__(3);
-	__webpack_require__(14);
+	__webpack_require__(15);
 
 	describe('should test something', ()=> {
 	  var mapController;
@@ -83,13 +83,9 @@
 
 	'use strict';
 
-	var angular = __webpack_require__(3);
+	const angular = __webpack_require__(3);
 	__webpack_require__(5);
-
-	var app = angular.module('rideShareApp', ['ngRoute']);
-
-	//controller
-
+	const app = angular.module('rideShareApp', ['ngRoute']);
 
 	__webpack_require__(7)(app);
 	__webpack_require__(8)(app);
@@ -101,45 +97,7 @@
 	__webpack_require__(12)(app);
 	__webpack_require__(13)(app);
 
-	//angular router
-
-	app.config(['$routeProvider', function(routeProvider){
-	  routeProvider
-
-	  //home
-	  .when('/', {
-	    controller: 'UserController',
-	    templateUrl: './views/01_signup_in.html'
-	  })
-	  // .when('/signout', {
-	  //   controller: 'UserController',
-	  //   templateUrl: './views/01_signup_in.html'
-	  // })
-	  .when('/dashboard', {
-	    controller: 'UserController',
-	    templateUrl: './templates/dashboard.html'
-	  })
-	  .when('/home', {
-	    controller: 'UserController',
-	    templateUrl: './views/home.html'
-	  })
-	  .when('/about', {
-	    controller: 'ProfileController',
-	    templateUrl: './templates/about-us.html'
-	  })
-	  .when('/profile', {
-	    controller: 'ProfileController',
-	    templateUrl: './templates/user-profile.html'
-	  })
-	  .when('/search', {
-	    controller: 'ProfileController',
-	    templateUrl: './templates/gmap-view.html'
-	  })
-	  .when('/newprofile', {
-	    controller: 'ProfileController',
-	    templateUrl: './templates/new-profile.html'
-	  });
-	}]);
+	__webpack_require__(14)(app);
 
 
 /***/ },
@@ -32556,7 +32514,7 @@
 	      restrict: 'E',
 	      replace: true,
 	      controller: 'mapController',
-	      templateUrl: '/templates/form-rider.html'
+	      templateUrl: '/components/request-forms/form-rider.html'
 	    };
 	  });
 
@@ -32565,7 +32523,7 @@
 	      restrict: 'E',
 	      replace: true,
 	      controller: 'mapController',
-	      templateUrl: '/templates/form-driver.html'
+	      templateUrl: '/components/request-forms/form-driver.html'
 	    };
 	  });
 
@@ -32574,17 +32532,10 @@
 	      restrict: 'E',
 	      replace: true,
 	      controller: 'mapController',
-	      templateUrl: '/templates/gmap-view.html'
+	      templateUrl: '/components/map/gmap-view.html'
 	    };
 	  });
-	  // app.directive('mapRider',function(){
-	  //   return {
-	  //     restrict: 'E',
-	  //     replace: true,
-	  //     controller: 'mapController',
-	  //     templateUrl: '/templates/gmap-view.html'
-	  //   };
-	  // });
+	  
 	};
 
 
@@ -32598,7 +32549,7 @@
 	  app.directive('userProfile', function(){
 	    return {
 	      restrict: 'E',
-	      templateUrl: './templates/edit-profile-form.html'
+	      templateUrl: './components/profile/edit-profile-form.html'
 	    };
 	  });
 	  //
@@ -32630,14 +32581,14 @@
 	  app.directive('userSignin', function(){
 	    return {
 	      restrict: 'E',
-	      templateUrl: './templates/signin.html'
+	      templateUrl: './components/signin_up/signin.html'
 	    };
 	  });
 
 	  app.directive('logoBar', function(){
 	    return {
 	      restrict: 'E',
-	      templateUrl: './templates/logo-bar.html'
+	      templateUrl: './components/header/logo-bar.html'
 	    };
 	  });
 	  //
@@ -32661,22 +32612,74 @@
 	  app.directive('customNav', function(){
 	    return {
 	      restrict: 'E',
-	      templateUrl: './templates/tabs.html'
+	      templateUrl: './components/header/tabs.html'
 	    };
 	  });
 
 	  app.directive('mainHeader', function(){
 	    return {
 	      restrict: 'E',
-	      templateUrl: ' ./templates/header.html'
+	      templateUrl: ' ./components/header/main-header.html'
 	    };
 	  });
+
+	  app.directive('adminHeader', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: ' ./components/header/admin-header.html'
+	    };
+	  });
+
 
 	};
 
 
 /***/ },
 /* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = function (app) {
+	  app.config(['$routeProvider', function(routeProvider){
+	    routeProvider
+
+	    //home
+	    .when('/', {
+	      controller: 'UserController',
+	      templateUrl: './views/01_signup_in.html'
+	    })
+
+	    .when('/dashboard', {
+	      controller: 'UserController',
+	      templateUrl: './templates/dashboard.html'
+	    })
+	    .when('/home', {
+	      controller: 'UserController',
+	      templateUrl: './views/home.html'
+	    })
+	    .when('/about', {
+	      controller: 'ProfileController',
+	      templateUrl: './templates/about-us.html'
+	    })
+	    .when('/profile', {
+	      controller: 'ProfileController',
+	      templateUrl: './templates/user-profile.html'
+	    })
+	    .when('/search', {
+	      controller: 'ProfileController',
+	      templateUrl: './templates/gmap-view.html'
+	    })
+	    .when('/newprofile', {
+	      controller: 'ProfileController',
+	      templateUrl: './templates/new-profile.html'
+	    });
+	  }]);
+	};
+
+
+/***/ },
+/* 15 */
 /***/ function(module, exports) {
 
 	/**
@@ -35688,12 +35691,12 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(2);
 	const angular = __webpack_require__(3);
-	__webpack_require__(14);
+	__webpack_require__(15);
 
 	describe('should test something', ()=> {
 	  var profileController;
@@ -35717,12 +35720,12 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(2);
 	const angular = __webpack_require__(3);
-	__webpack_require__(14);
+	__webpack_require__(15);
 
 	describe('user controller unit test', ()=>{
 	  var UserController;

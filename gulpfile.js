@@ -7,8 +7,8 @@ const sources = {
   html: __dirname + '/app/**/*.html',
   js: __dirname + '/app/**/*.js',
   test: __dirname + '/test/*_spec.js',
-  images: __dirname + '/app/images/*.png',
-  img: __dirname + '/app/**/*.png'
+  images: __dirname + '/app/images/*.png'
+
 
 };
 
@@ -30,7 +30,7 @@ gulp.task('bundle:dev', () => {
     .pipe(gulp.dest('./build'));
 });
 
-gulp.task('copy', () => {
+gulp.task('copy:HTML', () => {
   return gulp.src(sources.html)
     .pipe(gulp.dest('./build'));
 });
@@ -41,11 +41,7 @@ gulp.task('copy:image', () => {
     .pipe(gulp.dest('./build'));
 });
 
-gulp.task('copyImg', () => {
-  return gulp.src(sources.img)
-    .pipe(gulp.dest('./build'));
 
-});
 
 
 gulp.task('bundle:test', () => {
@@ -56,4 +52,4 @@ gulp.task('bundle:test', () => {
 
 
 
-gulp.task('default', ['bundle:dev', 'build:css', 'copy:image', 'copy', 'copyImg', 'bundle:test']);
+gulp.task('default', ['bundle:dev', 'build:css', 'copy:image', 'copy:HTML',  'bundle:test']);

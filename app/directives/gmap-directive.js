@@ -4,7 +4,7 @@ module.exports = function(app){
       restrict: 'E',
       replace: true,
       controller: 'mapController',
-      templateUrl: '/templates/form-rider.html'
+      templateUrl: '/components/request-forms/form-rider.html'
     };
   });
 
@@ -13,7 +13,7 @@ module.exports = function(app){
       restrict: 'E',
       replace: true,
       controller: 'mapController',
-      templateUrl: '/templates/form-driver.html'
+      templateUrl: '/components/request-forms/form-driver.html'
     };
   });
 
@@ -22,15 +22,8 @@ module.exports = function(app){
       restrict: 'E',
       replace: true,
       controller: 'mapController',
-      templateUrl: '/templates/gmap-view.html'
+      templateUrl: '/components/map/gmap-view.html'
     };
   });
-  // app.directive('mapRider',function(){
-  //   return {
-  //     restrict: 'E',
-  //     replace: true,
-  //     controller: 'mapController',
-  //     templateUrl: '/templates/gmap-view.html'
-  //   };
-  // });
+  
 };
