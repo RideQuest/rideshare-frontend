@@ -143,31 +143,28 @@ html {
   height: 100%;
 }
 
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-weight: 700;
-}
-
-body {
-  background-color: coral;
-}
+// body,
+// h1,
+// h2,
+// h3,
+// h4,
+// h5,
+// h6 {
+//   font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+//   font-weight: 700;
+// }
+//
+// body {
+//   background-color: coral;
+// }
 .meta-image {
   opacity: 0;
   height: 1px;
   width: 1px;
 }
-.topnav {
-  font-size: 1.2em;
-  background-color: rgba(0,0,0,0.5) ;
-}
+
 .navbar-brand.topnav {
-  color: coral;
+
   text-shadow: 2px 2px 3px rgba(0,0,0,0.5);
   background-color: transparent;
   font-size: 2em;
@@ -553,8 +550,6 @@ padding-bottom: 50px;
 .navbar>.container .navbar-brand:hover{
   color: rgba(233,233,233,0);
   text-shadow: 0px 0px 0px rgba(0,0,0,0.0);
-  background-image: url(../images/hire.png);
-  /*background-size: cover;*/
   background-repeat: no-repeat;
   width: 150px;
   height: 150px;
@@ -576,31 +571,9 @@ padding-bottom: 50px;
 }
 
 
-.list-inline{
-  padding: 2em;
-}
-.fun-facts {
-  color: darksalmon;
-  background-color: rgba(208,201,31,0.3);
-  overflow: scroll;
-  padding: .5em;
-  font-style: oblique;
-  letter-spacing: 1px;
-}
-.fun-head {
-    text-align: center;
-    font-variant: small-caps;
-    /*text-align: center;*/
-    letter-spacing: 2px;
-}
-
-figcaption {
-  opacity: 0;
-}
-
-/*.div {
-  opacity: 0;
-}*/
+// .list-inline{
+//   padding: 2em;
+// }
 
 .project-link-bar {
   padding-top: 1em;
@@ -634,19 +607,7 @@ figcaption {
         /*z-index: 9999;*/
   }
 
-  figcaption p {
-    padding-left: .5em;
-    padding-right: .5em;
-    font-size: 14px;
-  }
-  .tech {
-    margin-top: 10%;
-  }
-.tech p {
-  padding-left: .5em;
-  padding-right: .5em;
-  font-size: 10px;
-}
+
 
 
   .project-buttons a:hover {
@@ -712,11 +673,7 @@ figcaption {
   }
 }
 
-/*@media(max-width:618px) {
-  .content-section-b  {
-    height:auto;
-  }
-}*/
+
 
 @media(max-width:765px) {
   .icon2 {
