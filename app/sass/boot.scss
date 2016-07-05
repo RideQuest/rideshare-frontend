@@ -26,7 +26,7 @@
 }
 
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: white;
+  background-color: grey
 }
 
 .navbar-default .navbar-nav>li>a {
@@ -166,8 +166,8 @@ html {
 .container.topnav {
   background-color: transparent;
   margin-right: auto;
-  margin-left: -1em;
-  padding-left: 2em;
+  // margin-left: -1em;
+  // padding-left: 2em;
 }
 .lead {
   font-size: 18px;
@@ -190,7 +190,7 @@ html {
     color: rgba(202,207,215,0.5);
     font-size: 5em;
 }
-.intro-header {
+#intro-container {
   position: relative;
   overflow: hidden;
   text-align: center;
@@ -198,6 +198,14 @@ html {
   height: 100%;
   // padding-top: 50px;
   // padding-bottom: 50px;
+}
+
+.intro-header {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  color: #f8f8f8;
+  height: 100%;
 }
 .intro-message {
   position: relative;
@@ -207,10 +215,11 @@ html {
 }
 
 .intro-message > h1 {
-  padding-top: 10%;
+  padding-top: 1em;
+  // padding-bottom: 2em;
   margin: 0;
   font-size: 3em;
-  color: rgb(0,200,248);
+  color: white;
   text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
   // padding: 200px;
   position: relative;
@@ -227,10 +236,12 @@ html {
   // padding: 200px;
   position: relative;
   z-index: 2;
-  color: white;
+  color: lightgrey;
+  padding-bottom: 7em;
+  text-shadow: 1px 1px 1.5px rgba(0, 0, 0, 0.4);
 }
 
-.intro-header img {
+#intro-container img {
     position: absolute;
     left: 0;
     top: 0;
@@ -378,12 +389,16 @@ html {
   }
 
   .intro-message > h1 {
-    font-size: 3em;
+    font-size: 1.5em;
+  }
+  .intro-message > h3 {
+    padding-bottom: 0em;
+    font-size: 1em
   }
 
   ul.intro-social-buttons > li {
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     padding: 0;
   }
 
@@ -781,14 +796,14 @@ p.copyright {
   margin-left: 1em;
 }
 #b22 {
-  background-color: rgba(43,148,100,0.7);
+  background-color: rgb(0,200,248);
 }
 #b22:hover{
   background-color: white;
 }
 
 #b21 {
-  background-color: transparent;
+  background-color: rgb(0,200,248);
   touch-action: manipulation;
 }
 

@@ -86,6 +86,12 @@
 
 @import url(http://fonts.googleapis.com/css?family=Lily+Script+One);
 
+.user-sign {
+	background-color: blue;
+	background-image: url(https://raw.githubusercontent.com/RideQuest/rideshare-frontend/fixing_styles/app/images/Road-Trip.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
 
 form {
 	margin:10% auto 0 auto;
@@ -93,8 +99,18 @@ form {
 	width:400px;
 	height:auto;
 	overflow:hidden;
-  background: rgba(235,255,76,0.9);
+  background: rgba(0,200,248,0.8);
 	border-radius:10px;
+
+
+}
+
+.sign-box {
+	padding-bottom: 5em;
+}
+
+.login {
+	padding-bottom: 5em;
 }
 
 
@@ -131,9 +147,10 @@ form input[type="password"]:focus {
 input[type=submit] {
 	padding:15px 50px;
 	width:auto;
-	background:#1abc9c;
-	border:none;
+	background:transparent;
+	border:darkgrey solid 2px;
 	color:white;
+	font-size: 1em;
 	cursor:pointer;
 	display:inline-block;
 	float:right;
@@ -151,17 +168,18 @@ input[type=submit]:hover {
 
 input[type="submit"]:active {
 	opacity:0.4;
+
 }
 
 
 #logo {
 	margin:0 auto;
 	width:200px;
-	font-family:'Lily Script One', cursive;
+	// font-family:'Lily Script One', cursive;
 	font-size:60px;
 	font-weight:bold;
 	text-align:center;
-	color:rgb(255,76,101);
+	color:rgb(243,134,48);
 	-webkit-transition:0.2s ease all;
 	   -moz-transition:0.2s ease all;
 	    -ms-transition:0.2s ease all;
@@ -170,5 +188,5 @@ input[type="submit"]:active {
 }
 
 #logo:hover {
-	color:cornflowerblue;
+	color:white;
 }
