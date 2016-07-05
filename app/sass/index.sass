@@ -1,7 +1,10 @@
 
 @import normalize
+@import bootstrap.min
+@import boot
 @import base
 @import module
+
 
 $turquoise: rgb(89,196,197) !default
 $blue: rgb(0,200,248)  !default
@@ -22,7 +25,7 @@ $gutter: 5em
 
 
 body
-  background-color: white
+  // background-color: white
 // padding: $gutter
 
 
@@ -108,26 +111,26 @@ footer
   margin-top: 0
 
 
-h3
-  margin-top: 200px
+
 
 .top-bar
   display: inline-block
   background-color: $blue
-  height: 3.5em
+  height: 5em
   width: 100%
 
 
 .navbar
-  height: 100%
   background-color: $blue
 
 
-.logo
-  float: left
-  padding: .7em
-  font-size: 1.3em
+.logo1
+  padding: .5em
+  font-size: 3em
   font-family: 'Satisfy', cursive
+  color: white
+
+.sub-logo
   color: white
 
 ul
@@ -153,7 +156,7 @@ a
 
 .edit-form-section
   display: inline-block
-  
+
 .sign
   display: flex
   flex-direction: row
@@ -200,18 +203,21 @@ a
 
 
 .boxes
-  display: inline-flex
-  flex-direction: row
-  padding: 5%
+  display: block
+  // padding: 5%
   height: 100%
 
 .box1
-  height: 250px
-  width: 250px
-  padding: 5em
-  margin-right: 2em
+  height: 20em
+  width: 100%
+  // padding: 5em
+  // margin-right: 2em
   text-align: center
   background-color: $teitary-color
+  background-image: url(./images/driving-friends.png)
+  background-repeat: no-repeat
+  background-size: cover
+  background-position: top
 
 .box2
   height: 250px

@@ -5,16 +5,20 @@ module.exports = function (app) {
     routeProvider
 
     //home
-    .when('/', {
+    .when('/signin', {
       controller: 'UserController',
-      templateUrl: './views/01_signup_in.html'
+      templateUrl: './views/signin.html'
+    })
+    .when('/signup', {
+      controller: 'UserController',
+      templateUrl: './views/signup.html'
     })
 
     .when('/dashboard', {
       controller: 'UserController',
       templateUrl: './templates/dashboard.html'
     })
-    .when('/home', {
+    .when('/', {
       controller: 'UserController',
       templateUrl: './views/home.html'
     })

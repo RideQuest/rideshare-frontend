@@ -40,6 +40,20 @@ module.exports = function (app) {
     };
   });
 
+  app.directive('userHeader', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './components/header/header2.html'
+    };
+  });
+
+  app.directive('userSignup', function(){
+    return {
+      restrict: 'E',
+      templateUrl: './components/signin_up/signup.html'
+    };
+  });
+
   app.directive('logoBar', function(){
     return {
       restrict: 'E',

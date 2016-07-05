@@ -1,13 +1,24 @@
+
+
 <header>
-  <logo-bar></logo-bar>
-  <div class="main-image">
-    <h1 class="main-title">Home</h1>
-  </div>
-  <nav class="navbar">
-       <ul>
-         <li><a href="#/home">Home</a></li>
-         <li><a href="#/profile">Profile</a></li>
-         <li><a href="#/dashboard">Dashboard</a></li>
-       </ul>
-  </nav>
+  <section ng-controller="UserController as user">
+    <div class="top-bar">
+      <div class="logo">Ride Share</div>
+      <p class="sub-logo">
+        Share rides. Meet cool people.
+      </p>
+      <nav class="navbar">
+           <ul>
+             <!-- <li><a href="#/home">Home</a></li> -->
+             <li><a href="#/profile">How it works</a></li>
+              <li class="button"><a href="#/signup">Join</a></li>
+              <li><a href="#signin">Login</a></li>
+              <li><a href="#/contact">Contact Us</a></li>
+
+           </ul>
+      </nav>
+
+    </div>
+  </section>
+
 </header>

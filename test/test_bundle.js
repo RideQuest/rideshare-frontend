@@ -32585,6 +32585,20 @@
 	    };
 	  });
 
+	  app.directive('userHeader', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './components/header/header2.html'
+	    };
+	  });
+
+	  app.directive('userSignup', function(){
+	    return {
+	      restrict: 'E',
+	      templateUrl: './components/signin_up/signup.html'
+	    };
+	  });
+
 	  app.directive('logoBar', function(){
 	    return {
 	      restrict: 'E',
@@ -32645,16 +32659,20 @@
 	    routeProvider
 
 	    //home
-	    .when('/', {
+	    .when('/signin', {
 	      controller: 'UserController',
-	      templateUrl: './views/01_signup_in.html'
+	      templateUrl: './views/signin.html'
+	    })
+	    .when('/signup', {
+	      controller: 'UserController',
+	      templateUrl: './views/signup.html'
 	    })
 
 	    .when('/dashboard', {
 	      controller: 'UserController',
 	      templateUrl: './templates/dashboard.html'
 	    })
-	    .when('/home', {
+	    .when('/', {
 	      controller: 'UserController',
 	      templateUrl: './views/home.html'
 	    })

@@ -1,7 +1,17 @@
 <header>
-  <logo-bar></logo-bar>
-<div class="main-image2">
-  <h1 class="main-title2">Home</h1>
-</div>
-<custom-nav></custom-nav>
+  <section ng-controller="UserController as user">
+    <div class="top-bar">
+      <div class="logo">Ride Share</div>
+      <nav class="navbar">
+           <ul>
+             <li><a href="#/home">Home</a></li>
+             <li><a href="#/profile">Profile</a></li>
+             <li><a href="#/dashboard">Dashboard</a></li>
+             <li><a href="" ng-click="user.logOut()">Sign Out</a></li>
+           </ul>
+      </nav>
+
+    </div>
+  </section>
+
 </header>
