@@ -45,16 +45,16 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(1);
+	__webpack_require__(12);
+	__webpack_require__(11);
 	__webpack_require__(8);
 	__webpack_require__(7);
 	__webpack_require__(6);
-	__webpack_require__(12);
-	__webpack_require__(11);
-	__webpack_require__(9);
 	__webpack_require__(13);
-	__webpack_require__(10);
 	__webpack_require__(14);
-	module.exports = __webpack_require__(15);
+	__webpack_require__(9);
+	__webpack_require__(15);
+	module.exports = __webpack_require__(10);
 
 
 /***/ },
@@ -32155,7 +32155,7 @@
 	    this.newProfile = {};
 	    this.editedProfile = {};
 	    this.updateStatus = {};
-	    
+
 	    var idStored = $window.localStorage.profile_id;
 	    var tokenFromLocalStorage = $window.localStorage.token;
 
@@ -32250,7 +32250,7 @@
 
 	    this.submit = function(profile){
 	      if(this.profiles){
-	        this.profiles.push(this.profiles);
+	        this.profiles.push(profile);
 	        this.profiles = '';
 	      }
 
@@ -32659,23 +32659,6 @@
 /* 13 */
 /***/ function(module, exports) {
 
-	'use strict';
-	module.exports = function(app) {
-	  app.factory('ErrorService', function() {
-	    var error;
-	    return function(newError) {
-	      if (newError === null) return error = null;
-	      if (!newError) return error;
-	      return error = newError;
-	    };
-	  });
-	};
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
-
 	(function(module){
 	  var Gmap = {};
 	  var map;
@@ -32779,7 +32762,7 @@
 
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	// $(document).ready(function() {
@@ -32821,6 +32804,23 @@
 	//   	}
 	//
 	// });
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+	module.exports = function(app) {
+	  app.factory('ErrorService', function() {
+	    var error;
+	    return function(newError) {
+	      if (newError === null) return error = null;
+	      if (!newError) return error;
+	      return error = newError;
+	    };
+	  });
+	};
 
 
 /***/ }

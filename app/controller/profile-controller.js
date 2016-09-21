@@ -10,7 +10,7 @@ module.exports = function(app){
     this.newProfile = {};
     this.editedProfile = {};
     this.updateStatus = {};
-    
+
     var idStored = $window.localStorage.profile_id;
     var tokenFromLocalStorage = $window.localStorage.token;
 
@@ -105,7 +105,7 @@ module.exports = function(app){
 
     this.submit = function(profile){
       if(this.profiles){
-        this.profiles.push(this.profiles);
+        this.profiles.push(profile);
         this.profiles = '';
       }
 
